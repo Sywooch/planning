@@ -38,6 +38,17 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'ldap' => [
+            'class'=>'Edvlerblog\Ldap',
+            'options'=>[
+                'ad_port' => 389,
+                'domain_controllers' => array('192.168.7.2'),
+                'account_suffix' => '@vlgd61.ru',
+                'base_dn' => 'OU=adm,DC=vlgd61,DC=ru',
+                'admin_username' => 'podlasenko',
+                'admin_password' => 'GjFyLt-844',
+            ]
+        ],
     ],
     'params' => $params,
 ];

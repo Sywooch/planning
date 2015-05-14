@@ -4,8 +4,54 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b1cc6c8c161c72bb689cfba0d4e1fd86",
+    "hash": "0981335fa422781829eb8fefef7bd93e",
     "packages": [
+        {
+            "name": "adldap/adldap",
+            "version": "v4.0-stable",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ztec/adLDAP.git",
+                "reference": "43bca164cde8f5a98e054e1aea53406aa3b805cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ztec/adLDAP/zipball/43bca164cde8f5a98e054e1aea53406aa3b805cc",
+                "reference": "43bca164cde8f5a98e054e1aea53406aa3b805cc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "suggest": {
+                "ext-ldap": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "adLDAP": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GNU"
+            ],
+            "authors": [
+                {
+                    "name": "Richard Hyland",
+                    "email": "adldap@richardhyland.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "adLDAP, low-level library to query Active directory",
+            "homepage": "http://adldap.sourceforge.net",
+            "keywords": [
+                "active directory",
+                "ldap",
+                "windows"
+            ],
+            "time": "2013-08-29 14:08:57"
+        },
         {
             "name": "bower-asset/bootstrap",
             "version": "v3.3.4",
@@ -274,6 +320,52 @@
                 "markdown-extra"
             ],
             "time": "2015-03-06 05:28:07"
+        },
+        {
+            "name": "edvlerblog/yii2-adldap-module",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/edvler/yii2-adldap-module.git",
+                "reference": "36cd78e2ebae3484fc8b394e38749a44b2969a74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/edvler/yii2-adldap-module/zipball/36cd78e2ebae3484fc8b394e38749a44b2969a74",
+                "reference": "36cd78e2ebae3484fc8b394e38749a44b2969a74",
+                "shasum": ""
+            },
+            "require": {
+                "adldap/adldap": "v4.0-stable"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "Edvlerblog\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Matthias Maderer",
+                    "email": "edvler@edvler-blog.de",
+                    "homepage": "http://www.edvler-blog.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "yii2 adldap extention (wrapper for adldap/adLDAP Module)",
+            "homepage": "http://www.edvler-blog.de",
+            "keywords": [
+                "active directory",
+                "ad",
+                "adLDAP",
+                "ldap",
+                "yii2"
+            ],
+            "time": "2014-01-29 00:00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
