@@ -43,8 +43,12 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-
-            if (!$user || !$user->validatePassword($this->password)) {
+            if($user->ldap){
+                $adLdap = Yii::$app->ldap;
+                if($adLdap->authenticate($this->username, $this->password))
+                    return true;
+            }
+            elseif(!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
         }
@@ -71,9 +75,17 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+            if(!($user = User::findByUsername($this->username))){
+                $adLdap = Yii::$app->ldap;
+                if($adLdap->authenticate($this->username, $this->password)){
+                    $user = new User();
+                    $user->ldap = true;
+                    $user->username = strtolower($this->username);
+                    $user->save(false);
+                }
+            }
+            $this->_user = $user;
         }
-
         return $this->_user;
     }
 }

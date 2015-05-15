@@ -11,9 +11,6 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'q0H2xHXaLOyLQtYygLx-GeLuSfMyHafF',
         ],
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
-        ],
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
@@ -48,6 +45,16 @@ $config = [
                 'admin_username' => 'podlasenko',
                 'admin_password' => 'GjFyLt-844',
             ]
+        ],
+        'cache' => [
+            'class' => 'yii\caching\MemCache',
+            'servers' => [
+                [
+                    'host' => 'localhost',
+                    'port' => 11211,
+                    'weight' => 60,
+                ],
+            ],
         ],
     ],
     'params' => $params,

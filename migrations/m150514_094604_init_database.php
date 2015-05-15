@@ -7,29 +7,33 @@ class m150514_094604_init_database extends Migration
 {
     public function up()
     {
+         $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
+        }
         $this->execute('SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0');
         $this->execute('SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0');
         $this->execute('SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE="NO_AUTO_VALUE_ON_ZERO"');
 
         $this->createTable('{{%place}}',[
-            'id' => 'pk',
+            'id' => Schema::TYPE_PK,
             'place' => Schema::TYPE_STRING.' NOT NULL'
-        ],'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
 
         $this->createTable('{{%department}}', array(
-            'id' => 'pk',
+            'id' => Schema::TYPE_PK,
             'department' => Schema::TYPE_TEXT.' NOT NULL',
             'department_id' => Schema::TYPE_INTEGER.' DEFAULT NULL'
-        ), 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ), $tableOptions);
         $this->addForeignKey('fk_childdep_dep','{{%department}}', 'department_id', '{{%department}}', 'id', 'CASCADE');
 
         $this->createTable('{{%position}}', [
-            'id'=>'pk',
+            'id'=>Schema::TYPE_PK,
             'position'=> Schema::TYPE_STRING.' NOT NULL'
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
 
         $this->createTable('{{%employee}}', [
-            'id' => 'pk',
+            'id' => Schema::TYPE_PK,
             'fio' => Schema::TYPE_STRING.' NOT NULL',
             'position_id' => Schema::TYPE_INTEGER.' DEFAULT NULL',
             'useGenitive' => Schema::TYPE_BOOLEAN.' NOT NULL',
@@ -38,45 +42,50 @@ class m150514_094604_init_database extends Migration
             'department_id' => Schema::TYPE_INTEGER.' NOT NULL',
             'logic_delete' => Schema::TYPE_BOOLEAN.' NOT NULL DEFAULT 0',
             'weight' => Schema::TYPE_SMALLINT.' NOT NULL DEFAULT 0',
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_employee_department', '{{%employee}}', 'department_id', '{{%department}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_employee_position', '{{%employee}}', 'position_id', '{{%position}}', 'id', 'SET NULL');
 
         $this->createTable('{{%phone}}', [
-          'id'=>'pk',
+          'id'=>Schema::TYPE_PK,
           'type'=>Schema::TYPE_SMALLINT . ' DEFAULT 0',
           'employee_id' => Schema::TYPE_INTEGER.' NOT NULL',
           'phone'=> 'VARCHAR(10) NOT NULL'
-        ],'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_phone_employee', '{{%phone}}', 'employee_id', '{{%employee}}', 'id', 'CASCADE');
 
         $this->createTable('{{%user}}', [
-            'id'=>'pk',
-            'name'=>Schema::TYPE_STRING.' NOT NULL',
-            'password'=>'VARCHAR(34) NOT NULL',
+            'id' => Schema::TYPE_PK,
+            'username' => Schema::TYPE_STRING . ' NOT NULL',
+            'auth_key' => Schema::TYPE_STRING . '(32)',
+            'password_hash' => Schema::TYPE_STRING,
+            'password_reset_token' => Schema::TYPE_STRING,
             'employee_id'=>Schema::TYPE_INTEGER.' DEFAULT NULL',
+            'status' => Schema::TYPE_SMALLINT . ' NOT NULL DEFAULT 10',
+            'created_at' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'updated_at' => Schema::TYPE_INTEGER . ' NOT NULL',
             'ldap'=>Schema::TYPE_BOOLEAN.' DEFAULT 0',
-        ],'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_user_employee', '{{%user}}', 'employee_id', '{{%employee}}', 'id', 'SET NULL');
 
         $this->createTable('{{%io_calendar}}', [
-          'id' => 'pk',
+          'id' => Schema::TYPE_PK,
           'emp_id' => Schema::TYPE_INTEGER.' NOT NULL',
           'chief_id' => Schema::TYPE_INTEGER.' NOT NULL',
           'start' => Schema::TYPE_INTEGER.' NOT NULL',
           'stop' => Schema::TYPE_INTEGER.' NOT NULL'
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_io_calendar_employee', '{{%io_calendar}}', 'emp_id', '{{%employee}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_io_calendar_chiefEmployee', '{{%io_calendar}}', 'chief_id', '{{%employee}}', 'id', 'CASCADE');
 
         $this->createTable('{{%category}}', [
-            'id'=>'pk',
+            'id'=>Schema::TYPE_PK,
             'name'=>Schema::TYPE_STRING.' NOT NULL',
             'weight'=>Schema::TYPE_INTEGER.' UNSIGNED DEFAULT 1000'
-        ],'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
 
         $this->createTable('{{%action}}', [
-            'id' => 'pk',
+            'id' => Schema::TYPE_PK,
             'dateStart' => Schema::TYPE_DATETIME.' NOT NULL',
             'dateStop' => Schema::TYPE_DATETIME.' NOT NULL',
             'category_id' => Schema::TYPE_INTEGER,
@@ -90,7 +99,7 @@ class m150514_094604_init_database extends Migration
             'transferred' => Schema::TYPE_BOOLEAN.' NOT NULL DEFAULT 0',
             'transferred_from' => Schema::TYPE_INTEGER,
             'note' => Schema::TYPE_STRING,
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_action_author', '{{%action}}', 'user_id', '{{%user}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_converted_parent', '{{%action}}', 'converted_from', '{{%action}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_action_category','{{%action}}','category_id','{{%category}}','id','SET NULL');
@@ -100,7 +109,7 @@ class m150514_094604_init_database extends Migration
             'action_id'=>Schema::TYPE_INTEGER.' NOT NULL',
             'place_id'=>Schema::TYPE_INTEGER.' NOT NULL',
             'PRIMARY KEY (`action_id`, `place_id`)'
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_ap_action', 'action_place', 'action_id', '{{%action}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_ap_place', 'action_place', 'place_id', '{{%place}}', 'id', 'CASCADE');
 
@@ -113,22 +122,22 @@ class m150514_094604_init_database extends Migration
             'agreement_note' => Schema::TYPE_STRING,
             'weight' => Schema::TYPE_SMALLINT.' NOT NULL DEFAULT 0',
             'PRIMARY KEY (`action_id`, `employee_id`)'
-        ],'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_action', 'action_employee', 'action_id', '{{%action}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_employee', 'action_employee', 'employee_id', '{{%employee}}', 'id', 'CASCADE');
 
         $this->createTable('{{%flag}}', array(
-            'id' => 'pk',
+            'id' => Schema::TYPE_PK,
             'name' => Schema::TYPE_STRING.' NOT NULL',
             'description' => Schema::TYPE_STRING.' NOT NULL',
             'icon' => Schema::TYPE_STRING.' NOT NULL'
-        ), 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ), $tableOptions);
 
         $this->createTable('action_flag', array(
             'action_id' => Schema::TYPE_INTEGER.' NOT NULL',
             'flag_id' => Schema::TYPE_INTEGER.' NOT NULL',
             'PRIMARY KEY (`action_id`,`flag_id`)'
-        ), 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ), $tableOptions);
         $this->addForeignKey('fk_af_action', 'action_flag', 'action_id', '{{%action}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_af_flags', 'action_flag', 'flag_id', '{{%flags}}', 'id', 'CASCADE');
 
@@ -139,7 +148,7 @@ class m150514_094604_init_database extends Migration
             'bizrule' => Schema::TYPE_TEXT,
             'data' => Schema::TYPE_TEXT,
             'PRIMARY KEY (`name`)'
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->execute('LOCK TABLES `items` WRITE;
       /*!40000 ALTER TABLE `items` DISABLE KEYS */;
       INSERT INTO `items` VALUES ("ActionAlwaysAdd",1,"Возможность обходить запреты по добавлению мероприятий","","s:0:\"\";"),
@@ -166,7 +175,7 @@ class m150514_094604_init_database extends Migration
           'parent' => 'VARCHAR(64) NOT NULL',
           'child' => 'VARCHAR(64) NOT NULL',
           'PRIMARY KEY (`parent`,`child`)'
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('itemchildren_ibfk_1', 'itemchildren', 'parent', 'items', 'name', 'CASCADE');
         $this->addForeignKey('itemchildren_ibfk_2', 'itemchildren', 'child', 'items', 'name', 'CASCADE');
         $this->execute('LOCK TABLES `itemchildren` WRITE;
@@ -196,7 +205,7 @@ class m150514_094604_init_database extends Migration
             'bizrule' => Schema::TYPE_TEXT,
             'data' => Schema::TYPE_TEXT,
             'PRIMARY KEY (`itemname`,`userid`)'
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('assignments_ibfk_1', 'assignments', 'itemname', 'items', 'name', 'CASCADE');
         $this->execute('LOCK TABLES `assignments` WRITE;
         /*!40000 ALTER TABLE `assignments` DISABLE KEYS */;
@@ -205,57 +214,57 @@ class m150514_094604_init_database extends Migration
         UNLOCK TABLES;');
 
         $this->createTable('{{%log}}', [
-            'id' => 'pk',
+            'id' => Schema::TYPE_PK,
             'user_id' => Schema::TYPE_INTEGER.' NOT NULL',
             'action_id' => Schema::TYPE_INTEGER.' NOT NULL',
             'controller_action' => Schema::TYPE_STRING.' NOT NULL',
             'date' => Schema::TYPE_TIMESTAMP.' NOT NULL',
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_log_user','{{%log}}','user_id','{{%user}}','id','CASCADE');
         $this->addForeignKey('fk_log_action', '{{%log}}', 'action_id', '{{%action}}', 'id', 'CASCADE');
 
         $this->createTable('{{%message}}', [
-            'id' => 'pk',
+            'id' => Schema::TYPE_PK,
             'sender_id' => Schema::TYPE_INTEGER.' NOT NULL',
             'addressee_id' => Schema::TYPE_INTEGER.' NOT NULL',
             'message' => Schema::TYPE_TEXT.' NOT NULL',
             'read' => Schema::TYPE_BOOLEAN.' DEFAULT 0',
             'created_at' => Schema::TYPE_TIMESTAMP.' NOT NULL',
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ],  $tableOptions);
         $this->addForeignKey('fk_message_sender','{{%message}}','sender_id','{{%user}}','id','CASCADE');
         $this->addForeignKey('fk_message_addressee','{{%message}}','addressee_id','{{%user}}','id','CASCADE');
 
         $this->createTable('{{%action_file}}', [
-            'id'=>'pk',
+            'id'=>Schema::TYPE_PK,
             'action_id'=> Schema::TYPE_INTEGER.' NOT NULL',
             'filename'=>Schema::TYPE_STRING.' NOT NULL',
             'file_url'=>Schema::TYPE_STRING.' NOT NULL'
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_file_action','{{%action_file}}','action_id','{{%action}}','id','CASCADE');
 
         $this->createTable('{{%mail_list}}', [
-          'id'=>'pk',
+          'id'=>Schema::TYPE_PK,
           'user_id'=>Schema::TYPE_INTEGER,
           'list_name'=> Schema::TYPE_STRING.' NOT NULL',
           'public_list'=>Schema::TYPE_BOOLEAN.' DEFAULT 0',
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_list_user','{{%mail_list}}','user_id','{{%user}}','id','SET NULL');
 
         $this->createTable('mail_list_employee', [
           'list_id'=>Schema::TYPE_INTEGER.' NOT NULL',
           'employee_id'=>Schema::TYPE_INTEGER.' NOT NULL',
           'PRIMARY KEY (`list_id`, `employee_id`)',
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_list_employee','mail_list_employee','list_id', '{{%mail_list}}', 'id','CASCADE');
         $this->addForeignKey('fk_employee_list','mail_list_employee','employee_id','{{%employee}}','id','CASCADE');
 
         $this->createTable('{{%report}}', [
-            'id'=>'pk',
+            'id'=>Schema::TYPE_PK,
             'created_at'=>Schema::TYPE_TIMESTAMP.' NOT NULL',
             'department_id'=>Schema::TYPE_INTEGER.' DEFAULT NULL',
             'type'=>Schema::TYPE_SMALLINT.' NOT NULL DEFAULT 2',
             'report_file'=>Schema::TYPE_STRING.' NOT NULL',
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_report_department','{{%report}}','department_id','{{%department}}','id','SET NULL');
 
         $this->execute('INSERT INTO items VALUES ("deputy",2,"Заместители, которые проверяют проекты планов","","s:0:\"\";"),
@@ -263,14 +272,14 @@ class m150514_094604_init_database extends Migration
         $this->execute('INSERT INTO itemchildren VALUES ("deputy","CheckPlanProject"),("admin","CheckPlanProject");');
 
         $this->createTable('{{%template}}', [
-            'id'=>'pk',
+            'id'=>Schema::TYPE_PK,
             'start'=>Schema::TYPE_TIMESTAMP.' NOT NULL',
             'stop'=>Schema::TYPE_TIMESTAMP.' NOT NULL',
             'action'=>Schema::TYPE_TEXT.' NOT NULL',
             'repeat'=>Schema::TYPE_STRING,
             'category_id'=>Schema::TYPE_INTEGER.' DEFAULT NULL',
             'user_id'=>Schema::TYPE_INTEGER.' NOT NULL'
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_template_category', '{{%template}}', 'category_id', '{{%category}}', 'id', 'SET NULL');
         $this->addForeignKey('fk_template_user', '{{%template}}', 'user_id', '{{%user}}', 'id', 'CASCADE');
 
@@ -278,7 +287,7 @@ class m150514_094604_init_database extends Migration
             'template_id'=>Schema::TYPE_INTEGER.' NOT NULL',
             'employee_id'=>Schema::TYPE_INTEGER.' NOT NULL',
             'PRIMARY KEY (`template_id`, `employee_id`)',
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_te_template', 'template_employee', 'template_id', '{{%template}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_te_employee', 'template_employee', 'employee_id', '{{%employee}}', 'id', 'CASCADE');
 
@@ -286,7 +295,7 @@ class m150514_094604_init_database extends Migration
           'template_id'=>Schema::TYPE_INTEGER.' NOT NULL',
           'flag_id'=>Schema::TYPE_INTEGER.' NOT NULL',
           'PRIMARY KEY (`template_id`, `flag_id`)',
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_tf_template', 'template_flag', 'template_id', '{{%template}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_tf_flag', 'template_flag', 'flag_id', '{{%flag}}', 'id', 'CASCADE');
 
@@ -294,7 +303,7 @@ class m150514_094604_init_database extends Migration
           'template_id'=>Schema::TYPE_INTEGER.' NOT NULL',
           'place_id'=>Schema::TYPE_INTEGER.' NOT NULL',
           'PRIMARY KEY (`template_id`, `place_id`)',
-        ], 'ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        ], $tableOptions);
         $this->addForeignKey('fk_tp_template', 'template_place', 'template_id', '{{%template}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_tp_place', 'template_place', 'place_id', '{{%place}}', 'id', 'CASCADE');
 
