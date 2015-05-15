@@ -1,11 +1,11 @@
 <?php
 
-namespace app\models\search;
+namespace app\modules\planning\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Place;
+use app\modules\planning\models\Place;
 
 /**
  * PlaceSearch represents the model behind the search form about `app\models\Place`.

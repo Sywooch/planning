@@ -1,10 +1,10 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\planning\controllers;
 
 use Yii;
-use app\models\Place;
-use app\models\search\PlaceSearch;
+use app\modules\planning\models\Place;
+use app\modules\planning\models\search\PlaceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

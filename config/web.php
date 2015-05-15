@@ -6,6 +6,16 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'language'=>'ru-RU',
+    'modules'=>[
+        'admin'=>[
+            'class'=>'mdm\admin\Module',
+            'layout' => 'left-menu',
+        ],
+        'planning' => [
+            'class' => 'app\modules\planning\Module',
+        ],
+    ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -56,6 +66,15 @@ $config = [
                 ],
             ],
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
+    ],
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'site/*', // add or remove allowed actions to this list
+        ]
     ],
     'params' => $params,
 ];
