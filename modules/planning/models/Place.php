@@ -3,6 +3,7 @@
 namespace app\modules\planning\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%place}}".
@@ -10,7 +11,7 @@ use Yii;
  * @property integer $id
  * @property string $place
  */
-class Place extends \yii\db\ActiveRecord
+class Place extends ActiveRecord
 {
     /**
      * @inheritdoc

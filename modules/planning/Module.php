@@ -1,6 +1,8 @@
 <?php
 namespace app\modules\planning;
 
+use Yii;
+
 class Module extends \yii\base\Module
 {
     public $controllerNamespace = 'app\modules\planning\controllers';
@@ -9,6 +11,12 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
-        // custom initialization code goes here
+        if (!isset(Yii::$app->i18n->translations['planning'])) {
+            Yii::$app->i18n->translations['planning'] = [
+              'class' => 'yii\i18n\PhpMessageSource',
+              'sourceLanguage' => 'en',
+              'basePath' => '@planning/messages'
+            ];
+        }
     }
 }

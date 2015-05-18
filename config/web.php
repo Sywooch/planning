@@ -16,6 +16,9 @@ $config = [
             'class' => 'app\modules\planning\Module',
         ],
     ],
+    'aliases'=>[
+        '@planning'=>'@app/modules/planning'
+    ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
