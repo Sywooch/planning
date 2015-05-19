@@ -3,6 +3,7 @@
 namespace app\modules\planning\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -19,6 +20,17 @@ class Place extends ActiveRecord
     public static function tableName()
     {
         return '{{%place}}';
+    }
+
+
+    /**
+     * @inher
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
     }
 
     /**
@@ -38,8 +50,8 @@ class Place extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'place' => 'Place',
+            'id' => Yii::t('app', 'ID'),
+            'place' => Yii::t('planning', 'Place'),
         ];
     }
 }

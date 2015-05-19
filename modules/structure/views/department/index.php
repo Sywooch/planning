@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\planning\models\search\PlaceSearch */
+/* @var $searchModel app\modules\structure\models\search\DepartmentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('planning', 'Places');
+$this->title = Yii::t('structure', 'Departments');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="place-index">
+<div class="department-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('planning', 'Create place'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('structure', 'Create department'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,8 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'place',
+            'department:ntext',
+            'department_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

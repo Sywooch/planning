@@ -4,10 +4,10 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Place */
+/* @var $model app\modules\planning\models\Place */
 
-$this->title = Yii::t('app', 'Create Place');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Places'), 'url' => ['index']];
+$this->title = Yii::t('planning', 'Create place');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('planning', 'Places'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="place-create">

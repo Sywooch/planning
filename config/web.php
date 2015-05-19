@@ -15,9 +15,13 @@ $config = [
         'planning' => [
             'class' => 'app\modules\planning\Module',
         ],
+        'structure' => [
+            'class' => 'app\modules\structure\Module',
+        ],
     ],
     'aliases'=>[
-        '@planning'=>'@app/modules/planning'
+        '@planning'=>'@app/modules/planning',
+        '@structure'=>'@app/modules/structure',
     ],
     'components' => [
         'request' => [

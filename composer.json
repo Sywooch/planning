@@ -19,7 +19,15 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "edvlerblog/yii2-adldap-module": "v1.0.0",
-        "mdmsoft/yii2-admin": "~1.0"
+        "mdmsoft/yii2-admin": "~1.0",
+        "kartik-v/yii2-widgets": "*",
+        "kartik-v/yii2-sortable": "dev-master",
+        "kartik-v/yii2-editable": "dev-master",
+        "kartik-v/yii2-helpers": "dev-master",
+        "kartik-v/yii2-grid": "dev-master",
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "kartik-v/yii2-widget-fileinput": "*",
+        "kartik-v/yii2-widget-select2": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

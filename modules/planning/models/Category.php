@@ -39,9 +39,9 @@ class Category extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('planning', 'ID'),
+            'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('planning', 'Category'),
-            'weight' => Yii::t('planning', 'Weight'),
+            'weight' => Yii::t('app', 'Weight'),
         ];
     }
 }

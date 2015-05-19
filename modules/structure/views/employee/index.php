@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\planning\models\search\PlaceSearch */
+/* @var $searchModel app\modules\structure\models\search\EmployeeSeach */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('planning', 'Places');
+$this->title = Yii::t('structure', 'Employees');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="place-index">
+<div class="employee-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('planning', 'Create place'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('structure', 'Create employee'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -26,7 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'place',
+            'fio',
+            'position_id',
+            'useGenitive',
+            'chief',
+            // 'email:email',
+            // 'department_id',
+            // 'logic_delete',
+            // 'weight',
+            // 'created_at',
+            // 'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

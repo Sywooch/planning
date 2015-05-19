@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\planning\models\Place */
+/* @var $model app\modules\structure\models\Employee */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('planning', 'Places'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('structure', 'Employees'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="place-view">
+<div class="employee-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,7 +29,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'place',
+            'fio',
+            'position_id',
+            'useGenitive',
+            'chief',
+            'email:email',
+            'department_id',
+            'logic_delete',
+            'weight',
+            'created_at',
+            'updated_at',
         ],
     ]) ?>
 
