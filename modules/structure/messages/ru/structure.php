@@ -10,6 +10,7 @@ return [
     'Update position: ' => 'Изменить должность',
     'Position' => 'Должность',
     'Positions' => 'Список должностей',
+    'Select a position ...' => 'Выберите должность ...',
     'Fio' => 'Ф.И.О.',
     'Chief' => 'Начальник',
     'Logic delete' => 'Логически удален',

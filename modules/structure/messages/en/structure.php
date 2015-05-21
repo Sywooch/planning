@@ -10,6 +10,7 @@ return [
     'Update position: ' => '',
     'Position' => '',
     'Positions' => '',
+    'Select a position ...' => '',
     'Fio' => '',
     'Chief' => '',
     'Logic delete' => '',
