@@ -18,7 +18,7 @@ class EmployeeSeach extends Employee
     public function rules()
     {
         return [
-            [['id', 'position_id', 'useGenitive', 'chief', 'department_id', 'logic_delete', 'weight', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'position_id', 'chief', 'department_id', 'logic_delete', 'weight', 'created_at', 'updated_at'], 'integer'],
             [['fio', 'email'], 'safe'],
         ];
     }
@@ -58,7 +58,6 @@ class EmployeeSeach extends Employee
         $query->andFilterWhere([
             'id' => $this->id,
             'position_id' => $this->position_id,
-            'useGenitive' => $this->useGenitive,
             'chief' => $this->chief,
             'department_id' => $this->department_id,
             'logic_delete' => $this->logic_delete,

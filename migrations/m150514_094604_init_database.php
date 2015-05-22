@@ -7,7 +7,7 @@ class m150514_094604_init_database extends Migration
 {
     public function up()
     {
-         $tableOptions = null;
+        $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
              $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }

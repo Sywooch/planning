@@ -28,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'fio',
             'position_id',
-            'useGenitive',
             'chief',
             // 'email:email',
             // 'department_id',

@@ -26,11 +26,9 @@ use yii\widgets\ActiveForm;
         ],
     ]) ?>
 
-    <?= $form->field($model, 'useGenitive')->checkbox() ?>
+    <?= $form->field($model, 'chief')->checkbox() ?>
 
-    <?= $form->field($model, 'chief')->textInput() ?>
-
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'email')->input('email') ?>
 
     <?= $form->field($model, 'department_id')->widget(Select2::className(), [
         'data'=>ArrayHelper::map(Department::find()->asArray()->all(), 'id', 'department'),
@@ -40,7 +38,7 @@ use yii\widgets\ActiveForm;
         ],
     ]) ?>
 
-    <?= $form->field($model, 'logic_delete')->textInput() ?>
+    <?= $form->field($model, 'logic_delete')->checkbox() ?>
 
     <?= $form->field($model, 'weight')->textInput() ?>
 

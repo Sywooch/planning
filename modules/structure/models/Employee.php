@@ -11,7 +11,6 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $id
  * @property string $fio
  * @property integer $position_id
- * @property integer $useGenitive
  * @property integer $chief
  * @property string $email
  * @property integer $department_id
@@ -43,10 +42,11 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fio', 'useGenitive', 'department_id', 'position_id'], 'required'],
-            [['position_id', 'useGenitive', 'chief', 'department_id', 'logic_delete', 'weight', 'created_at', 'updated_at'], 'integer'],
+            [['fio', 'department_id', 'position_id'], 'required'],
+            [['position_id', 'chief', 'department_id', 'logic_delete', 'weight', 'created_at', 'updated_at'], 'integer'],
             [['fio'], 'string', 'max' => 255],
-            [['email'], 'string', 'max' => 128]
+            [['email'], 'string', 'max' => 128],
+            [['email'], 'email']
         ];
     }
 
@@ -59,7 +59,6 @@ class Employee extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'fio' => Yii::t('structure', 'Fio'),
             'position_id' => Yii::t('structure', 'Position'),
-            'useGenitive' => Yii::t('structure', 'Use Genitive'),
             'chief' => Yii::t('structure', 'Chief'),
             'email' => Yii::t('structure', 'Email'),
             'department_id' => Yii::t('structure', 'Department'),

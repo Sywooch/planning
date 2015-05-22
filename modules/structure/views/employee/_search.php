@@ -21,8 +21,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'position_id') ?>
 
-    <?= $form->field($model, 'useGenitive') ?>
-
     <?= $form->field($model, 'chief') ?>
 
     <?php // echo $form->field($model, 'email') ?>
