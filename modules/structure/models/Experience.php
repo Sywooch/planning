@@ -3,6 +3,7 @@
 namespace app\modules\structure\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "employee_position".
@@ -12,7 +13,7 @@ use Yii;
  * @property integer $start
  * @property integer $stop
  */
-class Experience extends \yii\db\ActiveRecord
+class Experience extends ActiveRecord
 {
     /**
      * @inheritdoc

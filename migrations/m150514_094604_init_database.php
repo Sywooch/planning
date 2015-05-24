@@ -195,10 +195,6 @@ class m150514_094604_init_database extends Migration
         ], $tableOptions);
         $this->addForeignKey('fk_report_department','{{%report}}','department_id','{{%department}}','id','SET NULL');
 
-        $this->execute('INSERT INTO items VALUES ("deputy",2,"Заместители, которые проверяют проекты планов","","s:0:\"\";"),
-                      ("CheckPlanProject",1,"Проверка проектов планов мероприятий","","s:0:\"\";");');
-        $this->execute('INSERT INTO itemchildren VALUES ("deputy","CheckPlanProject"),("admin","CheckPlanProject");');
-
         $this->createTable('{{%template}}', [
             'id'=>Schema::TYPE_PK,
             'start'=>Schema::TYPE_TIMESTAMP.' NOT NULL',

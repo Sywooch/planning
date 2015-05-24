@@ -56,7 +56,7 @@ $config = [
             'class'=>'Edvlerblog\Ldap',
             'options'=>[
                 'ad_port' => 389,
-                'domain_controllers' => array('192.168.7.2'),
+                'domain_controllers' => array('vlgd61.ru'),
                 'account_suffix' => '@vlgd61.ru',
                 'base_dn' => 'OU=adm,DC=vlgd61,DC=ru',
                 'admin_username' => 'podlasenko',
@@ -80,6 +80,7 @@ $config = [
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
+            'admin/*',
             'site/*', // add or remove allowed actions to this list
         ]
     ],

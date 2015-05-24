@@ -4,6 +4,7 @@ namespace app\modules\structure\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%employee}}".
@@ -19,7 +20,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class Employee extends \yii\db\ActiveRecord
+class Employee extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -44,6 +45,7 @@ class Employee extends \yii\db\ActiveRecord
         return [
             [['fio', 'department_id', 'position_id'], 'required'],
             [['position_id', 'chief', 'department_id', 'logic_delete', 'weight', 'created_at', 'updated_at'], 'integer'],
+            [['fio', 'email'], 'trim'],
             [['fio'], 'string', 'max' => 255],
             [['email'], 'string', 'max' => 128],
             [['email'], 'email']

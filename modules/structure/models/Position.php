@@ -3,6 +3,7 @@
 namespace app\modules\structure\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%position}}".
@@ -10,7 +11,7 @@ use Yii;
  * @property integer $id
  * @property string $position
  */
-class Position extends \yii\db\ActiveRecord
+class Position extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -27,6 +28,7 @@ class Position extends \yii\db\ActiveRecord
     {
         return [
             [['position'], 'required'],
+            [['position'], 'trim'],
             [['position'], 'string', 'max' => 255]
         ];
     }

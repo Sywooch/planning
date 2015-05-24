@@ -18,4 +18,7 @@ return [
     'Employee' => '',
     'Create employee' => '',
     'Update employee: ' => '',
+    'Abbr' => '',
+    '{abbr} is too long!' => '',
+    '{abbr} is not unique!' => '',
 ];

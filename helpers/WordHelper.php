@@ -2,6 +2,7 @@
 
 namespace app\helpers;
 use Yii;
+use app\modules\structure\models\Word;
 
 class WordHelper {
 
@@ -14,9 +15,7 @@ class WordHelper {
         $punctuation = (in_array(mb_substr($word, -1, 1, "UTF-8"), [',', '.', '!', '?']))? mb_substr($word, -1, 1, "UTF-8"): '';
         if($punctuation!='')
             $word = self::cutWordRight($word,1);
-        if(in_array(mb_strtoupper($word, "UTF-8"), ['ЗАГС','ГОЧС','ЗОЖ','ДТиСР','СДЮСШОР','ВИТИ','НИЯУ','МИФИ','(ОФИУМС)','СМИ' ,'МКУ',
-          '«ДСиГХ»', 'МО', 'УФСБ', 'КУИ', 'УФМС', 'ИКРО', 'ТИК', 'ГАС','ЖКХ','ТОСам', 'ГКУ', 'РО', 'ЗАО', 'ООО', 'ФГУП', 'ГБУК', 'ИФНС',
-          'СОН', 'ГБУ', 'ВФ', 'МСЧ', 'ФГБУЗ', 'НКЦ', 'ФМБА', 'МБУДО', 'ДООЦ']))
+        if(in_array(mb_strtoupper($word, "UTF-8"), Word::getAllWords(Word::ABBR)))
             return mb_strtoupper($word, "UTF-8");
         $lastChar = mb_substr($word, -1, 1, "UTF-8");
         $lastTwoChars = mb_substr($word, -2, 2, "UTF-8");
@@ -27,12 +26,7 @@ class WordHelper {
         if(in_array($lastTwoChars, ['ен', 'ов', 'ии', 'ой', 'их', 'ых', 'ей', 'ым', 'ам', 'ев']) ||
           in_array($lastChar, ['ы', 'ю']) ||
           in_array($lastThreeChars, ['ами', 'ями' , 'ыми', 'ими', 'ого', 'его', 'ому']) ||
-          in_array($word, ['по', 'за', 'и', 'с', 'технологий', 'образования',
-            'здравоохранения', 'развития', 'города', 'Волгодонска', 'учета', 'труда','предпринимательства',
-            'туризма', 'самоуправления', 'Мэра', 'обслуживания', 'рынка', 'услуг', 'прав', 'Комитета','порядка',
-            'отношений','г','г.Волгодонска', 'попечительства', 'имущества', 'в', 'закупок','формирования','Управления',
-            'комиссариата','Волгодонску', 'организаций', 'сил','пособий', 'ухода', 'благоустройства', 'ремонта', 'юношества',
-            'надзора','землеустройства','обеспечения'])) //@todo По возможности перенести в файл или базу
+          in_array($word, Word::getAllWords(Word::EXCLUSION)))
             return $word.$punctuation;
         if(in_array($lastChar,$consonants))
             return $word.'а'.$punctuation;
