@@ -11,4 +11,6 @@ return [
     'Created At'=>'Добавлено',
     'Updated At' => 'Изменено',
     'Are you sure you want to delete this item?'=>'Вы уверены, что хотите удалить этот элемент?',
+    'Type' => 'Тип',
+    'Select type...' => 'Выберите тип...',
 ];

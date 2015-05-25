@@ -47,6 +47,7 @@ class Word extends ActiveRecord
     {
         return [
             'word' => Yii::t('structure', 'Word'),
+            'type' => Yii::t('app', 'Type'),
         ];
     }
 

@@ -17,7 +17,7 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'type')->widget(Select2::className(), [
         'data' => \app\modules\structure\models\Word::getTypes(),
-        'options' => ['placeholder' => Yii::t('structure', 'Select type...')],
+        'options' => ['placeholder' => Yii::t('app', 'Select type...')],
         'pluginOptions' => [
             'allowClear' => true
         ],

@@ -19,6 +19,9 @@ use yii\db\ActiveRecord;
  * @property integer $weight
  * @property integer $created_at
  * @property integer $updated_at
+ *
+ * Relations properties
+ * @property Phone[] $phones
  */
 class Employee extends ActiveRecord
 {
@@ -69,5 +72,12 @@ class Employee extends ActiveRecord
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
+    }
+
+    /**
+     * @return Phone[]
+     */
+    public function getPhones() {
+        return $this->hasMany(Phone::className(),['employee_id'=>'id']);
     }
 }
