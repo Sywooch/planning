@@ -18,12 +18,17 @@ use yii\widgets\MaskedInput;
         </span>
         <?=
         MaskedInput::widget([
-            'name'=>'Employee[phones][][phone]',
+            'name'=>'template',
             'mask'=>$mask,
             'options'=>[
                 'class'=>'form-control',
             ],
         ]) ?>
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-danger delete-phone">
+                <i class="glyphicon glyphicon-remove"></i>
+            </button>
+        </span>
     </div>
-    <?= Html::hiddenInput('Employee[phones][][type]', constant(Phone::className().'::'.strtoupper($type))) ?>
+    <?= Html::hiddenInput('template', constant(Phone::className().'::'.strtoupper($type))) ?>
 </div>

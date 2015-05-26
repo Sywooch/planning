@@ -8,3 +8,8 @@ $('.add-phone').click(function(){
     $('#'+input.attr('id')).inputmask(window[input.data('pluginInputmask')]);
     return false;
 });
+
+$('.delete-phone').live('click', function(){
+    alert($(this).parent('.input-group').html());
+    return false;
+});
