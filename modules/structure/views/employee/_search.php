@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\structure\models\search\EmployeeSeach */
+/* @var $model app\modules\structure\models\search\EmployeeSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -19,11 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'fio') ?>
 
-    <?= $form->field($model, 'position_id') ?>
-
-    <?= $form->field($model, 'chief') ?>
-
-    <?php // echo $form->field($model, 'email') ?>
+    <?= $form->field($model, 'email') ?>
 
     <?php // echo $form->field($model, 'department_id') ?>
 

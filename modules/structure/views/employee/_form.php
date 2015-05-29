@@ -18,29 +18,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'fio')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'position_id')->widget(Select2::className(), [
-        'data'=>ArrayHelper::map(Position::find()->all(), 'id', 'position'),
-        'options'=>['placeholder'=>Yii::t('structure', 'Select a position ...')],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ]) ?>
-
-    <?= $form->field($model, 'chief')->checkbox() ?>
-
     <?= $form->field($model, 'email')->input('email') ?>
 
-    <?= $form->field($model, 'department_id')->widget(Select2::className(), [
-        'data'=>ArrayHelper::map(Department::find()->asArray()->all(), 'id', 'department'),
-        'options' => ['placeholder' => Yii::t('structure', 'Select a department ...')],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ]) ?>
-
     <?= $form->field($model, 'logic_delete')->checkbox() ?>
-
-    <?= $form->field($model, 'weight')->textInput() ?>
 
     <?= $this->render('/phone/addPhones') ?>
 

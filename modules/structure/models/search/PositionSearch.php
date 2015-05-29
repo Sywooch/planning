@@ -5,12 +5,12 @@ namespace app\modules\structure\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\structure\models\Employee;
+use app\modules\structure\models\Position;
 
 /**
- * EmployeeSeach represents the model behind the search form about `app\modules\structure\models\Employee`.
+ * PositionSearch represents the model behind the search form about `app\modules\structure\models\Position`.
  */
-class EmployeeSeach extends Employee
+class PositionSearch extends Position
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class EmployeeSeach extends Employee
     public function rules()
     {
         return [
-            [['id', 'position_id', 'chief', 'department_id', 'logic_delete', 'weight', 'created_at', 'updated_at'], 'integer'],
-            [['fio', 'email'], 'safe'],
+            [['id'], 'integer'],
+            [['position', 'weight'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class EmployeeSeach extends Employee
      */
     public function search($params)
     {
-        $query = Employee::find();
+        $query = Position::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -57,17 +57,9 @@ class EmployeeSeach extends Employee
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'position_id' => $this->position_id,
-            'chief' => $this->chief,
-            'department_id' => $this->department_id,
-            'logic_delete' => $this->logic_delete,
-            'weight' => $this->weight,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'fio', $this->fio])
-            ->andFilterWhere(['like', 'email', $this->email]);
+        $query->andFilterWhere(['like', 'position', $this->position]);
 
         return $dataProvider;
     }

@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
  *
  * @property integer $id
  * @property string $position
+ * @property integer $weight
  */
 class Position extends ActiveRecord
 {
@@ -27,9 +28,10 @@ class Position extends ActiveRecord
     public function rules()
     {
         return [
-            [['position'], 'required'],
+            [['position', 'weight'], 'required'],
             [['position'], 'trim'],
-            [['position'], 'string', 'max' => 255]
+            [['position'], 'string', 'max' => 255],
+//            [['weight'], 'default', 'value'=>1000]
         ];
     }
 
@@ -41,6 +43,7 @@ class Position extends ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'position' => Yii::t('structure', 'Position'),
+            'weight' => Yii::t('app', 'weight'),
         ];
     }
 }

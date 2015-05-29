@@ -9,7 +9,7 @@ $('.add-phone').click(function(){
     return false;
 });
 
-$('.delete-phone').live('click', function(){
-    alert($(this).parent('.input-group').html());
+$(document).on('click', '.delete-phone', function(){
+    $(this).parents('.input-group').remove();
     return false;
 });

@@ -4,7 +4,7 @@ namespace app\modules\structure\controllers;
 
 use Yii;
 use app\modules\structure\models\Position;
-use app\modules\structure\models\search\PositionSeach;
+use app\modules\structure\models\search\PositionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,7 +32,7 @@ class PositionController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PositionSeach();
+        $searchModel = new PositionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
