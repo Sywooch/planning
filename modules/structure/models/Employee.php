@@ -21,6 +21,7 @@ use yii\db\ActiveRecord;
  */
 class Employee extends ActiveRecord
 {
+    public $_phones;
     /**
      * @inheritdoc
      */
@@ -47,7 +48,8 @@ class Employee extends ActiveRecord
             [['fio', 'email'], 'trim'],
             [['fio'], 'string', 'max' => 255],
             [['email'], 'string', 'max' => 128],
-            [['email'], 'email']
+            [['email'], 'email'],
+            [['_phones'], 'safe'],
         ];
     }
 

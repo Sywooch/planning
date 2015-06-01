@@ -28,6 +28,7 @@ return [
     'Create word' => '',
     'Update word: ' => '',
     'Phone' => '',
+    'Phones' => '',
     'Add {type} phone' => '',
     'work' => '',
     'mobile' => '',
