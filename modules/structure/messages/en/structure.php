@@ -32,4 +32,8 @@ return [
     'Add {type} phone' => '',
     'work' => '',
     'mobile' => '',
+    'Staff unit' => '',
+    'Staff list' => '',
+    'Create staff unit' => '',
+    'Update staff unit: ' => '',
 ];

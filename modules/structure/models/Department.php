@@ -5,6 +5,7 @@ namespace app\modules\structure\models;
 use app\helpers\WordHelper;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -21,6 +22,7 @@ use yii\db\ActiveRecord;
  */
 class Department extends ActiveRecord
 {
+    public $staffListCount;
     /**
      * @inheritdoc
      */
@@ -38,6 +40,10 @@ class Department extends ActiveRecord
         ];
     }
 
+    public static function find() {
+        return new DepartmentQuery(get_called_class());
+    }
+
     public function getChild()
     {
         return $this->hasMany(Department::className(),['department_id'=>'id']);
@@ -46,6 +52,10 @@ class Department extends ActiveRecord
     public function getParent()
     {
         return $this->hasOne(Department::className(), ['id'=>'department_id']);
+    }
+
+    public function getStaffList() {
+        return $this->hasMany(StaffList::className(), ['department_id' => 'id']);
     }
 
     /**
@@ -83,8 +93,6 @@ class Department extends ActiveRecord
         {
             $words = explode(' ', $this->department);
             $_i=0;
-            //@todo По возможности перенести массив в файл или базу
-
             $properNames = Word::getAllWords(Word::CAPITAL);
 
             foreach($words as $word)
@@ -94,12 +102,12 @@ class Department extends ActiveRecord
                     $_i++;
                     continue;
                 }
-                if(mb_substr($word,0,1,'UTF-8')=='«') {
+                if(mb_substr($word,0,1,'UTF-8')=='В«') {
                     $wordInQuotes = true;
                     $_i++;
                     continue;
                 }
-                if(mb_substr($word,-1,1,'UTF-8')=='»'){
+                if(mb_substr($word,-1,1,'UTF-8')=='В»'){
                     $wordInQuotes = false;
                     $_i++;
                     continue;
@@ -113,5 +121,12 @@ class Department extends ActiveRecord
             return implode(' ', $words);
         }
         return $this->department;
+    }
+}
+
+class DepartmentQuery extends ActiveQuery {
+
+    public function withStaffCount() {
+        return $this->joinWith('staffList')->addSelect(' COUNT({{%staff_list}}.department_id) as staffListCount')->groupBy('{{%department}}.id');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\structure\models\Department;
 use yii\helpers\Html;
 use yii\grid\GridView;
 

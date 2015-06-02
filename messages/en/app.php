@@ -13,4 +13,5 @@ return [
     'Are you sure you want to delete this item?'=>'',
     'Type' => '',
     'Select type...' => '',
+    'Count' => '',
 ];

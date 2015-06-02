@@ -32,4 +32,8 @@ return [
     'Add {type} phone' => 'Добавить {type} телефон',
     'work' => 'рабочий',
     'mobile' => 'мобильный',
+    'Staff unit' => 'Штатная единица',
+    'Staff list' => 'Штатное расписание',
+    'Create staff unit' => 'Добавить штатную единицу',
+    'Update staff unit: ' => 'Изменить штатную единицу: ',
 ];
