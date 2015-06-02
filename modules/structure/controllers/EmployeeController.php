@@ -63,15 +63,7 @@ class EmployeeController extends Controller
     {
         $model = new Employee();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {//
-            if(!empty($_POST['Employee']['phones'])){
-                foreach($model->_phones as $phone){
-                    $newPhone = new Phone();
-                    $newPhone->phone = Phone::normalize($phone['phone']);
-                    $newPhone->type = $phone['type'];
-                    $model->link('phones', $newPhone);
-                }
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [

@@ -49,7 +49,7 @@ class Employee extends ActiveRecord
             [['fio'], 'string', 'max' => 255],
             [['email'], 'string', 'max' => 128],
             [['email'], 'email'],
-            [['_phones'], 'safe'],
+            [['phones'], 'safe'],
         ];
     }
 
@@ -73,5 +73,21 @@ class Employee extends ActiveRecord
      */
     public function getPhones() {
         return $this->hasMany(Phone::className(),['employee_id'=>'id']);
+    }
+
+    public function setPhones($value) {
+        $this->_phones = $value;
+    }
+
+    public function afterSave($insert, $changedAttributes) {
+        if(!empty($this->_phones)){
+            foreach($this->_phones as $phone){
+                $newPhone = new Phone();
+                $newPhone->phone = Phone::normalize($phone['phone']);
+                $newPhone->type = $phone['type'];
+                $this->link('phones', $newPhone);
+            }
+        }
+        parent::afterSave($insert, $changedAttributes);
     }
 }

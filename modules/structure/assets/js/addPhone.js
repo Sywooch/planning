@@ -13,6 +13,22 @@ $('.add-phone').click(function(){
 });
 
 $(document).on('click', '.delete-phone', function(){
+    var id = $(this).data('id');
+    if(id){
+        $.ajax({
+            url: $(this).data('url'),
+            async: false,
+            type: 'post',
+            dataType: "json",
+            data:{id:id, _csrf: yii.getCsrfToken()},
+            statusCode: {
+                404: function() {
+                    console.log('Phone not deleted');
+                    return false;
+                }
+            }
+        });
+    }
     $(this).parents('.phone').remove();
     return false;
 });
