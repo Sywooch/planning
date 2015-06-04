@@ -13,7 +13,6 @@ class m150527_083545_structure_change extends Migration
         }
         $this->dropTable('employee_position');
         $this->dropForeignKey('fk_employee_department', '{{%employee}}');
-        $this->dropForeignKey('fk_employee_position', '{{%employee}}');
         $this->dropColumn('{{%employee}}', 'department_id');
         $this->dropColumn('{{%employee}}', 'position_id');
         $this->dropColumn('{{%employee}}', 'chief');
@@ -55,15 +54,4 @@ class m150527_083545_structure_change extends Migration
 
         return false;
     }
-    
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-    
-    public function safeDown()
-    {
-    }
-    */
 }

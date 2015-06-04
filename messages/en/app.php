@@ -14,4 +14,6 @@ return [
     'Type' => '',
     'Select type...' => '',
     'Count' => '',
+    'Start' => '',
+    'Stop' => '',
 ];

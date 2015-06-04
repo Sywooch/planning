@@ -20,7 +20,7 @@ class Experience extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'employee_position';
+        return '{{%experience}}';
     }
 
     /**
@@ -40,10 +40,10 @@ class Experience extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'employee_id' => Yii::t('structure', 'Employee ID'),
-            'position_id' => Yii::t('structure', 'Position ID'),
-            'start' => Yii::t('structure', 'Start'),
-            'stop' => Yii::t('structure', 'Stop'),
+            'employee_id' => 'Employee',
+            'position_id' => 'Position',
+            'start' => Yii::t('app', 'Start'),
+            'stop' => Yii::t('app', 'Stop'),
         ];
     }
 }
