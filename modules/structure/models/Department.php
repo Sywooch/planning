@@ -58,6 +58,10 @@ class Department extends ActiveRecord
         return $this->hasMany(StaffList::className(), ['department_id' => 'id']);
     }
 
+    public function getExperience() {
+        return $this->hasMany(Experience::className(), ['staff_unit_id' => 'id'])->via('staffList');
+    }
+
     /**
      * @inheritdoc
      */

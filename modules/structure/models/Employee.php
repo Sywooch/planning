@@ -21,6 +21,10 @@ use yii\db\ActiveRecord;
  */
 class Employee extends ActiveRecord
 {
+    const HOLDEVENT = 1;
+    const RESPONSIBLE = 2;
+    const INVITED = 3;
+
     public $_phones;
     /**
      * @inheritdoc

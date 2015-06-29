@@ -24,6 +24,13 @@ $config = [
         '@structure'=>'@app/modules/structure',
     ],
     'components' => [
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                // your rules go here
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'q0H2xHXaLOyLQtYygLx-GeLuSfMyHafF',

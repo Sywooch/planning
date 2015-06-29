@@ -6,12 +6,13 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "employee_position".
+ * This is the model class for table "{{%experience}}".
  *
+ * @property integer $id
  * @property integer $employee_id
- * @property integer $position_id
- * @property integer $start
- * @property integer $stop
+ * @property string $start
+ * @property string $stop
+ * @property integer $staff_unit_id
  */
 class Experience extends ActiveRecord
 {
@@ -29,8 +30,9 @@ class Experience extends ActiveRecord
     public function rules()
     {
         return [
-            [['employee_id', 'position_id'], 'required'],
-            [['employee_id', 'position_id', 'start', 'stop'], 'integer']
+            [['employee_id', 'staff_unit_id'], 'required'],
+            [['employee_id', 'staff_unit_id'], 'integer'],
+            [['start', 'stop'], 'safe']
         ];
     }
 
@@ -40,10 +42,11 @@ class Experience extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'employee_id' => 'Employee',
-            'position_id' => 'Position',
-            'start' => Yii::t('app', 'Start'),
-            'stop' => Yii::t('app', 'Stop'),
+            'id' => Yii::t('structure', 'ID'),
+            'employee_id' => Yii::t('structure', 'Employee ID'),
+            'start' => Yii::t('structure', 'Start'),
+            'stop' => Yii::t('structure', 'Stop'),
+            'staff_unit_id' => Yii::t('structure', 'Staff Unit ID'),
         ];
     }
 }

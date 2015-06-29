@@ -36,5 +36,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
-
+    <?php $exp = $model->experience; ?>
 </div>

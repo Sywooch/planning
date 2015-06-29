@@ -60,12 +60,12 @@ class StaffListController extends Controller
      * @param integer $position_id
      * @return mixed
      */
-    public function actionView($department_id, $position_id)
+    /*public function actionView($department_id, $position_id)
     {
         return $this->render('view', [
             'model' => $this->findModel($department_id, $position_id),
         ]);
-    }
+    }*/
 
     /**
      * Creates a new StaffList model.
@@ -88,13 +88,12 @@ class StaffListController extends Controller
     /**
      * Updates an existing StaffList model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $department_id
-     * @param integer $position_id
+     * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($department_id, $position_id)
+    public function actionUpdate($id)
     {
-        $model = $this->findModel($department_id, $position_id);
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'department_id' => $model->department_id, 'position_id' => $model->position_id]);
@@ -108,13 +107,12 @@ class StaffListController extends Controller
     /**
      * Deletes an existing StaffList model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $department_id
-     * @param integer $position_id
+     * @param integer $id
      * @return mixed
      */
-    public function actionDelete($department_id, $position_id)
+    public function actionDelete($id)
     {
-        $this->findModel($department_id, $position_id)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -122,14 +120,13 @@ class StaffListController extends Controller
     /**
      * Finds the StaffList model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $department_id
-     * @param integer $position_id
+     * @param integer $id
      * @return StaffList the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($department_id, $position_id)
+    protected function findModel($id)
     {
-        if (($model = StaffList::findOne(['department_id' => $department_id, 'position_id' => $position_id])) !== null) {
+        if (($model = StaffList::findOne(['id' => $id])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
