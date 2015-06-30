@@ -109,6 +109,33 @@ class Word extends ActiveRecord
         return [self::ABBR, self::EXCLUSION, self::CAPITAL];
     }
 
+    public static function getFileName($type) {
+        switch($type) {
+            case self::ABBR:
+                return 'abbr';
+            case self::EXCLUSION:
+                return 'exclusion';
+            case self::CAPITAL:
+                return 'capital';
+        }
+    }
+
+    public function createPhpFile($content = null) {
+        if($content === null)
+            $content = Word::find()->select('word')->where(['type'=>$this->type])->asArray()->all();
+        if(!file_exists($path = Yii::getAlias('@structure/models/word')))
+            mkdir($path, 0755, true);
+        $i = 0;
+        $content = ArrayHelper::map($content, function() use (&$i) {
+            return $i++;
+        }, 'word');
+        file_put_contents($path.'/'.self::getFileName($this->type).'.php', '<?php return ' . var_export($content, true) . ';');
+    }
+
+    public static function getWords($type) {
+        return file_exists(($path = Yii::getAlias('@structure/models/word/').Word::getFileName($type).'.php'))?require($path):[];
+    }
+
     public static function getTypes() {
         return [
             self::ABBR => Yii::t('structure', 'Abbr'),

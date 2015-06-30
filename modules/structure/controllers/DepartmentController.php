@@ -49,7 +49,7 @@ class DepartmentController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => Department::find()->joinWith('employees')->where(['{{%department}}.id' => $id])->one(),
         ]);
     }
 

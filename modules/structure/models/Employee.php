@@ -41,6 +41,22 @@ class Employee extends ActiveRecord
         ];
     }
 
+    public function getExperience() {
+        return $this->hasMany(Experience::className(), ['employee_id' => 'id']);
+    }
+
+    public function getStaffUnit() {
+        return $this->hasOne(StaffList::className(), ['id' => 'staff_unit_id'])->via('experience');
+    }
+
+    public function getPosition() {
+        return $this->hasOne(Position::className(), ['id' => 'position_id'])->via('staffUnit');
+    }
+
+    public function getDepartment() {
+        return $this->hasOne(Department::className(), ['id' => 'department_id'])->via('staffUnit');
+    }
+
     /**
      * @inheritdoc
      */

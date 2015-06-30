@@ -6,5 +6,7 @@ return [
     'username' => 'root',
     'password' => 'ktybydct[gjckfk',
     'charset' => 'utf8',
-    'tablePrefix' => 'tbl_'
+    'tablePrefix' => 'tbl_',
+    'enableSchemaCache' => true,
+    'schemaCacheDuration' => 1800
 ];

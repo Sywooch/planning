@@ -14,6 +14,9 @@ use yii\db\ActiveRecord;
  */
 class Position extends ActiveRecord
 {
+    public function __toString() {
+        return $this->position;
+    }
     /**
      * @inheritdoc
      */

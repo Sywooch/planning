@@ -5,19 +5,15 @@ $params = require(__DIR__ . '/params.php');
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'structure'],
     'language'=>'ru-RU',
     'modules'=>[
         'admin'=>[
             'class'=>'mdm\admin\Module',
             'layout' => 'left-menu',
         ],
-        'planning' => [
-            'class' => 'app\modules\planning\Module',
-        ],
-        'structure' => [
-            'class' => 'app\modules\structure\Module',
-        ],
+        'planning' => 'app\modules\planning\Module',
+        'structure' => 'app\modules\structure\Module',
     ],
     'aliases'=>[
         '@planning'=>'@app/modules/planning',
@@ -27,9 +23,6 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-                // your rules go here
-            ],
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation

@@ -51,6 +51,7 @@ class WordController extends Controller
         $model = new Word();
 
         if ($model->load(Yii::$app->request->post()) && $model->saveWords()) {
+            $model->createPhpFile();
             return $this->redirect(['index']);
         } else {
             return $this->render('create', [
@@ -70,6 +71,7 @@ class WordController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->createPhpFile();
             return $this->redirect(['view', 'id' => $model->word]);
         } else {
             return $this->render('update', [

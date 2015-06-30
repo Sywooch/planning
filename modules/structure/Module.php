@@ -19,5 +19,13 @@ class Module extends \yii\base\Module
               'basePath' => '@structure/messages'
             ];
         }
+        Yii::$app->urlManager->addRules([
+            'staff-list' => 'structure/staff-list/index',
+            '<controller:[a-z\-]+>s' => 'structure/<controller>/index',
+            '<controller:[a-z\-]+>/<id:\d+>' => 'structure/<controller>/view',
+            '<controller:[a-z\-]+>/create' => 'structure/<controller>/create',
+            '<controller:[a-z\-]+>/<id:\d+>/edit' => 'structure/<controller>/update',
+            '<controller:[a-z\-]+>/<id:\d+>/delete' => 'structure/<controller>/delete',
+        ],false);
     }
 }

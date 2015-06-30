@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\structure\models\Department;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -36,5 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
-    <?php $exp = $model->experience; ?>
+    <?php if(!empty($model->employees)): ?>
+        <h3><?= Yii::t('structure', 'Staff list') ?></h3>
+        <?php foreach($model->employees as $key => $employee): ?>
+            <?= ($key+1).'. '.$employee->fio.' - '.$employee->position ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>

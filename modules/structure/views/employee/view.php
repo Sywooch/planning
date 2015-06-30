@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="employee-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <h4><?= $model->position .' '. Html::a(Html::encode($model->department->getDepartmentGenitive()),['department/view', 'id'=>$model->department->id]) ?></h4>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [

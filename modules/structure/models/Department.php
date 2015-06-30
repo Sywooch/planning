@@ -19,10 +19,15 @@ use yii\db\ActiveRecord;
  *
  * @property Department[] $child
  * @property Department $parent
+ * @property Employee[] $employees
  */
 class Department extends ActiveRecord
 {
     public $staffListCount;
+
+    public function __toString() {
+        return $this->department;
+    }
     /**
      * @inheritdoc
      */
@@ -59,7 +64,15 @@ class Department extends ActiveRecord
     }
 
     public function getExperience() {
-        return $this->hasMany(Experience::className(), ['staff_unit_id' => 'id'])->via('staffList');
+        return $this->hasMany(Experience::className(), ['staff_unit_id' => 'id'])->via('staffList', function($q){$q->from('{{%staff_list}} st');});
+    }
+
+    public function getEmployees() {
+        return $this->hasMany(Employee::className(), ['id' => 'employee_id'])
+            ->via('experience', function($q){$q->from('{{%experience}} exp');})
+            ->joinWith([
+                'position' => function($q){$q->from('{{%position}} po');},
+            ]);
     }
 
     /**
@@ -91,13 +104,13 @@ class Department extends ActiveRecord
 
     public function getDepartmentGenitive() {
         $wordInQuotes = false;
-        $depBegin = Word::getAllWords(Word::ABBR);
+        $depBegin = Word::getWords(Word::ABBR);
         $matches = array_filter($depBegin, function($var){ return preg_match("/^$var/i", $this->department); });
         if(count($matches)==0)
         {
             $words = explode(' ', $this->department);
             $_i=0;
-            $properNames = Word::getAllWords(Word::CAPITAL);
+            $properNames = Word::getWords(Word::CAPITAL);
 
             foreach($words as $word)
             {

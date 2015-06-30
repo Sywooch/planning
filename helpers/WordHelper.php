@@ -6,7 +6,7 @@ use app\modules\structure\models\Word;
 
 class WordHelper {
 
-    public static function Genitive($word)
+    public static function genitive($word)
     {
         //ИСКЛЮЧЕНИЯ В СИСТЕМЕ
         if(in_array($word,array('пресс-служба')))
@@ -15,7 +15,7 @@ class WordHelper {
         $punctuation = (in_array(mb_substr($word, -1, 1, "UTF-8"), [',', '.', '!', '?']))? mb_substr($word, -1, 1, "UTF-8"): '';
         if($punctuation!='')
             $word = self::cutWordRight($word,1);
-        if(in_array(mb_strtoupper($word, "UTF-8"), Word::getAllWords(Word::ABBR)))
+        if(in_array(mb_strtoupper($word, "UTF-8"), Word::getWords(Word::ABBR)))
             return mb_strtoupper($word, "UTF-8");
         $lastChar = mb_substr($word, -1, 1, "UTF-8");
         $lastTwoChars = mb_substr($word, -2, 2, "UTF-8");
@@ -26,7 +26,7 @@ class WordHelper {
         if(in_array($lastTwoChars, ['ен', 'ов', 'ии', 'ой', 'их', 'ых', 'ей', 'ым', 'ам', 'ев']) ||
           in_array($lastChar, ['ы', 'ю']) ||
           in_array($lastThreeChars, ['ами', 'ями' , 'ыми', 'ими', 'ого', 'его', 'ому']) ||
-          in_array($word, Word::getAllWords(Word::EXCLUSION)))
+          in_array($word, Word::getWords(Word::EXCLUSION)))
             return $word.$punctuation;
         if(in_array($lastChar,$consonants))
             return $word.'а'.$punctuation;
@@ -65,16 +65,16 @@ class WordHelper {
         return $word.$punctuation;
     }
 
+    public static function getGenitiveForm($string){
+        if(is_array($string))
+            return implode(' ', array_map(function($el){return self::genitive($el);}, $string));
+        else
+            return self::genitive($string);
+    }
+
     public static function changeQuotes($str) {
         $str = preg_replace('/(^|\s|\()"/','$1«',$str);
         $str = preg_replace('/"(\;|\!|\?|\:|\.|\,|$|\)|\s)/','»$1',$str);
-        return $str;
-    }
-
-    public static function mb_ucfirst($str)
-    {
-        if(explode(' ',$str)[0]!="Мэр")
-            $str = mb_strtolower(mb_substr($str, 0, 1,'UTF-8'),'UTF-8') . mb_substr($str, 1,strlen($str)-1,'UTF-8');
         return $str;
     }
 
