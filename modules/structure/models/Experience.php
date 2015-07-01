@@ -16,6 +16,8 @@ use yii\db\ActiveRecord;
  */
 class Experience extends ActiveRecord
 {
+    public $department;
+    public $position;
     /**
      * @inheritdoc
      */
@@ -32,7 +34,7 @@ class Experience extends ActiveRecord
         return [
             [['employee_id', 'staff_unit_id'], 'required'],
             [['employee_id', 'staff_unit_id'], 'integer'],
-            [['start', 'stop'], 'safe']
+            [['start', 'stop', 'position'], 'safe']
         ];
     }
 

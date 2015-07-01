@@ -36,4 +36,6 @@ return [
     'Staff list' => 'Штатное расписание',
     'Create staff unit' => 'Добавить штатную единицу',
     'Update staff unit: ' => 'Изменить штатную единицу: ',
+    'List of employees' => 'Список сотрудников',
+    'There {n, plural, =0{are no employees} =1{is one employee} other{are # employees}}' => '{n, plural, =0{сотрудников нет} =1{один сотрудник} one{# сотрудник} few{# сотрудника} many{# сотрудников} other{# сотрудника}}',
 ];

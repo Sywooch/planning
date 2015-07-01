@@ -26,6 +26,7 @@ class Module extends \yii\base\Module
             '<controller:[a-z\-]+>/create' => 'structure/<controller>/create',
             '<controller:[a-z\-]+>/<id:\d+>/edit' => 'structure/<controller>/update',
             '<controller:[a-z\-]+>/<id:\d+>/delete' => 'structure/<controller>/delete',
+            '<module:\w+>/<controller:[a-z\-]+>/<action:\w+>' => '<module>/<controller>/<action>'
         ],false);
     }
 }

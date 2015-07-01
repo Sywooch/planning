@@ -1,11 +1,9 @@
 <?php
 /* @var $this yii\web\View */
 /* @var $model yii\db\ActiveRecord*/
-use app\modules\structure\EmployeeFormAsset;
 use app\modules\structure\models\Phone;
 use yii\helpers\StringHelper;
 
-EmployeeFormAsset::register($this);
 $modelStr = (isset($model)) ? StringHelper::basename($model::className()) : 'Template';
 ?>
 <div class="form-group field-add-phones">

@@ -5,6 +5,8 @@ namespace app\modules\structure\controllers;
 use Yii;
 use app\modules\structure\models\StaffList;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -115,6 +117,25 @@ class StaffListController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDepPos() {
+        if(isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $dep_id = $parents[0];
+                $out = (new Query())
+                    ->select(['staff.id AS id', 'pos.position AS name'])
+                    ->from('{{%staff_list}} staff')
+                    ->where(['department_id'=>$dep_id])
+                    ->andWhere('staff.count > 0')
+                    ->innerJoin('{{%position}} pos', 'staff.position_id = pos.id')
+                    ->all();
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
     }
 
     /**

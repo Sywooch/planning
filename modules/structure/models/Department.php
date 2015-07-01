@@ -45,13 +45,9 @@ class Department extends ActiveRecord
         ];
     }
 
-    public static function find() {
-        return new DepartmentQuery(get_called_class());
-    }
-
     public function getChild()
     {
-        return $this->hasMany(Department::className(),['department_id'=>'id']);
+        return $this->hasMany(Department::className(),['department_id'=>'id'])->with('employees');
     }
 
     public function getParent()
@@ -64,15 +60,13 @@ class Department extends ActiveRecord
     }
 
     public function getExperience() {
-        return $this->hasMany(Experience::className(), ['staff_unit_id' => 'id'])->via('staffList', function($q){$q->from('{{%staff_list}} st');});
+        return $this->hasMany(Experience::className(), ['staff_unit_id' => 'id'])->via('staffList');
     }
 
     public function getEmployees() {
         return $this->hasMany(Employee::className(), ['id' => 'employee_id'])
-            ->via('experience', function($q){$q->from('{{%experience}} exp');})
-            ->joinWith([
-                'position' => function($q){$q->from('{{%position}} po');},
-            ]);
+            ->via('experience')
+            ->with('position');
     }
 
     /**
@@ -138,12 +132,5 @@ class Department extends ActiveRecord
             return implode(' ', $words);
         }
         return $this->department;
-    }
-}
-
-class DepartmentQuery extends ActiveQuery {
-
-    public function withStaffCount() {
-        return $this->joinWith('staffList')->addSelect(' COUNT({{%staff_list}}.department_id) as staffListCount')->groupBy('{{%department}}.id');
     }
 }

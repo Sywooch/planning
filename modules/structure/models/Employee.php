@@ -18,6 +18,8 @@ use yii\db\ActiveRecord;
  *
  * Relations properties
  * @property Phone[] $phones
+ * @property Department $department
+ * @property Position $position
  */
 class Employee extends ActiveRecord
 {

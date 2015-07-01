@@ -2,10 +2,12 @@
 
 namespace app\modules\structure\controllers;
 
+use app\modules\structure\models\Experience;
 use app\modules\structure\models\Phone;
 use Yii;
 use app\modules\structure\models\Employee;
 use app\modules\structure\models\search\EmployeeSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -81,12 +83,14 @@ class EmployeeController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $query = $model->getExperience();
+        $dataProvider = new ActiveDataProvider(['query' => $query]);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'dataProvider' => $dataProvider
             ]);
         }
     }
