@@ -1,14 +1,13 @@
 <?php
 
 use app\modules\structure\EmployeeFormAsset;
-use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\structure\models\Employee */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $dataProvider \yii\data\ActiveDataProvider */
 EmployeeFormAsset::register($this);
 ?>
 
@@ -39,18 +38,4 @@ EmployeeFormAsset::register($this);
     </div>
 
     <?php ActiveForm::end(); ?>
-    <?= $this->render('_addWorkForm', ['model' => new \app\modules\structure\models\Experience(['employee_id'=>$model->id])]) ?>
-    <?php Pjax::begin(['id' => 'emp-works']); ?>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'id',
-            'start:date',
-            'stop:date',
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-    <?php Pjax::end(); ?>
-
 </div>

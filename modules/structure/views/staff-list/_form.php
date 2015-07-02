@@ -25,7 +25,7 @@ $this->registerJs(
 ?>
 
 <div class="staff-list-form">
-    <?php Pjax::begin(['id' => 'new-staff-unit']) ?>
+    <?php Pjax::begin(['id' => 'new-staff-unit', 'enablePushState'=>false]) ?>
         <?php $form = ActiveForm::begin(['options' => ['data-pjax' => true ]]); ?>
 
         <?= $form->field($model, 'department_id')->widget(Select2::className() ,[

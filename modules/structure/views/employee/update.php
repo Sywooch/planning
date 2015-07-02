@@ -16,7 +16,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <?= $this->render('_form', [
         'model' => $model,
-        'dataProvider' => $dataProvider
+    ]) ?>
+
+    <?= $this->render('/experience/create', [
+        'model' => new \app\modules\structure\models\Experience(['employee_id' => $model->id]),
+        'dataProvider' => new \yii\data\ActiveDataProvider(['query' => $model->getExperience()])
     ]) ?>
 
 </div>

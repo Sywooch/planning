@@ -2,6 +2,7 @@
 
 namespace app\modules\structure\controllers;
 
+use app\modules\structure\models\Employee;
 use Yii;
 use app\modules\structure\models\Experience;
 use yii\data\ActiveDataProvider;
@@ -17,12 +18,12 @@ class ExperienceController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
+            /*'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
                 ],
-            ],
+            ],*/
         ];
     }
 
@@ -64,12 +65,13 @@ class ExperienceController extends Controller
         $model->load(Yii::$app->request->post());
         $model->staff_unit_id = $model->position;
         if ($model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
-            $model = new Experience();
+            $model = new Experience(['employee_id' => $model->employee_id]);
         }
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        $dataProvider = new ActiveDataProvider(['query' => Employee::findOne(['id' => $model->employee_id])->getExperience()]);
+        return $this->render('create', [
+            'model' => $model,
+            'dataProvider' => $dataProvider
+        ]);
     }
 
     /**
@@ -99,8 +101,18 @@ class ExperienceController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->delete();
+        if(Yii::$app->request->isAjax){
+            $newModel = new Experience(['employee_id' => $model->employee_id]);
+            $dataProvider = new ActiveDataProvider(['query' => Employee::findOne(['id' => $model->employee_id])->getExperience()]);
 
+
+            return $this->render('create', [
+                'model' => $newModel,
+                'dataProvider' => $dataProvider
+            ]);
+        }
         return $this->redirect(['index']);
     }
 

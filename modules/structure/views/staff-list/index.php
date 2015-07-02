@@ -2,7 +2,6 @@
 
 use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\widgets\ListView;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -14,10 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="staff-list-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-<!--    <p>
-        <?/*= Html::a(Yii::t('structure', 'Create staff unit'), ['create'], ['class' => 'btn btn-success']) */?>
-    </p>-->
 
     <?= $this->render('_form', ['model' => $model]) ?>
 

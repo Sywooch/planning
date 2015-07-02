@@ -23,10 +23,10 @@ $this->registerJs(
 );
 ?>
 <div class="experience-form">
-    <?php Pjax::begin(['id' => 'exp', 'enablePushState'=>false, 'enableReplaceState'=>false]); ?>
+    <?php Pjax::begin(['id' => 'exp', 'enablePushState'=>false]); ?>
         <?php $form = ActiveForm::begin([
             'id'=>'exp-form',
-//            'action' => Url::toRoute('experience/create'),
+            'action' => Url::toRoute('experience/create'),
             'options' => ['data-pjax' => 'emp-works' ]
         ]); ?>
         <?= $form->field($model, 'employee_id')->hiddenInput()->label(false); ?>
@@ -34,7 +34,7 @@ $this->registerJs(
 
         <?= $form->field($model, 'stop')->widget(\kartik\widgets\DatePicker::className()) ?>
 
-        <?= $form->field($model, 'department')->widget(Select2::className() ,[
+        <?= $form->field($model, 'department')->label(Yii::t('structure', 'Department'))->widget(Select2::className() ,[
             'data'=> ArrayHelper::map(Department::find()->asArray()->all(), 'id', 'department'),
             'options' => ['id' => 'department-id', 'placeholder' => Yii::t('structure', 'Select a department ...')],
             'pluginOptions' => [
@@ -42,7 +42,7 @@ $this->registerJs(
             ],
         ]); ?>
 
-        <?= $form->field($model, 'position')->widget(\kartik\widgets\DepDrop::className(), [
+        <?= $form->field($model, 'position')->label(Yii::t('structure', 'Position'))->widget(\kartik\widgets\DepDrop::className(), [
             'options'=>['id'=>'position-id'],
             'pluginOptions'=>[
                 'depends'=>['department-id'],
@@ -52,7 +52,7 @@ $this->registerJs(
         ]) ?>
 
         <div class="form-group">
-            <?= Html::submitButton($model->isNewRecord ? Yii::t('structure', 'Create') : Yii::t('structure', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

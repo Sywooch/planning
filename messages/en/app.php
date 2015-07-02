@@ -3,6 +3,7 @@ return [
     'Create'=>'',
     'View'=>'',
     'Update'=>'',
+    'Edit'=>'',
     'Delete'=>'',
     'ID'=>'',
     'Weight'=>'',
