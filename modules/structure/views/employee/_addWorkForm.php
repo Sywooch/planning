@@ -23,11 +23,11 @@ $this->registerJs(
 );
 ?>
 <div class="experience-form">
-    <?php Pjax::begin(['id' => 'exp']); ?>
+    <?php Pjax::begin(['id' => 'exp', 'enablePushState'=>false, 'enableReplaceState'=>false]); ?>
         <?php $form = ActiveForm::begin([
             'id'=>'exp-form',
-            'action' => Url::toRoute('experience/create'),
-            'options' => ['data-pjax' => true ]
+//            'action' => Url::toRoute('experience/create'),
+            'options' => ['data-pjax' => 'emp-works' ]
         ]); ?>
         <?= $form->field($model, 'employee_id')->hiddenInput()->label(false); ?>
         <?= $form->field($model, 'start')->widget(\kartik\widgets\DatePicker::className()) ?>

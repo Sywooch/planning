@@ -3,6 +3,7 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\ListView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -14,26 +15,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('structure', 'Create staff unit'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+<!--    <p>
+        <?/*= Html::a(Yii::t('structure', 'Create staff unit'), ['create'], ['class' => 'btn btn-success']) */?>
+    </p>-->
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?= $this->render('_form', ['model' => $model]) ?>
 
-            'department.department',
-            'position.position',
-            'count',
+    <?php Pjax::begin(['id' => 'staff-list-grid']) ?>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template'=>'{update} {delete}',
+                'department.department',
+                'position.position',
+                'count',
+
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template'=>'{update} {delete}',
+                ],
             ],
-        ],
-        'layout' => "{items}\n{pager}",
-    ]); ?>
+            'layout' => "{items}\n{pager}",
+        ]); ?>
+    <?php Pjax::end() ?>
 
 
 </div>

@@ -39,7 +39,7 @@ EmployeeFormAsset::register($this);
     </div>
 
     <?php ActiveForm::end(); ?>
-    <?= $this->render('/experience/_empForm', ['model' => new \app\modules\structure\models\Experience(['employee_id'=>$model->id])]) ?>
+    <?= $this->render('_addWorkForm', ['model' => new \app\modules\structure\models\Experience(['employee_id'=>$model->id])]) ?>
     <?php Pjax::begin(['id' => 'emp-works']); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

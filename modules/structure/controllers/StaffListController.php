@@ -34,6 +34,11 @@ class StaffListController extends Controller
      */
     public function actionIndex()
     {
+        $model = new StaffList();
+
+        if($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model = new StaffList();
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => StaffList::find()->joinWith(['department', 'position']),
             'sort' => [
@@ -53,6 +58,7 @@ class StaffListController extends Controller
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'model' => $model
         ]);
     }
 

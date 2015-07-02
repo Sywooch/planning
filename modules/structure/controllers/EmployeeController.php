@@ -83,16 +83,22 @@ class EmployeeController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $query = $model->getExperience();
-        $dataProvider = new ActiveDataProvider(['query' => $query]);
+        $expModel = new Experience(['employee_id' => $id]);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-                'dataProvider' => $dataProvider
-            ]);
         }
+        $expModel->load(Yii::$app->request->post());
+        $expModel->staff_unit_id = $expModel->position;
+        if($expModel->save()) {
+            $expModel = new Experience(['employee_id' => $id]);
+        }
+        $query = $model->getExperience();
+        $dataProvider = new ActiveDataProvider(['query' => $query]);
+        return $this->render('update', [
+            'model' => $model,
+            'dataProvider' => $dataProvider,
+            'expModel' => $expModel
+        ]);
     }
 
     /**
