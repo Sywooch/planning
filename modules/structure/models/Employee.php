@@ -4,6 +4,7 @@ namespace app\modules\structure\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -44,11 +45,19 @@ class Employee extends ActiveRecord
     }
 
     public function getExperience() {
-        return $this->hasMany(Experience::className(), ['employee_id' => 'id']);
+        return $this->hasMany(Experience::className(), ['employee_id' => 'id'])->orderBy('start');
+    }
+
+    public function getExtendedExperience() {
+        return $this->getExperience()->with(['relPosition', 'relDepartment']);
+    }
+
+    public function getCurrentExperience() {
+        return $this->getExperience()->andWhere('{{%experience}}.stop IS NULL');
     }
 
     public function getStaffUnit() {
-        return $this->hasOne(StaffList::className(), ['id' => 'staff_unit_id'])->via('experience');
+        return $this->hasOne(StaffList::className(), ['id' => 'staff_unit_id'])->via('currentExperience');
     }
 
     public function getPosition() {
@@ -73,6 +82,10 @@ class Employee extends ActiveRecord
             [['email'], 'email'],
             [['phones'], 'safe'],
         ];
+    }
+
+    public static function find() {
+        return new EmployeeQuery(get_called_class());
     }
 
     /**
@@ -112,4 +125,8 @@ class Employee extends ActiveRecord
         }
         parent::afterSave($insert, $changedAttributes);
     }
+}
+
+class EmployeeQuery extends ActiveQuery {
+
 }

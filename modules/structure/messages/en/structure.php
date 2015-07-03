@@ -38,5 +38,7 @@ return [
     'Update staff unit: ' => '',
     'List of employees' => '',
     'There {n, plural, =0{are no employees} =1{is one employee} other{are # employees}}' => '',
-    'Places of work' => '',
+    'Work experience' => '',
+    'Add place of work' => '',
+    'Until now' => '',
 ];

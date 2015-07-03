@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\structure\models\Employee */
 
-$this->title = Yii::t('structure', 'Update employee: ') . ' ' . $model->id;
+$this->title = Yii::t('structure', 'Update employee: ') . ' ' . $model->fio;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('structure', 'Employees'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->fio, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <?= $this->render('/experience/create', [
         'model' => new \app\modules\structure\models\Experience(['employee_id' => $model->id]),
-        'dataProvider' => new \yii\data\ActiveDataProvider(['query' => $model->getExperience()])
+        'dataProvider' => new \yii\data\ActiveDataProvider(['query' => $model->getExtendedExperience()])
     ]) ?>
 
 </div>

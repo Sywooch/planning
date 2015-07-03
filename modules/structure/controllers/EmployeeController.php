@@ -49,7 +49,7 @@ class EmployeeController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => Employee::find()->joinWith(['position', 'department'])->where(['{{%employee}}.id'=>$id])->one(),
+            'model' => Employee::find()->with(['position', 'department'],true, 'RIGHT JOIN')->where(['{{%employee}}.id'=>$id])->one(),
         ]);
     }
 

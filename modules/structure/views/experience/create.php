@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\structure\models\Experience;
 use kartik\helpers\Html as HtmlKart;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -17,24 +18,30 @@ use yii\widgets\Pjax;
 ?>
 <div class="experience-create">
 
-    <h2><?= Yii::t('structure', 'Places of work') ?></h2>
-    <?= $this->render('_addWorkForm', [
-        'model' => $model,
-    ]) ?>
-
-    <?php
-        Pjax::begin(['id' => 'edit-form']);
-        Pjax::end();
-    ?>
-
+    <h2><?= Yii::t('structure', 'Work experience') ?></h2>
+<?php $dataProvider->getModels() ?>
     <?php Pjax::begin(['id' => 'emp-works', 'timeout' => 10000, 'enablePushState'=>false]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-//            'id',
+            'relDepartment.department',
+            'relPosition.position',
+            /*[
+                'label' => Yii::t('structure', 'Position'),
+                'format' => 'text',
+                'value' => function(Experience $data){
+                    return Html::encode($data->relPosition.' '.$data->relDepartment->getDepartmentGenitive());
+                }
+            ],*/
             'start:date',
-            'stop:date',
+            [
+                'attribute' => 'stop',
+                'format' => 'raw',
+                'value' => function(Experience $data) {
+                    return ($data->stop !== null)?Yii::$app->formatter->asDate($data->stop):Yii::t('structure', 'Until now');
+                }
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',
@@ -61,7 +68,11 @@ use yii\widgets\Pjax;
                 ],
             ],
         ],
+        'layout' => "{items}"
     ]); ?>
     <?php Pjax::end(); ?>
 
+    <?= $this->render('_addWorkForm', [
+        'model' => $model,
+    ]) ?>
 </div>

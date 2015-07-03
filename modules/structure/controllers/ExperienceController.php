@@ -6,6 +6,7 @@ use app\modules\structure\models\Employee;
 use Yii;
 use app\modules\structure\models\Experience;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -67,7 +68,7 @@ class ExperienceController extends Controller
         if ($model->save()) {
             $model = new Experience(['employee_id' => $model->employee_id]);
         }
-        $dataProvider = new ActiveDataProvider(['query' => Employee::findOne(['id' => $model->employee_id])->getExperience()]);
+        $dataProvider = new ActiveDataProvider(['query' => Employee::findOne(['id' => $model->employee_id])->getExtendedExperience()]);
         return $this->render('create', [
             'model' => $model,
             'dataProvider' => $dataProvider
@@ -83,10 +84,10 @@ class ExperienceController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Url::previous('employee')); //['view', 'id' => $model->id]
         } else {
+            Url::remember(Yii::$app->request->referrer, 'employee');
             return $this->render('update', [
                 'model' => $model,
             ]);

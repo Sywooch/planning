@@ -7,15 +7,21 @@ use yii\widgets\DetailView;
 /* @var $model app\modules\structure\models\Employee */
 
 $this->title = $model->fio;
-//$this->params['breadcrumbs'][] = ['label' => Yii::t('structure', 'Employees'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('structure', 'Departments'), 'url' => ['department/index']];
-$this->params['breadcrumbs'][] = ['label' => Html::encode($model->department->department), 'url' => ['department/view', 'id' => $model->department->id]];
+if( $model->department !== null){
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('structure', 'Departments'), 'url' => ['department/index']];
+    $this->params['breadcrumbs'][] = ['label' => Html::encode($model->department->department), 'url' => ['department/view', 'id' => $model->department->id]];
+}
+else {
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('structure', 'Employees'), 'url' => ['index']];
+}
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="employee-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <h4><?= $model->position .' '. Html::a(Html::encode($model->department->getDepartmentGenitive()),['department/view', 'id'=>$model->department->id]) ?></h4>
+    <?php if ($model->department !== null): ?>
+        <h4><?= $model->position .' '. Html::encode($model->department->getDepartmentGenitive()) ?></h4>
+    <?php endif; ?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [

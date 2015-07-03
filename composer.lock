@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6f2463199912338a2710d36d45de6c55",
+    "hash": "bb44afc52fe4dc16fabdfd93a7e872ca",
     "packages": [
         {
             "name": "adldap/adldap",
@@ -621,7 +621,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-editable/zipball/ec5a3cd9114b22d20401780cbf7beafce791ed16",
+                "url": "https://api.github.com/repos/kartik-v/yii2-editable/zipball/bbbe10218d1539c31f1628e86ee889a27629e3f5",
                 "reference": "ec5a3cd9114b22d20401780cbf7beafce791ed16",
                 "shasum": ""
             },
@@ -669,7 +669,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/d7c7f74a9de79929edc51822daf31333abb66dbb",
+                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/828a9d752f81ec6ab729d23fbbf13f10237ad285",
                 "reference": "d7c7f74a9de79929edc51822daf31333abb66dbb",
                 "shasum": ""
             },
@@ -713,7 +713,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-helpers/zipball/9fad64668fb60c0a56744ea7e7faa06f94c9805e",
+                "url": "https://api.github.com/repos/kartik-v/yii2-helpers/zipball/daafedf1ae6130d2287e417941b8c50ad59a50c0",
                 "reference": "9fad64668fb60c0a56744ea7e7faa06f94c9805e",
                 "shasum": ""
             },
@@ -853,7 +853,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-sortable/zipball/33a8384e3569e12b7c0b470f6fbf8e61ec021e70",
+                "url": "https://api.github.com/repos/kartik-v/yii2-sortable/zipball/650dfd6876115fbb996eb6eb8f1d5d13ddb69285",
                 "reference": "33a8384e3569e12b7c0b470f6fbf8e61ec021e70",
                 "shasum": ""
             },
@@ -1886,6 +1886,48 @@
             "time": "2015-04-01 05:47:26"
         },
         {
+            "name": "nepstor/yii2-datetime-compare-validator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nepstor/yii2-datetime-compare-validator.git",
+                "reference": "f01050368cf7c5d4024e76c990e5dad3a8b92012"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nepstor/yii2-datetime-compare-validator/zipball/f01050368cf7c5d4024e76c990e5dad3a8b92012",
+                "reference": "f01050368cf7c5d4024e76c990e5dad3a8b92012",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "nepstor\\validators\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Krytskiy"
+                }
+            ],
+            "description": "Yii2 validator for compare datetime.",
+            "homepage": "https://github.com/nepstor/yii2-datetime-compare-validator",
+            "keywords": [
+                "datetime",
+                "extension",
+                "validator",
+                "yii2"
+            ],
+            "time": "2015-05-12 08:49:59"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v5.4.0",
             "source": {
@@ -2532,7 +2574,8 @@
         "kartik-v/yii2-sortable": 20,
         "kartik-v/yii2-editable": 20,
         "kartik-v/yii2-helpers": 20,
-        "kartik-v/yii2-grid": 20
+        "kartik-v/yii2-grid": 20,
+        "nepstor/yii2-datetime-compare-validator": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

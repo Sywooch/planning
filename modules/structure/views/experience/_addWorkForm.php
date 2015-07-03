@@ -30,29 +30,38 @@ $this->registerJs(
             'options' => ['data-pjax' => 'emp-works' ]
         ]); ?>
         <?= $form->field($model, 'employee_id')->hiddenInput()->label(false); ?>
-        <?= $form->field($model, 'start')->widget(\kartik\widgets\DatePicker::className()) ?>
-
-        <?= $form->field($model, 'stop')->widget(\kartik\widgets\DatePicker::className()) ?>
-
-        <?= $form->field($model, 'department')->label(Yii::t('structure', 'Department'))->widget(Select2::className() ,[
-            'data'=> ArrayHelper::map(Department::find()->asArray()->all(), 'id', 'department'),
-            'options' => ['id' => 'department-id', 'placeholder' => Yii::t('structure', 'Select a department ...')],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]); ?>
-
-        <?= $form->field($model, 'position')->label(Yii::t('structure', 'Position'))->widget(\kartik\widgets\DepDrop::className(), [
-            'options'=>['id'=>'position-id'],
-            'pluginOptions'=>[
-                'depends'=>['department-id'],
-                'placeholder'=>Yii::t('structure', 'Select a position ...'),
-                'url'=>Url::to(['staff-list/dep-pos'])
-            ]
-        ]) ?>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <?= $form->field($model, 'start')->widget(\kartik\widgets\DatePicker::className()) ?>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <?= $form->field($model, 'stop')->widget(\kartik\widgets\DatePicker::className()) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <?= $form->field($model, 'department')->label(Yii::t('structure', 'Department'))->widget(Select2::className() ,[
+                    'data'=> ArrayHelper::map(Department::find()->asArray()->all(), 'id', 'department'),
+                    'options' => ['id' => 'department-id', 'placeholder' => Yii::t('structure', 'Select a department ...')],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]); ?>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <?= $form->field($model, 'position')->label(Yii::t('structure', 'Position'))->widget(\kartik\widgets\DepDrop::className(), [
+                    'options'=>['id'=>'position-id'],
+                    'pluginOptions'=>[
+                        'depends'=>['department-id'],
+                        'placeholder'=>Yii::t('structure', 'Select a position ...'),
+                        'url'=>Url::to(['staff-list/dep-pos'])
+                    ]
+                ]) ?>
+            </div>
+        </div>
 
         <div class="form-group">
-            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <?= Html::submitButton(Yii::t('structure', 'Add place of work'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
