@@ -38,7 +38,8 @@ class Experience extends ActiveRecord
     public function rules()
     {
         return [
-            [['employee_id', 'staff_unit_id'], 'integer'],
+            [['employee_id', 'staff_unit_id', 'position'], 'integer'],
+            [['stop'], 'safe'],
 //            ['stop', DateTimeCompareValidator::className(), 'compareAttribute' => 'start', 'format' => 'd.m.Y', 'operator' => '>', 'allowEmpty' => true],
             [['start'], 'validateDates']
         ];
@@ -91,8 +92,7 @@ class Experience extends ActiveRecord
 
     public function validateDates($attribute, $params) {
         $q = (new Query())
-            ->from('{{%experience}}')
-            ->where(['employee_id' => $this->employee_id]);
+            ->from('{{%experience}}');
         if($this->stop !== null){
             $q->andWhere('start BETWEEN :start AND :stop')
                 ->orWhere('(start <= :start AND stop >= :stop) OR (start <= :start AND start < :stop AND stop IS NULL)')
@@ -106,6 +106,7 @@ class Experience extends ActiveRecord
                 ->orWhere('start <= :start AND stop > :start');
 
         }
+        $q->andWhere(['employee_id' => $this->employee_id]);
         if(!$this->isNewRecord) {
             $q->andWhere('id <> :id', [':id' => $this->id]);
         }

@@ -7,6 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\modules\structure\models\Department */
 
 $this->title = $model->department;
+//$model->getEmployees()->all();
 $this->params['breadcrumbs'][] = ['label' => Yii::t('structure', 'Departments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

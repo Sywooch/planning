@@ -27,13 +27,6 @@ use yii\widgets\Pjax;
             ['class' => 'yii\grid\SerialColumn'],
             'relDepartment.department',
             'relPosition.position',
-            /*[
-                'label' => Yii::t('structure', 'Position'),
-                'format' => 'text',
-                'value' => function(Experience $data){
-                    return Html::encode($data->relPosition.' '.$data->relDepartment->getDepartmentGenitive());
-                }
-            ],*/
             'start:date',
             [
                 'attribute' => 'stop',

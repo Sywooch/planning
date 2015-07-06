@@ -65,8 +65,7 @@ class Department extends ActiveRecord
 
     public function getEmployees() {
         return $this->hasMany(Employee::className(), ['id' => 'employee_id'])
-            ->via('experience')
-            ->with('position');
+            ->via('experience');
     }
 
     /**
