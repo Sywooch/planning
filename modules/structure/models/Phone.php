@@ -24,7 +24,7 @@ class Phone extends ActiveRecord
                 return preg_replace('/(\d{2})(\d{2})(\d{2})/', "$1-$2-$3", $this->phone);
                 break;
             case self::MOBILE:
-                return preg_replace('/(\d{3})(\d{3})(\d{2})(\d{2})/', "($1)$2-$3-$4", $this->phone);
+                return preg_replace('/(\d{3})(\d{3})(\d{2})(\d{2})/', "($1) $2-$3-$4", $this->phone);
                 break;
             default:
                 return $this->phone;
@@ -94,7 +94,7 @@ class Phone extends ActiveRecord
     private static function getMasks() {
         return [
             self::WORK => '99-99-99',
-            self::MOBILE => '(999)999-99-99',
+            self::MOBILE => '(999) 999-99-99',
         ];
     }
 

@@ -19,7 +19,6 @@ use yii\db\ActiveRecord;
  *
  * @property Department[] $child
  * @property Department $parent
- * @property Employee[] $employees
  */
 class Department extends ActiveRecord
 {
@@ -63,9 +62,12 @@ class Department extends ActiveRecord
         return $this->hasMany(Experience::className(), ['staff_unit_id' => 'id'])->via('staffList');
     }
 
+    /**
+     * @return ActiveQuery
+     */
     public function getEmployees() {
         return $this->hasMany(Employee::className(), ['id' => 'employee_id'])
-            ->via('experience');
+            ->via('experience')->joinWith('position', false)->orderBy('{{%position}}.weight ASC');
     }
 
     /**
