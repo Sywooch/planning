@@ -45,7 +45,7 @@ class Employee extends ActiveRecord
     }
 
     public function getExperience() {
-        return $this->hasMany(Experience::className(), ['employee_id' => 'id'])->orderBy('start');
+        return $this->hasMany(Experience::className(), ['employee_id' => 'id']);
     }
 
     public function getExtendedExperience() {
@@ -53,15 +53,17 @@ class Employee extends ActiveRecord
     }
 
     public function getCurrentExperience() {
-        return $this->getExperience()->andWhere('{{%experience}}.stop IS NULL');
+        return $this->getExperience()->active();
     }
 
     public function getStaffUnit() {
-        return $this->hasOne(StaffList::className(), ['id' => 'staff_unit_id'])->via('currentExperience');
+        return $this->hasOne(StaffList::className(), ['id' => 'staff_unit_id'])
+            ->via('currentExperience');
     }
 
     public function getPosition() {
-        return $this->hasOne(Position::className(), ['id' => 'position_id'])->via('staffUnit');
+        return $this->hasOne(Position::className(), ['id' => 'position_id'])
+            ->via('staffUnit');
     }
 
     public function getDepartment() {

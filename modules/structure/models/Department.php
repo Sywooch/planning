@@ -46,7 +46,7 @@ class Department extends ActiveRecord
 
     public function getChild()
     {
-        return $this->hasMany(Department::className(),['department_id'=>'id'])->with('employees');
+        return $this->hasMany(Department::className(),['department_id'=>'id'])->with('experience');
     }
 
     public function getParent()
@@ -59,7 +59,9 @@ class Department extends ActiveRecord
     }
 
     public function getExperience() {
-        return $this->hasMany(Experience::className(), ['staff_unit_id' => 'id'])->via('staffList');
+        return $this->hasMany(Experience::className(), ['staff_unit_id' => 'id'])
+            ->via('staffList')
+            ->active();
     }
 
     /**
@@ -67,7 +69,8 @@ class Department extends ActiveRecord
      */
     public function getEmployees() {
         return $this->hasMany(Employee::className(), ['id' => 'employee_id'])
-            ->via('experience')->joinWith('position', false)->orderBy('{{%position}}.weight ASC');
+            ->joinWith('position', false)->orderBy('{{%position}}.weight')
+            ->via('experience');
     }
 
     /**

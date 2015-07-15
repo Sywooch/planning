@@ -49,7 +49,7 @@ class DepartmentController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => Department::find()->where(['{{%department}}.id' => $id])->one(),
+            'model' => Department::find()->with(['parent'])->where(['{{%department}}.id' => $id])->one(),
         ]);
     }
 

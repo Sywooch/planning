@@ -41,6 +41,11 @@ class StaffList extends ActiveRecord
         return $this->hasOne(Position::className(), ['id' => 'position_id']);
     }
 
+    public function getExperience()
+    {
+        return $this->hasMany(Experience::className(), ['staff_unit_id' => 'id']);
+    }
+
     /**
      * @inheritdoc
      */

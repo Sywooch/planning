@@ -2,8 +2,8 @@
 
 namespace app\modules\structure\models;
 
-use nepstor\validators\DateTimeCompareValidator;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 
@@ -49,6 +49,11 @@ class Experience extends ActiveRecord
         return $this->hasOne(StaffList::className(), ['id' => 'staff_unit_id']);
     }
 
+    public function getEmployee()
+    {
+        return $this->hasOne(Employee::className(), ['id' => 'employee_id']);
+    }
+
     public function getRelPosition() {
         return $this->hasOne(Position::className(), ['id' => 'position_id'])->via('stuffUnit');
     }
@@ -69,6 +74,11 @@ class Experience extends ActiveRecord
             'stop' => Yii::t('app', 'Stop'),
             'staff_unit_id' => Yii::t('structure', 'Staff Unit ID'),
         ];
+    }
+
+    public static function find()
+    {
+        return new ExperienceQuery(get_called_class());
     }
 
     public function afterFind() {
@@ -117,5 +127,14 @@ class Experience extends ActiveRecord
             $this->addError($attribute, 'Неправильно выбран диапазон дат работы сотрудника!');
             $this->addError('stop', 'Неправильно выбран диапазон дат работы сотрудника!');
         }
+    }
+}
+
+
+class ExperienceQuery extends ActiveQuery
+{
+    public function active()
+    {
+        return $this->andWhere('{{%experience}}.stop IS NULL OR {{%experience}}.stop >= now()');
     }
 }
