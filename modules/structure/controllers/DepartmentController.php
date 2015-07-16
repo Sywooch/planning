@@ -5,6 +5,8 @@ namespace app\modules\structure\controllers;
 use Yii;
 use app\modules\structure\models\Department;
 use app\modules\structure\models\search\DepartmentSearch;
+use yii\db\ActiveQuery;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -48,8 +50,21 @@ class DepartmentController extends Controller
      */
     public function actionView($id)
     {
+        //@todo ѕриудалении employee_id остаетс€ только одна запись, оп€ть вернутьс€ к AR добавив к селекту employee_id
+        $employees = (new Query())
+            ->select(['employee_id', 'fio', 'position'])
+            ->from('{{%department}}')
+            ->leftJoin('{{%staff_list}}', '{{%department}}.id = {{%staff_list}}.department_id')
+            ->leftJoin('{{%experience}}', '{{%staff_list}}.id = {{%experience}}.staff_unit_id')
+            ->leftJoin('{{%position}}', '{{%staff_list}}.position_id = {{%position}}.id')
+            ->leftJoin('{{%employee}}', '{{%experience}}.employee_id = {{%employee}}.id')
+            ->where(['{{%department}}.id' => $id])
+            ->andWhere('{{%experience}}.stop IS NULL OR {{%experience}}.stop >= now()')
+            ->indexBy('employee_id')
+            ->all();
         return $this->render('view', [
-            'model' => Department::find()->with(['parent'])->where(['{{%department}}.id' => $id])->one(),
+            'model' => Department::find()->with(['parent','child'])->where(['{{%department}}.id' => $id])->one(),
+            'employees' => $employees
         ]);
     }
 

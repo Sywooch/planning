@@ -5,6 +5,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\structure\models\Department */
+/* @var $employees array */
 
 $this->title = $model->department;
 //$model->getEmployees()->all();
@@ -13,11 +14,11 @@ if($model->parent !== null)
     $this->params['breadcrumbs'][] = ['label' => Html::encode($model->parent), 'url' => ['view', 'id' => $model->parent->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="department-view">
 
     <h1>
         <?= Html::encode($this->title) ?>
-        <?php Yii::$app->db->queryBuilder->build($model->getEmployees()) ?>
         <?php if (Yii::$app->user->can('Department Manage')): ?>
             <?= Html::a(HtmlKart::icon('pencil'), ['update', 'id' => $model->id]) //['class' => 'btn btn-primary'] ?>
             <?= Html::a(HtmlKart::icon('trash'), ['delete', 'id' => $model->id], [
@@ -29,11 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php endif; ?>
     </h1>
 
-    <?php if(!empty($model->employees)): ?>
+    <?php if(!empty($employees)): ?>
         <h3><?= Yii::t('structure', 'List of employees') ?></h3>
         <ol>
-            <?php foreach($model->employees as $key => $employee): ?>
-                <li><?= Html::a(Html::encode($employee->fio), ['employee/view', 'id' => $employee->id]).' - '.$employee->position ?></li>
+            <?php foreach($employees as $key => $employee): ?>
+                <li><?= Html::a(Html::encode($employee['fio']), ['employee/view', 'id' => $key]).' - '.$employee['position'] ?></li>
             <?php endforeach; ?>
         </ol>
     <?php endif; ?>
