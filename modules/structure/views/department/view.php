@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php endif; ?>
     </h1>
 
-    <?php if(!empty($employees)): ?>
+    <?php if(!array_key_exists(null, $employees)): ?>
         <h3><?= Yii::t('structure', 'List of employees') ?></h3>
         <ol>
             <?php foreach($employees as $key => $employee): ?>
