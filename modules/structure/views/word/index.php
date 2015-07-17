@@ -9,6 +9,19 @@ use yii\widgets\ListView;
 
 $this->title = Yii::t('structure', 'Words');
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerJs('
+    $("#initialize-dictionaries").click(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr("href"),
+            type: "post",
+            success: function($data){
+                $("#initialize-result").html($data);
+            }
+        });
+    });
+');
+
 ?>
 <div class="word-index">
 
@@ -16,6 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('structure', 'Create word'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(
+            Yii::t('structure', 'Update dictionaries'),
+            ['initialize-dictionaries'],
+            ['id' => 'initialize-dictionaries','class' => 'btn btn-info']
+        ) ?>
+        <span id="initialize-result"></span>
     </p>
 
     <?= ListView::widget([

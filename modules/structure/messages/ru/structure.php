@@ -41,4 +41,6 @@ return [
     'Work experience' => 'Стаж работы',
     'Add place of work' => 'Добавить место работы',
     'Until now' => 'По настоящее время',
+    'Success dictionary updated' => 'Словари успешно обновлены',
+    'Update dictionaries' => 'Обновить справочники',
 ];

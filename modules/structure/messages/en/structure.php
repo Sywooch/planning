@@ -41,4 +41,6 @@ return [
     'Work experience' => '',
     'Add place of work' => '',
     'Until now' => '',
+    'Success dictionary updated' => '',
+    'Update dictionaries' => '',
 ];

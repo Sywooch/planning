@@ -2,22 +2,31 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Place */
+/* @var $model app\modules\planning\models\Place */
 /* @var $form yii\widgets\ActiveForm */
+$this->registerJs(
+    '$("document").ready(function(){
+            $("#new-place").on("pjax:end", function() {
+                $.pjax.reload({container:"#place-grid"});
+            });
+        });'
+);
 ?>
 
 <div class="place-form">
+    <?php Pjax::begin(['id' => 'new-place', 'enablePushState' => false]) ?>
+        <?php $form = ActiveForm::begin(['options' => ['data-pjax' => true ]]); ?>
 
-    <?php $form = ActiveForm::begin(); ?>
+        <?= $form->field($model, 'place')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'place')->textInput(['maxlength' => true]) ?>
+        <div class="form-group">
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Add') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        </div>
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
+        <?php ActiveForm::end(); ?>
+    <?php Pjax::end() ?>
 
 </div>

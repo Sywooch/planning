@@ -41,6 +41,21 @@ class WordController extends Controller
         ]);
     }
 
+    public function actionInitializeDictionaries()
+    {
+        if(Yii::$app->request->isAjax){
+            try{
+                foreach(Word::getTypes() as $key => $type){
+                    (new Word(['type' => $key]))->createPhpFile();
+                }
+                return Yii::t('structure', 'Success dictionary updated');
+            }
+            catch(\Exception $e){
+
+            }
+        }
+    }
+
     /**
      * Creates a new Word model.
      * If creation is successful, the browser will be redirected to the 'view' page.

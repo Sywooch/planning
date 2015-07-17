@@ -46,7 +46,7 @@ class Position extends ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'position' => Yii::t('structure', 'Position'),
-            'weight' => Yii::t('app', 'weight'),
+            'weight' => Yii::t('app', 'Weight'),
         ];
     }
 }

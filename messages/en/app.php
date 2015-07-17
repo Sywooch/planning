@@ -17,4 +17,5 @@ return [
     'Count' => '',
     'Start' => '',
     'Stop' => '',
+    'Add' => '',
 ];

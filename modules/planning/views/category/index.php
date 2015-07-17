@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\planning\models\search\CategorySearch */
@@ -13,24 +14,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="category-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?= $this->render('_form', ['model' => $model]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('planning', 'Create Category'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'name',
-            'weight',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+    <?php Pjax::begin(['id' => 'category-grid']) ?>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'name',
+                'weight',
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]); ?>
+    <?php Pjax::end(); ?>
 
 </div>

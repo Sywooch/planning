@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\structure\models\search\PositionSearch */
@@ -14,24 +15,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?= $this->render('_form', ['model' => $model]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('structure', 'Create position'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'position',
-
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template'=>'{update} {delete}',
+    <?php Pjax::begin(['id' => 'positions-grid']) ?>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'position',
+                'weight',
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template'=>'{update} {delete}',
+                ],
             ],
-        ],
-    ]); ?>
-
+        ]); ?>
+    <?php Pjax::end(); ?>
 </div>

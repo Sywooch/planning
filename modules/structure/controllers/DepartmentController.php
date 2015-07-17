@@ -50,7 +50,6 @@ class DepartmentController extends Controller
      */
     public function actionView($id)
     {
-        //@todo ѕриудалении employee_id остаетс€ только одна запись, оп€ть вернутьс€ к AR добавив к селекту employee_id
         $employees = (new Query())
             ->select(['employee_id', 'fio', 'position'])
             ->from('{{%department}}')

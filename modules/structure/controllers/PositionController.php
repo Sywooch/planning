@@ -32,12 +32,17 @@ class PositionController extends Controller
      */
     public function actionIndex()
     {
+        $model = (new Position())->loadDefaultValues();
         $searchModel = new PositionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        if($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model = (new Position())->loadDefaultValues();
+        }
+        $dataProvider->setSort(['defaultOrder' => ['weight'=>SORT_ASC]]);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
         ]);
     }
 
@@ -46,7 +51,7 @@ class PositionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    /*public function actionCreate()
     {
         $model = new Position();
         $model->loadDefaultValues();
@@ -58,7 +63,7 @@ class PositionController extends Controller
                 'model' => $model,
             ]);
         }
-    }
+    }*/
 
     /**
      * Updates an existing Position model.

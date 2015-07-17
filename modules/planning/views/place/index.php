@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\planning\models\search\PlaceSearch */
@@ -13,23 +14,20 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="place-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?= $this->render('_form', ['model' => $model]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('planning', 'Create place'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php Pjax::begin(['id' => 'place-grid']) ?>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+                'place',
 
-            'id',
-            'place',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]); ?>
+    <?php Pjax::end(); ?>
 
 </div>
