@@ -10,4 +10,10 @@ return [
     'Create place'=>'',
     'Places'=>'',
     'Update place: '=>'',
+    'Action name' => '',
+    'Author' => '',
+    'Week action' => '',
+    'Month action' => '',
+    'Template' => '',
+    'Repeat' => '',
 ];
