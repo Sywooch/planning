@@ -2,12 +2,16 @@
 
 namespace app\modules\structure\controllers;
 
+use app\modules\structure\models\Department;
 use Yii;
 use app\modules\structure\models\Employee;
 use app\modules\structure\models\search\EmployeeSearch;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * EmployeeController implements the CRUD actions for Employee model.
@@ -117,5 +121,30 @@ class EmployeeController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionEmployeeList($q = null)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = (new Query())
+                ->select(['{{%employee}}.id', 'fio', 'position', 'department'])
+                ->from('{{%employee}}')
+                ->leftJoin('{{%experience}}', '{{%employee}}.id = {{%experience}}.employee_id')
+                ->leftJoin('{{%staff_list}}', '{{%experience}}.staff_unit_id = {{%staff_list}}.id')
+                ->leftJoin('{{%position}}', '{{%staff_list}}.position_id = {{%position}}.id')
+                ->leftJoin('{{%department}}', '{{%staff_list}}.department_id = {{%department}}.id')
+                ->where('{{%experience}}.stop IS NULL OR {{%experience}}.stop >= now()')
+                ->andWhere('fio LIKE "%'.$q.'%"');
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $data = ArrayHelper::map($data, 'id', function($el){
+                $el['full'] = $el['fio'].' - '.$el['position'].' '.Department::getDepartmentGenitive($el['department']);
+                return $el;
+            });
+            $out['results'] = array_values($data);
+        }
+        return $out;
     }
 }

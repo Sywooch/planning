@@ -18,4 +18,6 @@ return [
     'Start' => '',
     'Stop' => '',
     'Add' => '',
+    'Name' => '',
+    'Description' => ''
 ];

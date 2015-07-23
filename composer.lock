@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "82d136b2218e4aad801bca6d294d16bb",
+    "hash": "eeb8153ec4d6b5a7cb7bded6f0b1d845",
     "packages": [
         {
             "name": "adldap/adldap",
@@ -12,24 +12,26 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adldap/adLDAP.git",
-                "reference": "ee471d2243124dcf29efd8c079456cc56e2fa6e7"
+                "reference": "63fd63e4f680e521bdf6cba23e0e524a2c34c0d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adldap/adLDAP/zipball/ee471d2243124dcf29efd8c079456cc56e2fa6e7",
-                "reference": "ee471d2243124dcf29efd8c079456cc56e2fa6e7",
+                "url": "https://api.github.com/repos/adldap/adLDAP/zipball/63fd63e4f680e521bdf6cba23e0e524a2c34c0d5",
+                "reference": "63fd63e4f680e521bdf6cba23e0e524a2c34c0d5",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "ext-ldap": "*",
+                "php": ">=5.4.0"
             },
-            "suggest": {
-                "ext-ldap": "*"
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "4.6.*"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "": "lib/"
+                "psr-4": {
+                    "Adldap\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -46,16 +48,20 @@
                     "name": "Richard Hyland",
                     "email": "adldap@richardhyland.com",
                     "role": "Developer"
+                },
+                {
+                    "name": "Steve Bauman",
+                    "email": "steven_bauman@outlook.com",
+                    "role": "Developer"
                 }
             ],
-            "description": "adLDAP, PHP LDAP library for manipulating Active Directory",
-            "homepage": "http://adldap.sourceforge.net",
+            "description": "A PHP LDAP Library for Active Directory Manipulation",
             "keywords": [
                 "active directory",
                 "ldap",
                 "windows"
             ],
-            "time": "2014-05-13 08:13:00"
+            "time": "2015-06-16 12:41:10"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -349,6 +355,44 @@
             "time": "2015-03-06 05:28:07"
         },
         {
+            "name": "components/flag-icon-css",
+            "version": "0.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lipis/flag-icon-css.git",
+                "reference": "db9d702ac15e74a84d5d859c9f3b1ce4c1882304"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lipis/flag-icon-css/zipball/db9d702ac15e74a84d5d859c9f3b1ce4c1882304",
+                "reference": "db9d702ac15e74a84d5d859c9f3b1ce4c1882304",
+                "shasum": ""
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "name": "flag-icon-css",
+                    "files": [
+                        "less/**",
+                        "css/**",
+                        "flags/**"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Panayiotis Lipiridis (Lipis)",
+                    "email": "lipiridis@gmail.com"
+                }
+            ],
+            "description": "CSS for vector based country flags",
+            "time": "2015-03-26 16:41:06"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.6.0",
             "source": {
@@ -393,17 +437,65 @@
             "time": "2013-11-30 08:25:19"
         },
         {
-            "name": "kartik-v/bootstrap-fileinput",
-            "version": "v4.2.3",
+            "name": "fortawesome/font-awesome",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "1b30f372977efdb5aa1cc8b706d9e40be90ff904"
+                "url": "https://github.com/FortAwesome/Font-Awesome.git",
+                "reference": "41b9ed01103e6820c3cb043ba7ddab30ecd3f4c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/1b30f372977efdb5aa1cc8b706d9e40be90ff904",
-                "reference": "1b30f372977efdb5aa1cc8b706d9e40be90ff904",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/41b9ed01103e6820c3cb043ba7ddab30ecd3f4c0",
+                "reference": "41b9ed01103e6820c3cb043ba7ddab30ecd3f4c0",
+                "shasum": ""
+            },
+            "require-dev": {
+                "jekyll": "1.0.2",
+                "lessc": "1.4.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OFL-1.1",
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dave Gandy",
+                    "email": "dave@fontawesome.io",
+                    "homepage": "http://twitter.com/davegandy",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The iconic font and CSS framework",
+            "homepage": "http://fontawesome.io/",
+            "keywords": [
+                "FontAwesome",
+                "awesome",
+                "bootstrap",
+                "font",
+                "icon"
+            ],
+            "time": "2015-01-22 18:09:42"
+        },
+        {
+            "name": "kartik-v/bootstrap-fileinput",
+            "version": "v4.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
+                "reference": "e73e54e63be58646ba9b32564d365d555090fad4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/e73e54e63be58646ba9b32564d365d555090fad4",
+                "reference": "e73e54e63be58646ba9b32564d365d555090fad4",
                 "shasum": ""
             },
             "type": "library",
@@ -438,7 +530,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2015-06-21 13:36:43"
+            "time": "2015-07-22 13:31:11"
         },
         {
             "name": "kartik-v/bootstrap-popover-x",
@@ -704,6 +796,54 @@
                 "yii2"
             ],
             "time": "2015-06-15 17:18:24"
+        },
+        {
+            "name": "kartik-v/yii2-icons",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-icons.git",
+                "reference": "bce5f85e8e9b76a11e34dd43156f2db4bdb566a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-icons/zipball/bce5f85e8e9b76a11e34dd43156f2db4bdb566a5",
+                "reference": "bce5f85e8e9b76a11e34dd43156f2db4bdb566a5",
+                "shasum": ""
+            },
+            "require": {
+                "components/flag-icon-css": "*",
+                "fortawesome/font-awesome": "*",
+                "kartik-v/yii2-krajee-base": "*",
+                "yiisoft/yii2-jui": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\icons\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD 3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://demos.krajee.com/"
+                }
+            ],
+            "description": "Set of icon frameworks for use in Yii Framework 2.0",
+            "homepage": "https://github.com/kartik-v/yii2-icons",
+            "keywords": [
+                "extension",
+                "font",
+                "icon",
+                "yii",
+                "yii2"
+            ],
+            "time": "2015-04-21 15:15:10"
         },
         {
             "name": "kartik-v/yii2-krajee-base",
@@ -1043,20 +1183,20 @@
         },
         {
             "name": "kartik-v/yii2-widget-datepicker",
-            "version": "v1.3.2",
+            "version": "v1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-                "reference": "3fb31048bb70ebddf94a827aec77779835305629"
+                "reference": "368b181ef658c05707fe41dd16eee4d9ffd9da38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/3fb31048bb70ebddf94a827aec77779835305629",
-                "reference": "3fb31048bb70ebddf94a827aec77779835305629",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/368b181ef658c05707fe41dd16eee4d9ffd9da38",
+                "reference": "368b181ef658c05707fe41dd16eee4d9ffd9da38",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": "*"
+                "kartik-v/yii2-krajee-base": "~1.7"
             },
             "type": "yii2-extension",
             "autoload": {
@@ -1066,7 +1206,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD 3-Clause"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -1088,7 +1228,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2015-03-02 13:03:59"
+            "time": "2015-07-19 04:49:03"
         },
         {
             "name": "kartik-v/yii2-widget-datetimepicker",
@@ -2494,6 +2634,7 @@
         "kartik-v/yii2-editable": 20,
         "kartik-v/yii2-helpers": 20,
         "kartik-v/yii2-grid": 20,
+        "kartik-v/yii2-icons": 20,
         "adldap/adldap": 20
     },
     "prefer-stable": false,

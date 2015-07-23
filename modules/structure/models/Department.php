@@ -100,13 +100,13 @@ class Department extends ActiveRecord
         ];
     }
 
-    public function getDepartmentGenitive() {
+    public static function getDepartmentGenitive($department) {
         $wordInQuotes = false;
         $depBegin = Word::getWords(Word::ABBR);
-        $matches = array_filter($depBegin, function($var){ return preg_match("/^$var/i", $this->department); });
+        $matches = array_filter($depBegin, function($var) use ($department){ return preg_match("/^$var/i", $department); });
         if(count($matches)==0)
         {
-            $words = explode(' ', $this->department);
+            $words = explode(' ', $department);
             $_i=0;
             $properNames = Word::getWords(Word::CAPITAL);
 
@@ -135,6 +135,6 @@ class Department extends ActiveRecord
             }
             return implode(' ', $words);
         }
-        return $this->department;
+        return $department;
     }
 }

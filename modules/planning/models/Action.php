@@ -5,6 +5,7 @@ namespace app\modules\planning\models;
 use app\models\User;
 use app\modules\structure\models\Experience;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -27,10 +28,8 @@ use yii\db\ActiveRecord;
  * @property string $repeat
  *
  * @property ActionEmployee[] $actionEmployees
- * @property Experience[] $exps
- * @property ActionFlag[] $actionFlags
- * @property Flags[] $flags
- * @property ActionPlace[] $actionPlaces
+ * @property Experience[] $employeesExp
+ * @property Flag[] $flags
  * @property Place[] $places
  * @property User $author
  * @property Category $category
@@ -40,6 +39,7 @@ use yii\db\ActiveRecord;
  */
 class Action extends ActiveRecord
 {
+    public $placesIDS;
     /**
      * @inheritdoc
      */
@@ -54,11 +54,19 @@ class Action extends ActiveRecord
     public function rules()
     {
         return [
-            [['dateStart', 'dateStop', 'action', 'user_id', 'created_at', 'updated_at'], 'required'],
-            [['dateStart', 'dateStop'], 'safe'],
-            [['category_id', 'user_id', 'week_status', 'confirmed', 'created_at', 'updated_at', 'month_status', 'month', 'week', 'template'], 'integer'],
+            [['dateStart', 'dateStop', 'action', 'category_id'], 'required'],
+            [['dateStart', 'dateStop', 'flags'], 'safe'],
+            [['category_id'], 'integer'],
+            [['category_id'], 'in', 'range' => Category::getCategoriesId()],
             [['action'], 'string'],
-            [['repeat'], 'string', 'max' => 255]
+//            [['repeat'], 'string', 'max' => 255]
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className()
         ];
     }
 
@@ -72,7 +80,7 @@ class Action extends ActiveRecord
             'dateStart' => Yii::t('app', 'Start'),
             'dateStop' => Yii::t('app', 'Stop'),
             'category_id' => Yii::t('planning', 'Category'),
-            'action' => Yii::t('planning', 'Action'),
+            'action' => Yii::t('planning', 'Action name'),
             'user_id' => Yii::t('planning', 'Author'),
 //            'week_status' => Yii::t('planning', 'Week action approved'),
             'confirmed' => Yii::t('planning', 'Confirmed'),
@@ -97,7 +105,7 @@ class Action extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getExps()
+    public function getEmployeesExp()
     {
         return $this->hasMany(Experience::className(), ['id' => 'exp_id'])->viaTable('action_employee', ['action_id' => 'id']);
     }
@@ -105,26 +113,26 @@ class Action extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getActionFlags()
+    /*public function getActionFlags()
     {
         return $this->hasMany(ActionFlag::className(), ['action_id' => 'id']);
-    }
+    }*/
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getFlags()
     {
-        return $this->hasMany(Flags::className(), ['id' => 'flag_id'])->viaTable('action_flag', ['action_id' => 'id']);
+        return $this->hasMany(Flag::className(), ['id' => 'flag_id'])->viaTable('action_flag', ['action_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getActionPlaces()
+    /*public function getActionPlaces()
     {
         return $this->hasMany(ActionPlace::className(), ['action_id' => 'id']);
-    }
+    }*/
 
     /**
      * @return \yii\db\ActiveQuery

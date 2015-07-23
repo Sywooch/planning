@@ -27,8 +27,9 @@
         "kartik-v/yii2-widget-datetimepicker": "*",
         "kartik-v/yii2-widget-fileinput": "*",
         "kartik-v/yii2-widget-select2": "*",
-        "adldap/adldap": "dev-master",
-        "edvlerblog/yii2-adldap-module": "v1.0.0"
+        "kartik-v/yii2-icons": "dev-master",
+        "adldap/adldap": "dev-master"
+
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

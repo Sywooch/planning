@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\structure\models\Department;
 use kartik\helpers\Html as HtmlKart;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -30,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ])?>
     </h1>
     <?php if ($model->department !== null): ?>
-        <h4><?= $model->position .' '. Html::encode($model->department->getDepartmentGenitive()) ?></h4>
+        <h4><?= $model->position .' '. Html::encode(Department::getDepartmentGenitive($model->department)) ?></h4>
     <?php endif; ?>
     <?= DetailView::widget([
         'model' => $model,

@@ -6,6 +6,7 @@ return [
     'Update category: '=>'',
     'Categories'=>'',
     'Create Category'=>'',
+    'Select a category ...' => '',
     'Place'=>'',
     'Create place'=>'',
     'Places'=>'',
@@ -16,4 +17,10 @@ return [
     'Month action' => '',
     'Template' => '',
     'Repeat' => '',
+    'Icon' => '',
+    'Type here <a href="http://fontawesome.io/icons/" target="_blank">FontAwesome</a> icon name.' => '',
+    'Actions' => '',
+    'Action' => '',
+    'Create action' => '',
+    'Select a employee ...' => '',
 ];

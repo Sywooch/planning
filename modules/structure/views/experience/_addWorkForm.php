@@ -2,6 +2,7 @@
 
 use app\modules\structure\models\Department;
 use kartik\select2\Select2;
+use kartik\widgets\DatePicker;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -32,10 +33,10 @@ $this->registerJs(
         <?= $form->field($model, 'employee_id')->hiddenInput()->label(false); ?>
         <div class="row">
             <div class="col-sm-12 col-md-6">
-                <?= $form->field($model, 'start')->widget(\kartik\widgets\DatePicker::className()) ?>
+                <?= $form->field($model, 'start')->widget(DatePicker::className()) ?>
             </div>
             <div class="col-sm-12 col-md-6">
-                <?= $form->field($model, 'stop')->widget(\kartik\widgets\DatePicker::className()) ?>
+                <?= $form->field($model, 'stop')->widget(DatePicker::className()) ?>
             </div>
         </div>
         <div class="row">

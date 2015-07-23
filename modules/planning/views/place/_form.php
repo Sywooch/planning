@@ -8,11 +8,9 @@ use yii\widgets\Pjax;
 /* @var $model app\modules\planning\models\Place */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerJs(
-    '$("document").ready(function(){
-            $("#new-place").on("pjax:end", function() {
-                $.pjax.reload({container:"#place-grid"});
-            });
-        });'
+    'jQuery("#new-place").on("pjax:end", function() {
+        jQuery.pjax.reload({container:"#place-grid"});
+    });'
 );
 ?>
 

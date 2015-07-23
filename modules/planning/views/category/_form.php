@@ -8,11 +8,9 @@ use yii\widgets\Pjax;
 /* @var $model app\modules\planning\models\Category */
 /* @var $form yii\widgets\ActiveForm */
 $this->registerJs(
-    '$("document").ready(function(){
-            $("#new-category").on("pjax:end", function() {
-                $.pjax.reload({container:"#category-grid"});
-            });
-        });'
+    'jQuery("#new-category").on("pjax:end", function() {
+        jQuery.pjax.reload({container:"#category-grid"});
+    });'
 );
 ?>
 
