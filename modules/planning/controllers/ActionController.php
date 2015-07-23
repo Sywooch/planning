@@ -61,7 +61,7 @@ class ActionController extends Controller
     public function actionCreate()
     {
         $model = new Action();
-
+        $model->load(Yii::$app->request->post());
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

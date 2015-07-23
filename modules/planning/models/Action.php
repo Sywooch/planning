@@ -39,7 +39,8 @@ use yii\db\ActiveRecord;
  */
 class Action extends ActiveRecord
 {
-    public $placesIDS;
+    public $flagsAdd;
+    public $empAdd;
     /**
      * @inheritdoc
      */
@@ -55,7 +56,7 @@ class Action extends ActiveRecord
     {
         return [
             [['dateStart', 'dateStop', 'action', 'category_id'], 'required'],
-            [['dateStart', 'dateStop', 'flags'], 'safe'],
+            [['dateStart', 'dateStop', 'flagsAdd', 'empAdd'], 'safe'],
             [['category_id'], 'integer'],
             [['category_id'], 'in', 'range' => Category::getCategoriesId()],
             [['action'], 'string'],

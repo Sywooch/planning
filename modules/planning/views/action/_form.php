@@ -1,8 +1,7 @@
 <?php
 
 use app\modules\planning\models\Category;
-use app\modules\structure\models\Department;
-use kartik\date\DatePicker;
+use kartik\datetime\DateTimePicker;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -19,9 +18,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'dateStart')->widget(DatePicker::className()) ?>
+    <?= $form->field($model, 'dateStart')->widget(DateTimePicker::className()) ?>
 
-    <?= $form->field($model, 'dateStop')->widget(DatePicker::className()) ?>
+    <?= $form->field($model, 'dateStop')->widget(DateTimePicker::className()) ?>
 
     <?= $form->field($model, 'category_id')
         ->dropDownList(
@@ -29,12 +28,12 @@ use yii\widgets\ActiveForm;
             ['prompt' => Yii::t('planning', 'Select a category ...')]
         ) ?>
 
-    <?= $form->field($model, 'flags')->checkboxList(
+    <?= $form->field($model, 'flagsAdd')->checkboxList(
         ArrayHelper::map(\app\modules\planning\models\Flag::find()->asArray()->all(), 'id', 'name'),
         ['separator' => '<br/>']
     ) ?>
 
-    <?= $form->field($model, 'placesIDS')->widget(Select2::className(), [
+    <?= $form->field($model, 'empAdd')->widget(Select2::className(), [
 //        'initValueText' => $cityDesc, // set the initial display text
         'options' => ['placeholder' => 'Search for a city ...', 'multiple' => true],
         'pluginOptions' => [
