@@ -33,6 +33,14 @@ use yii\widgets\ActiveForm;
         ['separator' => '<br/>']
     ) ?>
 
+    <?= $form->field($model, 'placesAdd')->widget(Select2::className(), [
+        'data' => ArrayHelper::map(\app\modules\planning\models\Place::find()->all(), 'id', 'place'),
+        'options' => ['placeholder' => Yii::t('structure', 'Select a place ...'), 'multiple' => true],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]) ?>
+
     <?= $form->field($model, 'empAdd')->widget(Select2::className(), [
 //        'initValueText' => $cityDesc, // set the initial display text
         'options' => ['placeholder' => 'Search for a city ...', 'multiple' => true],
