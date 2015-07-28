@@ -43,4 +43,6 @@ return [
     'Until now' => '',
     'Success dictionary updated' => '',
     'Update dictionaries' => '',
+    'Search a employee ...' => '',
+    'Select a place ...' => '',
 ];

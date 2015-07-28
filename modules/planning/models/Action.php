@@ -41,10 +41,19 @@ class Action extends ActiveRecord
 {
     public $placesAdd;
     public $flagsAdd;
-    public $empAdd;
+    public $headEmployees;
+    public $responsibleEmployees;
+    public $invitedEmployees;
     /**
      * @inheritdoc
      */
+
+    public function __construct($config = []){
+        $this->dateStart = date('d.m.Y H:i', (time() - (time() % 300)));
+        $this->dateStop = date('d.m.Y H:i', strtotime($this->dateStart.' +30 minutes'));
+        parent::__construct($config);
+    }
+
     public static function tableName()
     {
         return '{{%action}}';
@@ -57,7 +66,7 @@ class Action extends ActiveRecord
     {
         return [
             [['dateStart', 'dateStop', 'action', 'category_id'], 'required'],
-            [['dateStart', 'dateStop', 'flagsAdd', 'empAdd', 'placesAdd'], 'safe'],
+            [['dateStart', 'dateStop', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd'], 'safe'],
             [['category_id'], 'integer'],
             [['category_id'], 'in', 'range' => Category::getCategoriesId()],
             [['action'], 'string'],

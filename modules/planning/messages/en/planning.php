@@ -22,5 +22,4 @@ return [
     'Actions' => '',
     'Action' => '',
     'Create action' => '',
-    'Select a employee ...' => '',
 ];

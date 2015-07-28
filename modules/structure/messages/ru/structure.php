@@ -43,4 +43,6 @@ return [
     'Until now' => 'По настоящее время',
     'Success dictionary updated' => 'Словари успешно обновлены',
     'Update dictionaries' => 'Обновить справочники',
+    'Search a employee ...' => 'Выберите сотрудника ...',
+    'Select a place ...' => 'Выберите место проведения ...',
 ];

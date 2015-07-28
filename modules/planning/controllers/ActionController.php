@@ -58,10 +58,9 @@ class ActionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($type)
     {
-        $model = new Action();
-        $model->load(Yii::$app->request->post());
+        $model = new Action(['scenario' => $type, $type => true]);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -70,6 +69,8 @@ class ActionController extends Controller
             ]);
         }
     }
+
+
 
     /**
      * Updates an existing Action model.

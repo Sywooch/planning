@@ -18,5 +18,8 @@ class Module extends \yii\base\Module
               'basePath' => '@planning/messages'
             ];
         }
+        Yii::$app->urlManager->addRules([
+            $this->id.'/<controller:[a-z\-]+>/<type:(week|month)>/create' => $this->id.'/<controller>/create',
+        ],true);
     }
 }

@@ -5,7 +5,6 @@ use kartik\datetime\DateTimePicker;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 
@@ -18,15 +17,30 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'dateStart')->widget(DateTimePicker::className()) ?>
+    <?= $form->field($model, 'dateStart')->widget(DateTimePicker::className(), [
+        'options' => ['placeholder' => Yii::t('planning', 'Enter start time ...')],
+        'pluginOptions' => [
+            'format' => 'dd.mm.yyyy hh:ii',
+            'autoclose'=>true,
+        ]
+    ]) ?>
 
-    <?= $form->field($model, 'dateStop')->widget(DateTimePicker::className()) ?>
+    <?= $form->field($model, 'dateStop')->widget(DateTimePicker::className(), [
+        'options' => ['placeholder' => Yii::t('planning', 'Enter stop time ...')],
+        'pluginOptions' => [
+            'format' => 'dd.mm.yyyy hh:ii',
+            'autoclose'=>true,
+        ]
+    ]) ?>
 
-    <?= $form->field($model, 'category_id')
-        ->dropDownList(
-            ArrayHelper::map(Category::find()->asArray()->all(), 'id', 'name'),
-            ['prompt' => Yii::t('planning', 'Select a category ...')]
-        ) ?>
+    <?php if(in_array($model->scenario, ['month'])): ?>
+        <?= $form->field($model, 'category_id')
+            ->dropDownList(
+                ArrayHelper::map(Category::find()->asArray()->all(), 'id', 'name'),
+                ['prompt' => Yii::t('planning', 'Select a category ...')]
+            )
+        ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'flagsAdd')->checkboxList(
         ArrayHelper::map(\app\modules\planning\models\Flag::find()->asArray()->all(), 'id', 'name'),
@@ -41,26 +55,16 @@ use yii\widgets\ActiveForm;
         ],
     ]) ?>
 
-    <?= $form->field($model, 'empAdd')->widget(Select2::className(), [
-//        'initValueText' => $cityDesc, // set the initial display text
-        'options' => ['placeholder' => 'Search for a city ...', 'multiple' => true],
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' => 3,
-            'ajax' => [
-                'url' => \yii\helpers\Url::to(['/structure/employee/employee-list']),
-                'dataType' => 'json',
-                'data' => new JsExpression('function(params) { return {q:params.term}; }')
-            ],
-            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-            'templateResult' => new JsExpression('function(placesIDS) { return placesIDS.full; }'),
-            'templateSelection' => new JsExpression('function (placesIDS) {  return placesIDS.fio; }'),
-        ],
-    ]) ?>
+    <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'varName' => 'headEmployees'])  ?>
+    <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'varName' => 'responsibleEmployees'])  ?>
+    <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'varName' => 'invitedEmployees'])  ?>
 
     <?= $form->field($model, 'action')->textarea(['rows' => 6]) ?>
 
-    <?php //$form->field($model, 'user_id')->textInput() ?>
+    <?php $model->user_id = Yii::$app->user->id ?>
+    <?=  $form->field($model, 'user_id')
+            ->dropDownList(ArrayHelper::map(\app\models\User::find()->asArray()->all(), 'id', 'username'))
+    ?>
 
     <?php //$form->field($model, 'template')->textInput() ?>
 
