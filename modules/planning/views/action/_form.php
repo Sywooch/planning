@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
         ]
     ]) ?>
 
-    <?php if(in_array($model->scenario, ['month'])): ?>
+    <?php if($model->isMonth()): ?>
         <?= $form->field($model, 'category_id')
             ->dropDownList(
                 ArrayHelper::map(Category::find()->asArray()->all(), 'id', 'name'),

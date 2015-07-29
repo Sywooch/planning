@@ -3,10 +3,13 @@
 namespace app\modules\planning\models;
 
 use app\models\User;
+use app\modules\structure\models\Employee;
 use app\modules\structure\models\Experience;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%action}}".
@@ -65,9 +68,10 @@ class Action extends ActiveRecord
     public function rules()
     {
         return [
-            [['dateStart', 'dateStop', 'action', 'category_id'], 'required'],
-            [['dateStart', 'dateStop', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd'], 'safe'],
+            [['dateStart', 'dateStop', 'action'], 'required', 'on' => ['month', 'week']],
+            [['dateStart', 'dateStop', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd', 'user_id'], 'safe'],
             [['category_id'], 'integer'],
+            [['category_id'], 'required', 'on' => 'month'],
             [['category_id'], 'in', 'range' => Category::getCategoriesId()],
             [['action'], 'string'],
 //            [['repeat'], 'string', 'max' => 255]
@@ -191,5 +195,40 @@ class Action extends ActiveRecord
     public function getTransfers()
     {
         return $this->hasMany(Transfer::className(), ['action_id' => 'id']);
+    }
+
+    public function isWeek() {
+        return $this->week;
+    }
+
+    public function isMonth() {
+        return $this->month && !$this->week;
+    }
+
+    public function saveAllFields() {
+        if(!$this->isNewRecord){
+            ActionEmployee::deleteAll(['action_id' => $this->id]);
+            Yii::$app->db->createCommand()->delete('action_flag', ['action_id' => $this->id]);
+            Yii::$app->db->createCommand()->delete('action_place', ['action_id' => $this->id]);
+
+        }
+        if(!empty($this->flagsAdd)){
+            $this->saveRelated('action_flag', 'flag_id',  $this->flagsAdd);
+        }
+        $this->saveRelated('action_place', 'place_id', $this->placesAdd);
+        $this->saveRelated('action_employee', 'exp_id', $this->headEmployees, ['type' => Employee::HOLDEVENT]);
+        $this->saveRelated('action_employee', 'exp_id', $this->responsibleEmployees, ['type' => Employee::RESPONSIBLE]);
+        $this->saveRelated('action_employee', 'exp_id', $this->invitedEmployees, ['type' => Employee::INVITED]);
+    }
+
+    private function saveRelated($table, $column, $data, $externalColumns = []){
+        $rows = array_map(function($el) use($externalColumns){
+            return ArrayHelper::merge([$this->id, $el], array_values($externalColumns));
+        }, $data);
+        Yii::$app->db->createCommand()->batchInsert(
+            $table,
+            ArrayHelper::merge(['action_id', $column], array_keys($externalColumns)),
+            $rows
+        )->execute();
     }
 }

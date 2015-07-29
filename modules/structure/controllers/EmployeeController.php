@@ -130,7 +130,7 @@ class EmployeeController extends Controller
             $out = ['results' => ['id' => '', 'text' => '']];
             if (!is_null($q)) {
                 $query = (new Query())
-                    ->select(['{{%employee}}.id', 'fio', 'position', 'department'])
+                    ->select(['{{%experience}}.id', 'fio', 'position', 'department'])
                     ->from('{{%employee}}')
                     ->leftJoin('{{%experience}}', '{{%employee}}.id = {{%experience}}.employee_id')
                     ->leftJoin('{{%staff_list}}', '{{%experience}}.staff_unit_id = {{%staff_list}}.id')

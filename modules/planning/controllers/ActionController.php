@@ -62,6 +62,7 @@ class ActionController extends Controller
     {
         $model = new Action(['scenario' => $type, $type => true]);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->saveAllFields();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
