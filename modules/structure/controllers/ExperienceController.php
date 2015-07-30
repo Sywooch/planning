@@ -2,14 +2,18 @@
 
 namespace app\modules\structure\controllers;
 
+use app\modules\structure\models\Department;
 use app\modules\structure\models\Employee;
 use Yii;
 use app\modules\structure\models\Experience;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * ExperienceController implements the CRUD actions for Experience model.
@@ -130,6 +134,52 @@ class ExperienceController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionEmployeeList($q = null)
+    {
+        if(Yii::$app->request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $out = ['results' => ['id' => '', 'text' => '']];
+            if (!is_null($q)) {
+                $query = (new Query())
+                    ->select(['{{%experience}}.id', 'fio', 'position', 'department'])
+                    ->from('{{%employee}}')
+                    ->leftJoin('{{%experience}}', '{{%employee}}.id = {{%experience}}.employee_id')
+                    ->leftJoin('{{%staff_list}}', '{{%experience}}.staff_unit_id = {{%staff_list}}.id')
+                    ->leftJoin('{{%position}}', '{{%staff_list}}.position_id = {{%position}}.id')
+                    ->leftJoin('{{%department}}', '{{%staff_list}}.department_id = {{%department}}.id')
+                    ->where('{{%experience}}.stop IS NULL OR {{%experience}}.stop >= now()')
+                    ->andWhere('fio LIKE "%'.$q.'%"');
+                $command = $query->createCommand();
+                $data = $command->queryAll();
+                $data = ArrayHelper::map($data, 'id', function($el){
+                    $el['full'] = $el['fio'].' - '.$el['position'].' '.Department::getDepartmentGenitive($el['department']);
+                    return $el;
+                });
+                $out['results'] = array_values($data);
+            }
+            return $out;
+        }
+    }
+
+    public function actionEmployeeByExp($id = null)
+    {
+        if(Yii::$app->request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $out = ['results' => ['id' => '', 'text' => '']];
+            if (!is_null($id)) {
+                $query = (new Query())
+                    ->select(['{{%experience}}.id', 'fio'])
+                    ->from('{{%experience}}')
+                    ->leftJoin('{{%employee}}', '{{%experience}}.employee_id = {{%employee}}.id')
+                    ->where('{{%experience}}.id = :id', [':id' => $id]);
+                $command = $query->createCommand();
+                $data = $command->queryAll();
+                $out['results'] = array_values($data);
+            }
+            return $out;
         }
     }
 }

@@ -56,11 +56,13 @@ class ActionController extends Controller
     /**
      * Creates a new Action model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param string $type
      * @return mixed
      */
     public function actionCreate($type)
     {
         $model = new Action(['scenario' => $type, $type => true]);
+        $model->addError('action', 'TEST ERROR');
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $model->saveAllFields();
             return $this->redirect(['view', 'id' => $model->id]);
@@ -82,7 +84,6 @@ class ActionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

@@ -8,7 +8,6 @@ use app\modules\structure\models\Experience;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -69,7 +68,7 @@ class Action extends ActiveRecord
     {
         return [
             [['dateStart', 'dateStop', 'action'], 'required', 'on' => ['month', 'week']],
-            [['dateStart', 'dateStop', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd', 'user_id'], 'safe'],
+            [['dateStart', 'dateStop', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd', 'user_id'], 'safe', 'on' => ['month', 'week']],
             [['category_id'], 'integer'],
             [['category_id'], 'required', 'on' => 'month'],
             [['category_id'], 'in', 'range' => Category::getCategoriesId()],
@@ -109,6 +108,19 @@ class Action extends ActiveRecord
         ];
     }
 
+    public function afterFind()
+    {
+        $this->dateStart = Yii::$app->formatter->format($this->dateStart, ['date', 'php:d.m.Y H:i']);
+        $this->dateStop = Yii::$app->formatter->format($this->dateStop, ['date', 'php:d.m.Y H:i']);
+    }
+
+    public function beforeValidate()
+    {
+        $this->dateStart = Yii::$app->formatter->format($this->dateStart, ["date", "php:Y-m-d H:i:s"]);
+        $this->dateStop = Yii::$app->formatter->format($this->dateStop, ["date", "php:Y-m-d H:i:s"]);
+        parent::beforeValidate();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -120,9 +132,18 @@ class Action extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEmployeesExp()
+    public function getAllEmployeesExp()
     {
         return $this->hasMany(Experience::className(), ['id' => 'exp_id'])->viaTable('action_employee', ['action_id' => 'id']);
+    }
+
+    /**
+     * @param integer $type
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEmployeesExpByType($type)
+    {
+        return $this->getAllEmployeesExp()->andWhere(['action_employee.type' => $type]);
     }
 
     /**
