@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Query;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%experience}}".
@@ -127,6 +128,20 @@ class Experience extends ActiveRecord
             $this->addError($attribute, 'Неправильно выбран диапазон дат работы сотрудника!');
             $this->addError('stop', 'Неправильно выбран диапазон дат работы сотрудника!');
         }
+    }
+
+    public static function getEmpFioByExp($expId)
+    {
+        return ArrayHelper::map(
+            (new Query())
+                ->select(['{{%experience}}.id','fio'])
+                ->from('{{%experience}}')
+                ->leftJoin('{{%employee}}', '{{%experience}}.employee_id={{%employee}}.id')
+                ->where(['{{%experience}}.id' => $expId])
+                ->all(),
+            'id',
+            'fio'
+        );
     }
 }
 

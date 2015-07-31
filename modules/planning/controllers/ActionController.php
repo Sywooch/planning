@@ -5,6 +5,7 @@ namespace app\modules\planning\controllers;
 use Yii;
 use app\modules\planning\models\Action;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -62,7 +63,6 @@ class ActionController extends Controller
     public function actionCreate($type)
     {
         $model = new Action(['scenario' => $type, $type => true]);
-        $model->addError('action', 'TEST ERROR');
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $model->saveAllFields();
             return $this->redirect(['view', 'id' => $model->id]);
@@ -84,7 +84,9 @@ class ActionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = $model->type;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->saveAllFields();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

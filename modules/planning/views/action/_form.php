@@ -55,9 +55,9 @@ use yii\widgets\ActiveForm;
         ],
     ]) ?>
 
-    <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'varName' => 'headEmployees'])  ?>
-    <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'varName' => 'responsibleEmployees'])  ?>
-    <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'varName' => 'invitedEmployees'])  ?>
+    <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'attribute' => 'headEmployees'])  ?>
+    <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'attribute' => 'responsibleEmployees'])  ?>
+    <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'attribute' => 'invitedEmployees'])  ?>
 
     <?= $form->field($model, 'action')->textarea(['rows' => 6]) ?>
 

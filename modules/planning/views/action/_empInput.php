@@ -1,28 +1,19 @@
 <?php
 /* @var $form yii\widgets\ActiveForm */
 /* @var $model app\modules\planning\models\Action */
-/* @var $varName string */
+/* @var $attribute string */
 /* @var $this \yii\web\View*/
 
+use app\modules\structure\models\Experience;
 use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 
-$url = Url::to(['/structure/experience/employee-by-exp']);
-$initScript = <<<JS
-    function(element, callback) {
-                var id=$(element).val();
-                if (id !== "") {
-                    $.ajax("{$url}?id=" + id, {
-                        dataType: "json"
-                    }).done(function(data) { callback(data.results);});
-                }
-            }
-JS;
-//$val = (new ReflectionClass('app\modules\planning\models\Action'))->getProperty($varName)->getValue($model);
+$val = (new ReflectionClass('app\modules\planning\models\Action'))->getProperty($attribute)->getValue($model);
 
-echo $form->field($model, $varName)->widget(Select2::className(), [
+echo $form->field($model, $attribute)->widget(Select2::className(), [
     'options' => ['placeholder' => Yii::t('structure', 'Search a employee ...')],
+    'initValueText' => Experience::getEmpFioByExp($val),
     'pluginOptions' => [
         'multiple' => true,
         'allowClear' => true,
@@ -33,8 +24,7 @@ echo $form->field($model, $varName)->widget(Select2::className(), [
             'data' => new JsExpression('function(params) { return {q:params.term}; }')
         ],
         'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-        'templateResult' => new JsExpression('function(placesIDS) { return placesIDS.full; }'),
-        'templateSelection' => new JsExpression('function (placesIDS) {  return placesIDS.fio; }'),
-        'initSelection' => new JsExpression($initScript)
+        'templateResult' => new JsExpression('function(empIDs) { return empIDs.full; }'),
+        'templateSelection' => new JsExpression('function (empIDs) {  return empIDs.text; }'),
     ],
 ]);

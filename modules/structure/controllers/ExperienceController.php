@@ -144,7 +144,7 @@ class ExperienceController extends Controller
             $out = ['results' => ['id' => '', 'text' => '']];
             if (!is_null($q)) {
                 $query = (new Query())
-                    ->select(['{{%experience}}.id', 'fio', 'position', 'department'])
+                    ->select(['{{%experience}}.id', 'fio text', 'position', 'department'])
                     ->from('{{%employee}}')
                     ->leftJoin('{{%experience}}', '{{%employee}}.id = {{%experience}}.employee_id')
                     ->leftJoin('{{%staff_list}}', '{{%experience}}.staff_unit_id = {{%staff_list}}.id')
@@ -155,28 +155,9 @@ class ExperienceController extends Controller
                 $command = $query->createCommand();
                 $data = $command->queryAll();
                 $data = ArrayHelper::map($data, 'id', function($el){
-                    $el['full'] = $el['fio'].' - '.$el['position'].' '.Department::getDepartmentGenitive($el['department']);
+                    $el['full'] = $el['text'].' - '.$el['position'].' '.Department::getDepartmentGenitive($el['department']);
                     return $el;
                 });
-                $out['results'] = array_values($data);
-            }
-            return $out;
-        }
-    }
-
-    public function actionEmployeeByExp($id = null)
-    {
-        if(Yii::$app->request->isAjax){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            $out = ['results' => ['id' => '', 'text' => '']];
-            if (!is_null($id)) {
-                $query = (new Query())
-                    ->select(['{{%experience}}.id', 'fio'])
-                    ->from('{{%experience}}')
-                    ->leftJoin('{{%employee}}', '{{%experience}}.employee_id = {{%employee}}.id')
-                    ->where('{{%experience}}.id = :id', [':id' => $id]);
-                $command = $query->createCommand();
-                $data = $command->queryAll();
                 $out['results'] = array_values($data);
             }
             return $out;

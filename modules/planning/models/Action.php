@@ -28,6 +28,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $week
  * @property integer $template
  * @property string $repeat
+ * @property string $type
  *
  * @property ActionEmployee[] $actionEmployees
  * @property Experience[] $employeesExp
@@ -41,6 +42,8 @@ use yii\helpers\ArrayHelper;
  */
 class Action extends ActiveRecord
 {
+    const MONTH = 'month';
+    const WEEK = 'week';
     public $placesAdd;
     public $flagsAdd;
     public $headEmployees;
@@ -59,6 +62,14 @@ class Action extends ActiveRecord
     public static function tableName()
     {
         return '{{%action}}';
+    }
+
+    public function scenarios()
+    {
+        return [
+            'month' => ['dateStart', 'dateStop', 'action', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd', 'user_id'],
+            'week' => ['dateStart', 'dateStop', 'action', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd', 'user_id', 'category_id']
+        ];
     }
 
     /**
@@ -112,13 +123,25 @@ class Action extends ActiveRecord
     {
         $this->dateStart = Yii::$app->formatter->format($this->dateStart, ['date', 'php:d.m.Y H:i']);
         $this->dateStop = Yii::$app->formatter->format($this->dateStop, ['date', 'php:d.m.Y H:i']);
+        $this->flagsAdd = self::getIds($this->flags);
+        $this->placesAdd = self::getIds($this->places);
+        $this->headEmployees = self::getIds($this->getEmployeesExpByType(Employee::HOLDEVENT)->all());
+        $this->responsibleEmployees= self::getIds($this->getEmployeesExpByType(Employee::RESPONSIBLE)->all());
+        $this->invitedEmployees= self::getIds($this->getEmployeesExpByType(Employee::INVITED)->all());
+    }
+
+    public static function getIds($arValues)
+    {
+        return ArrayHelper::map($arValues, 'id', 'id');
     }
 
     public function beforeValidate()
     {
+        if(!parent::beforeValidate())
+            return false;
         $this->dateStart = Yii::$app->formatter->format($this->dateStart, ["date", "php:Y-m-d H:i:s"]);
         $this->dateStop = Yii::$app->formatter->format($this->dateStop, ["date", "php:Y-m-d H:i:s"]);
-        parent::beforeValidate();
+        return true;
     }
 
     /**
@@ -143,7 +166,7 @@ class Action extends ActiveRecord
      */
     public function getEmployeesExpByType($type)
     {
-        return $this->getAllEmployeesExp()->andWhere(['action_employee.type' => $type]);
+        return $this->getAllEmployeesExp()->leftJoin('action_employee', '{{%experience}}.id=action_employee.exp_id')->andWhere(['action_employee.type' => $type]);
     }
 
     /**
@@ -218,6 +241,12 @@ class Action extends ActiveRecord
         return $this->hasMany(Transfer::className(), ['action_id' => 'id']);
     }
 
+    public function getType()
+    {
+        if($this->isMonth()) return self::MONTH;
+        if($this->isWeek()) return self::WEEK;
+    }
+
     public function isWeek() {
         return $this->week;
     }
@@ -229,9 +258,8 @@ class Action extends ActiveRecord
     public function saveAllFields() {
         if(!$this->isNewRecord){
             ActionEmployee::deleteAll(['action_id' => $this->id]);
-            Yii::$app->db->createCommand()->delete('action_flag', ['action_id' => $this->id]);
-            Yii::$app->db->createCommand()->delete('action_place', ['action_id' => $this->id]);
-
+            Yii::$app->db->createCommand()->delete('action_flag', ['action_id' => $this->id])->execute();
+            Yii::$app->db->createCommand()->delete('action_place', ['action_id' => $this->id])->execute();
         }
         if(!empty($this->flagsAdd)){
             $this->saveRelated('action_flag', 'flag_id',  $this->flagsAdd);
