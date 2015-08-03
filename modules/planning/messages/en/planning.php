@@ -22,4 +22,9 @@ return [
     'Actions' => '',
     'Action' => '',
     'Create action' => '',
+    'Option' => '',
+    'Options' => '',
+    'Duration' => '',
+    'Create option' => '',
+    'Update option:' => '',
 ];

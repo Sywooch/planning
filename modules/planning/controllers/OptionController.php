@@ -2,19 +2,17 @@
 
 namespace app\modules\planning\controllers;
 
-use app\modules\planning\models\search\ActionSearch;
 use Yii;
-use app\modules\planning\models\Action;
-use yii\data\ActiveDataProvider;
-use yii\helpers\ArrayHelper;
+use app\modules\planning\models\Option;
+use app\modules\planning\models\search\OptionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ActionController implements the CRUD actions for Action model.
+ * OptionController implements the CRUD actions for Option model.
  */
-class ActionController extends Controller
+class OptionController extends Controller
 {
     public function behaviors()
     {
@@ -29,22 +27,26 @@ class ActionController extends Controller
     }
 
     /**
-     * Lists all Action models.
+     * Lists all Option models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ActionSearch();
+        $model = new Option();
+        $searchModel = new OptionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        if($model->load(Yii::$app->request->post()) && $model->save()){
+            $model = new Option();
+        }
         return $this->render('index', [
+            'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Action model.
+     * Displays a single Option model.
      * @param integer $id
      * @return mixed
      */
@@ -56,17 +58,15 @@ class ActionController extends Controller
     }
 
     /**
-     * Creates a new Action model.
+     * Creates a new Option model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param string $type
      * @return mixed
      */
-    public function actionCreate($type)
+    public function actionCreate()
     {
-        $model = new Action(['scenario' => $type, $type => true]);
-        $model->initDates();
+        $model = new Option();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $model->saveAllFields();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -75,10 +75,8 @@ class ActionController extends Controller
         }
     }
 
-
-
     /**
-     * Updates an existing Action model.
+     * Updates an existing Option model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -86,9 +84,8 @@ class ActionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->scenario = $model->type;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $model->saveAllFields();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -98,7 +95,7 @@ class ActionController extends Controller
     }
 
     /**
-     * Deletes an existing Action model.
+     * Deletes an existing Option model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -111,15 +108,15 @@ class ActionController extends Controller
     }
 
     /**
-     * Finds the Action model based on its primary key value.
+     * Finds the Option model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Action the loaded model
+     * @return Option the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Action::findOne($id)) !== null) {
+        if (($model = Option::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

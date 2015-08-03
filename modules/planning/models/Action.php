@@ -49,27 +49,13 @@ class Action extends ActiveRecord
     public $headEmployees;
     public $responsibleEmployees;
     public $invitedEmployees;
+
     /**
      * @inheritdoc
      */
-
-    public function __construct($config = []){
-        $this->dateStart = date('d.m.Y H:i', (time() - (time() % 300)));
-        $this->dateStop = date('d.m.Y H:i', strtotime($this->dateStart.' +30 minutes'));
-        parent::__construct($config);
-    }
-
     public static function tableName()
     {
         return '{{%action}}';
-    }
-
-    public function scenarios()
-    {
-        return [
-            'month' => ['dateStart', 'dateStop', 'action', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd', 'user_id'],
-            'week' => ['dateStart', 'dateStop', 'action', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd', 'user_id', 'category_id']
-        ];
     }
 
     /**
@@ -78,10 +64,10 @@ class Action extends ActiveRecord
     public function rules()
     {
         return [
-            [['dateStart', 'dateStop', 'action'], 'required', 'on' => ['month', 'week']],
-            [['dateStart', 'dateStop', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd', 'user_id'], 'safe', 'on' => ['month', 'week']],
+            [['dateStart', 'dateStop', 'action'], 'required', 'on' => [self::MONTH, self::WEEK]],
+            [['dateStart', 'dateStop', 'flagsAdd', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'placesAdd', 'user_id'], 'safe', 'on' => [self::MONTH, self::WEEK]],
             [['category_id'], 'integer'],
-            [['category_id'], 'required', 'on' => 'month'],
+            [['category_id'], 'required', 'on' => self::MONTH],
             [['category_id'], 'in', 'range' => Category::getCategoriesId()],
             [['action'], 'string'],
 //            [['repeat'], 'string', 'max' => 255]
@@ -123,11 +109,13 @@ class Action extends ActiveRecord
     {
         $this->dateStart = Yii::$app->formatter->format($this->dateStart, ['date', 'php:d.m.Y H:i']);
         $this->dateStop = Yii::$app->formatter->format($this->dateStop, ['date', 'php:d.m.Y H:i']);
-        $this->flagsAdd = self::getIds($this->flags);
-        $this->placesAdd = self::getIds($this->places);
-        $this->headEmployees = self::getIds($this->getEmployeesExpByType(Employee::HOLDEVENT)->all());
-        $this->responsibleEmployees= self::getIds($this->getEmployeesExpByType(Employee::RESPONSIBLE)->all());
-        $this->invitedEmployees= self::getIds($this->getEmployeesExpByType(Employee::INVITED)->all());
+        if(in_array($this->scenario, [self::MONTH, self::WEEK])){
+            $this->flagsAdd = self::getIds($this->flags);
+            $this->placesAdd = self::getIds($this->places);
+            $this->headEmployees = self::getIds($this->getEmployeesExpByType(Employee::HOLDEVENT)->all());
+            $this->responsibleEmployees= self::getIds($this->getEmployeesExpByType(Employee::RESPONSIBLE)->all());
+            $this->invitedEmployees= self::getIds($this->getEmployeesExpByType(Employee::INVITED)->all());
+        }
     }
 
     public static function getIds($arValues)
@@ -139,8 +127,10 @@ class Action extends ActiveRecord
     {
         if(!parent::beforeValidate())
             return false;
-        $this->dateStart = Yii::$app->formatter->format($this->dateStart, ["date", "php:Y-m-d H:i:s"]);
-        $this->dateStop = Yii::$app->formatter->format($this->dateStop, ["date", "php:Y-m-d H:i:s"]);
+        if(in_array($this->scenario, [self::MONTH, self::WEEK])){
+            $this->dateStart = Yii::$app->formatter->format($this->dateStart, ["date", "php:Y-m-d H:i:s"]);
+            $this->dateStop = Yii::$app->formatter->format($this->dateStop, ["date", "php:Y-m-d H:i:s"]);
+        }
         return true;
     }
 
@@ -279,5 +269,11 @@ class Action extends ActiveRecord
             ArrayHelper::merge(['action_id', $column], array_keys($externalColumns)),
             $rows
         )->execute();
+    }
+
+    public function initDates()
+    {
+        $this->dateStart = date('d.m.Y H:i', (time() - (time() % 300)));
+        $this->dateStop = date('d.m.Y H:i', strtotime($this->dateStart.' +30 minutes'));
     }
 }

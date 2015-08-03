@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
  * @property string $icon
  *
  * @property Action[] $actions
+ * @property Option[] $options
  */
 class Flag extends ActiveRecord
 {
@@ -69,6 +70,11 @@ class Flag extends ActiveRecord
      */
     public function getActions()
     {
-        return $this->hasMany(Action::className(),['id', 'action_id'])->viaTable('action_flag', ['flag_id' => 'id']);
+        return $this->hasMany(Action::className(),['id' => 'action_id'])->viaTable('action_flag', ['flag_id' => 'id']);
+    }
+
+    public function getOptions()
+    {
+        return $this->hasMany(Option::className(), ['id' => 'option_id'])->viaTable('action_option', ['flag_id' => 'id']);
     }
 }
