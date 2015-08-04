@@ -27,4 +27,5 @@ return [
     'Duration' => 'Продолжительность',
     'Create option' => 'Создать опцию',
     'Update option:' => 'Изменить опцию:',
+    'Select a option ...' => 'Выберите опцию ...',
 ];

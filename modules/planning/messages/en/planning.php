@@ -27,4 +27,5 @@ return [
     'Duration' => '',
     'Create option' => '',
     'Update option:' => '',
+    'Select a option ...' => '',
 ];

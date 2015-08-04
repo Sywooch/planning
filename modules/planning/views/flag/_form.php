@@ -1,5 +1,8 @@
 <?php
 
+use app\modules\planning\models\Option;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
@@ -25,7 +28,14 @@ $this->registerJs(
 
         <?= $form->field($model, 'icon')->textInput(['maxlength' => true])
             ->hint(Yii::t('planning', 'Type here <a href="http://fontawesome.io/icons/" target="_blank">FontAwesome</a> icon name.')) ?>
-        <?= $form->field($model, 'options') ?>
+
+        <?= $form->field($model, 'options')->widget(Select2::className(), [
+            'data' => ArrayHelper::map(Option::find()->all(), 'id', function(Option $el){ return $el->option.' '.$el->duration;}),
+            'options' => ['placeholder' => Yii::t('planning', 'Select a option ...'), 'multiple' => true],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]) ?>
 
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Add') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

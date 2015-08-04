@@ -52,14 +52,6 @@ class Flag extends ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    /*public function getActionFlags()
-    {
-        return $this->hasMany(ActionFlag::className(), ['flag_id' => 'id']);
-    }*/
-
     public function getIcon()
     {
         return Icon::showStack ($this->icon,'circle',['class'=>'fa-lg blue-icon'],['class'=>'fa-inverse']);
@@ -75,6 +67,6 @@ class Flag extends ActiveRecord
 
     public function getOptions()
     {
-        return $this->hasMany(Option::className(), ['id' => 'option_id'])->viaTable('action_option', ['flag_id' => 'id']);
+        return $this->hasMany(Option::className(), ['id' => 'option_id'])->viaTable('flag_option', ['flag_id' => 'id']);
     }
 }

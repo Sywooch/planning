@@ -72,10 +72,50 @@ class m150803_081128_add_option_table_for_action extends Migration
                 CLOSE option_cursor;
             END;
         ');
+
+        $this->execute('
+            CREATE TRIGGER add_flag_option AFTER INSERT ON flag_option FOR EACH ROW
+            BEGIN
+                DECLARE v_finished INTEGER DEFAULT 0;
+                DECLARE v_action INTEGER DEFAULT NULL;
+                DECLARE action_cursor CURSOR FOR SELECT action_id FROM action_flag WHERE flag_id=new.flag_id;
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_finished = 1;
+                OPEN action_cursor;
+                add_option: LOOP
+                    FETCH action_cursor INTO v_action;
+                    IF v_finished = 1 THEN
+                        LEAVE add_option;
+                    END IF;
+                    INSERT INTO action_option(action_id, option_id) VALUES (v_action, new.option_id);
+                END LOOP add_option;
+                CLOSE action_cursor;
+            END;
+        ');
+
+        $this->execute('
+            CREATE TRIGGER delete_flag_option AFTER DELETE ON flag_option FOR EACH ROW
+            BEGIN
+                DECLARE v_finished INTEGER DEFAULT 0;
+                DECLARE v_action INTEGER DEFAULT NULL;
+                DECLARE action_cursor CURSOR FOR SELECT action_id FROM action_flag WHERE flag_id=old.flag_id;
+                DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_finished = 1;
+                OPEN action_cursor;
+                add_option: LOOP
+                    FETCH action_cursor INTO v_action;
+                    IF v_finished = 1 THEN
+                        LEAVE add_option;
+                    END IF;
+                    DELETE FROM action_option WHERE action_id=v_action AND option_id=old.option_id;
+                END LOOP add_option;
+                CLOSE action_cursor;
+            END;
+        ');
     }
 
     public function down()
     {
+        $this->execute('DROP TRIGGER delete_flag_option');
+        $this->execute('DROP TRIGGER add_flag_option');
         $this->execute('DROP TRIGGER uncheck_flag_with_option');
         $this->execute('DROP TRIGGER add_flag_with_option');
         $this->dropTable('flag_option');
