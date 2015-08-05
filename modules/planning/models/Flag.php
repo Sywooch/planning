@@ -6,6 +6,7 @@ use kartik\helpers\Html;
 use kartik\icons\Icon;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 /**
  * This is the model class for table "{{%flag}}".
@@ -35,7 +36,8 @@ class Flag extends ActiveRecord
     {
         return [
             [['name', 'description', 'icon'], 'required'],
-            [['name', 'description', 'icon'], 'string', 'max' => 255]
+            [['name', 'description', 'icon'], 'string', 'max' => 255],
+            [['options'], 'safe']
         ];
     }
 
@@ -49,6 +51,7 @@ class Flag extends ActiveRecord
             'name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
             'icon' => Yii::t('planning', 'Icon'),
+            'options' => Yii::t('planning', 'Options')
         ];
     }
 
@@ -68,5 +71,24 @@ class Flag extends ActiveRecord
     public function getOptions()
     {
         return $this->hasMany(Option::className(), ['id' => 'option_id'])->viaTable('flag_option', ['flag_id' => 'id']);
+    }
+
+    public function setOptions($val)
+    {
+        $this->options = array_map(function($opId){return Option::find()->byId($opId);},$val);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->saveOptions();
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    public function saveOptions()
+    {
+        Yii::$app->db->createCommand()->delete('flag_option', ['flag_id' => $this->id])->execute();
+        foreach($this->options as $option){
+            $this->link('options', $option);
+        }
     }
 }

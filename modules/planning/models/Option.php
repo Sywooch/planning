@@ -2,7 +2,9 @@
 
 namespace app\modules\planning\models;
 
+use app\modules\planning\models\query\OptionQuery;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%option}}".
@@ -49,6 +51,11 @@ class Option extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function find()
+    {
+        return new OptionQuery(get_called_class());
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -63,5 +70,16 @@ class Option extends \yii\db\ActiveRecord
     public function getFlags()
     {
         return $this->hasMany(Flag::className(), ['id' => 'flag_id'])->viaTable('flag_option', ['option_id' => 'id']);
+    }
+
+    public static function configForSelect2()
+    {
+        return [
+            'data' => ArrayHelper::map(Option::find()->all(), 'id', function(Option $el){ return $el->option.' ('.$el->duration.')';}),
+            'options' => ['placeholder' => Yii::t('planning', 'Select a option ...'), 'multiple' => true],
+            'pluginOptions' => [
+                'allowClear' => true
+            ]
+        ];
     }
 }

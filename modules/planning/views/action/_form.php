@@ -1,6 +1,7 @@
 <?php
 
 use app\modules\planning\models\Category;
+use app\modules\planning\models\Option;
 use kartik\datetime\DateTimePicker;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
@@ -42,12 +43,12 @@ use yii\widgets\ActiveForm;
         ?>
     <?php endif; ?>
 
-    <?= $form->field($model, 'flagsAdd')->checkboxList(
+    <?= $form->field($model, 'flags')->checkboxList(
         ArrayHelper::map(\app\modules\planning\models\Flag::find()->asArray()->all(), 'id', 'name'),
         ['separator' => '<br/>']
     ) ?>
 
-    <?= $form->field($model, 'placesAdd')->widget(Select2::className(), [
+    <?= $form->field($model, 'places')->widget(Select2::className(), [
         'data' => ArrayHelper::map(\app\modules\planning\models\Place::find()->all(), 'id', 'place'),
         'options' => ['placeholder' => Yii::t('structure', 'Select a place ...'), 'multiple' => true],
         'pluginOptions' => [
@@ -60,6 +61,8 @@ use yii\widgets\ActiveForm;
     <?= $this->render('_empInput', ['form' => $form, 'model' => $model, 'attribute' => 'invitedEmployees'])  ?>
 
     <?= $form->field($model, 'action')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'options')->widget(Select2::className(), Option::configForSelect2()) ?>
 
     <?php $model->user_id = Yii::$app->user->id ?>
     <?=  $form->field($model, 'user_id')

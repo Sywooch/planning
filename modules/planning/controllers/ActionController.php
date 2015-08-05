@@ -87,6 +87,7 @@ class ActionController extends Controller
     {
         $model = $this->findModel($id);
         $model->scenario = $model->type;
+//        $model->getHeadEmployees()->all();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $model->saveAllFields();
             return $this->redirect(['view', 'id' => $model->id]);
