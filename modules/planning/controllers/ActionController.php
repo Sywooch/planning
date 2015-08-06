@@ -46,12 +46,15 @@ class ActionController extends Controller
     /**
      * Displays a single Action model.
      * @param integer $id
+     * @throws NotFoundHttpException if the model cannot be found
      * @return mixed
      */
     public function actionView($id)
     {
+        if(($model = Action::find()->with(['places', 'category', 'author'])->where(['id' => $id])->one()) === null)
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -66,7 +69,6 @@ class ActionController extends Controller
         $model = new Action(['scenario' => $type, $type => true]);
         $model->initDates();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $model->saveAllFields();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -88,8 +90,8 @@ class ActionController extends Controller
         $model = $this->findModel($id);
         $model->scenario = $model->type;
 //        $model->getHeadEmployees()->all();
+//        $model->load(Yii::$app->request->post());
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $model->saveAllFields();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -123,7 +125,7 @@ class ActionController extends Controller
         if (($model = Action::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
     }
 }

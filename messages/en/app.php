@@ -19,5 +19,6 @@ return [
     'Stop' => '',
     'Add' => '',
     'Name' => '',
-    'Description' => ''
+    'Description' => '',
+    'The requested page does not exist.' => '',
 ];

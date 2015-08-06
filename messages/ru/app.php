@@ -19,5 +19,6 @@ return [
     'Stop' => 'Окончание',
     'Add' => 'Добавить',
     'Name' => 'Наименование',
-    'Description' => 'Описание'
+    'Description' => 'Описание',
+    'The requested page does not exist.' => 'Запрашиваемая страница не найдена.',
 ];

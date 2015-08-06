@@ -1,6 +1,5 @@
 <?php
 
-use yii\db\Schema;
 use yii\db\Migration;
 
 class m150803_081128_add_option_table_for_action extends Migration
@@ -13,15 +12,15 @@ class m150803_081128_add_option_table_for_action extends Migration
         }
 
         $this->createTable('{{%option}}', [
-            'id' => Schema::TYPE_PK,
-            'option' => Schema::TYPE_STRING.' NOT NULL',
-            'duration' => Schema::TYPE_TIME.' NOT NULL',
+            'id' => $this->primaryKey(),
+            'option' => $this->string()->notNull(),
+            'duration' => $this->time()->notNull(),
         ], $tableOptions);
         $this->createIndex('ix_option', '{{%option}}', ['option'], true);
 
         $this->createTable('action_option', [
-            'action_id' => Schema::TYPE_INTEGER.' NOT NULL',
-            'option_id' => Schema::TYPE_INTEGER.' NOT NULL',
+            'action_id' => $this->integer()->notNull(),
+            'option_id' => $this->integer()->notNull(),
             'PRIMARY KEY (action_id, option_id)'
         ], $tableOptions);
         $this->addForeignKey('fk_action_option_action', 'action_option', 'action_id', '{{%action}}', 'id', 'CASCADE', 'RESTRICT');
@@ -29,8 +28,8 @@ class m150803_081128_add_option_table_for_action extends Migration
         $this->createIndex('ix_action_option', 'action_option', ['action_id', 'option_id'], true);
 
         $this->createTable('flag_option', [
-            'flag_id' => Schema::TYPE_INTEGER.' NOT NULL',
-            'option_id' => Schema::TYPE_INTEGER.' NOT NULL',
+            'flag_id' => $this->integer()->notNull(),
+            'option_id' => $this->integer()->notNull(),
         ], $tableOptions);
         $this->addForeignKey('fk_flag_option_flag', 'flag_option', 'flag_id', '{{%flag}}', 'id', 'CASCADE', 'RESTRICT');
         $this->addForeignKey('fk_flag_option_option', 'flag_option', 'option_id', '{{%option}}', 'id', 'CASCADE', 'RESTRICT');

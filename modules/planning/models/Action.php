@@ -8,6 +8,7 @@ use app\modules\structure\models\Experience;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -41,6 +42,9 @@ use yii\helpers\ArrayHelper;
  * @property Transfer[] $transfers
  * @property Option[] $options
  */
+
+//@todo При обновлении мероприятия, надо сделать так, чтобы обновлялись только измененные поля, а не все (Себе на заметку)
+
 class Action extends ActiveRecord
 {
     const MONTH = 'month';
@@ -61,8 +65,8 @@ class Action extends ActiveRecord
     {
         return ArrayHelper::merge(
             [
-                self::WEEK => ['dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id'],
-                self::MONTH => ['dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'category_id'],
+                self::WEEK => ['dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options'],
+                self::MONTH => ['dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options', 'category_id'],
             ],
             parent::scenarios()
         );
@@ -74,7 +78,7 @@ class Action extends ActiveRecord
     public function rules()
     {
         return [
-            [['dateStart', 'dateStop', 'action', 'headEmployees', 'responsibleEmployees'], 'required'],
+            [['dateStart', 'dateStop', 'action', 'headEmployees', 'responsibleEmployees', 'places'], 'required'],
             [['category_id'], 'integer'],
             [['category_id'], 'required', 'on' => self::MONTH],
             [['category_id'], 'in', 'range' => Category::getCategoriesId()],
@@ -111,23 +115,26 @@ class Action extends ActiveRecord
             'week' => Yii::t('planning', 'Week action'),
             'template' => Yii::t('planning', 'Template'),
             'repeat' => Yii::t('planning', 'Repeat'),
+            'places' => Yii::t('planning', 'Places'),
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function afterFind()
     {
         $this->dateStart = Yii::$app->formatter->format($this->dateStart, ['date', 'php:d.m.Y H:i']);
         $this->dateStop = Yii::$app->formatter->format($this->dateStop, ['date', 'php:d.m.Y H:i']);
-        $this->headEmployees = self::getIds($this->getEmployeesExpByType(Employee::HOLDEVENT)->all());
-        $this->responsibleEmployees= self::getIds($this->getEmployeesExpByType(Employee::RESPONSIBLE)->all());
-        $this->invitedEmployees= self::getIds($this->getEmployeesExpByType(Employee::INVITED)->all());
+        $filteredExp = $this->getAllEmployeesExp();
+        $this->headEmployees = $filteredExp[Employee::HOLDEVENT];
+        $this->responsibleEmployees= $filteredExp[Employee::RESPONSIBLE];
+        $this->invitedEmployees= $filteredExp[Employee::INVITED];
     }
 
-    public static function getIds($arValues)
-    {
-        return ArrayHelper::map($arValues, 'id', 'id');
-    }
-
+    /**
+     * @inheritdoc
+     */
     public function beforeValidate()
     {
         if(!parent::beforeValidate())
@@ -135,6 +142,28 @@ class Action extends ActiveRecord
         $this->dateStart = Yii::$app->formatter->format($this->dateStart, ["date", "php:Y-m-d H:i:s"]);
         $this->dateStop = Yii::$app->formatter->format($this->dateStop, ["date", "php:Y-m-d H:i:s"]);
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        /**
+         * Добавляем связь мероприятия с опцией только в том случае,
+         * если опция не была добавлена на основе триггера add_flag_with_option
+         */
+        $this->saveAllRelatedFields();
+        $existedId = array_map(
+            function($el){return $el['option_id'];},
+            (new Query())->select('option_id')->from('action_option')->where(['action_id' => $this->id])->all()
+        );
+        foreach($this->options as $option){
+            if(!in_array($option->id, $existedId)){
+                $this->link('options', $option);
+            }
+        }
+        parent::AfterSave($insert, $changedAttributes);
     }
 
     /**
@@ -150,7 +179,17 @@ class Action extends ActiveRecord
      */
     public function getAllEmployeesExp()
     {
-        return $this->hasMany(Experience::className(), ['id' => 'exp_id'])->viaTable('action_employee', ['action_id' => 'id']);
+        $expIds = (new Query)->select(['{{%experience}}.id', 'type', 'fio'])
+            ->from('{{%experience}}')
+            ->leftJoin('action_employee', '{{%experience}}.id = action_employee.exp_id')
+            ->leftJoin('{{%action}}', 'action_employee.action_id = {{%action}}.id')
+            ->leftJoin('{{%employee}}', '{{%experience}}.employee_id = {{%employee}}.id')
+            ->where(['{{%action}}.id' => $this->id])
+            ->all();
+        foreach($expIds as $expId){
+            $filteredArray[$expId['type']][] = $expId['id'];
+        }
+        return (isset($filteredArray))?$filteredArray:[];
     }
 
     /**
@@ -165,14 +204,6 @@ class Action extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    /*public function getActionFlags()
-    {
-        return $this->hasMany(ActionFlag::className(), ['action_id' => 'id']);
-    }*/
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getFlags()
     {
         return $this->hasMany(Flag::className(), ['id' => 'flag_id'])->viaTable('action_flag', ['action_id' => 'id']);
@@ -182,14 +213,6 @@ class Action extends ActiveRecord
     {
         $this->flags = $flags;
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    /*public function getActionPlaces()
-    {
-        return $this->hasMany(ActionPlace::className(), ['action_id' => 'id']);
-    }*/
 
     /**
      * @return \yii\db\ActiveQuery
@@ -252,6 +275,11 @@ class Action extends ActiveRecord
         return $this->hasMany(Option::className(), ['id' => 'option_id'])->viaTable('action_option', ['action_id' => 'id']);
     }
 
+    public function setOptions($options)
+    {
+        $this->options = (!empty($options))?array_map(function($opId){return Option::find()->byId($opId);}, $options):[];
+    }
+
     /**
      * @return string
      */
@@ -269,11 +297,12 @@ class Action extends ActiveRecord
         return $this->month && !$this->week;
     }
 
-    public function saveAllFields() {
+    public function saveAllRelatedFields() {
         if(!$this->isNewRecord){
             ActionEmployee::deleteAll(['action_id' => $this->id]);
-            Yii::$app->db->createCommand()->delete('action_flag', ['action_id' => $this->id])->execute();
-            Yii::$app->db->createCommand()->delete('action_place', ['action_id' => $this->id])->execute();
+            $this->clearRelatedTable('action_flag');
+            $this->clearRelatedTable('action_place');
+            $this->clearRelatedTable('action_option');
         }
         if(!empty($this->flags)){
             $this->saveRelated('action_flag', 'flag_id',  $this->flags);
@@ -301,5 +330,10 @@ class Action extends ActiveRecord
     {
         $this->dateStart = date('d.m.Y H:i', (time() - (time() % 300)));
         $this->dateStop = date('d.m.Y H:i', strtotime($this->dateStart.' +30 minutes'));
+    }
+
+    public function clearRelatedTable($tableName)
+    {
+        Yii::$app->db->createCommand()->delete($tableName, ['action_id' => $this->id])->execute();
     }
 }

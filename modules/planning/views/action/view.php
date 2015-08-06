@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\modules\planning\models\Action */
 
-$this->title = $model->id;
+$this->title = $model->action;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('planning', 'Actions'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -28,19 +28,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+//            'id',
             'dateStart',
             'dateStop',
-            'category_id',
-            'action:ntext',
-            'user_id',
-            'week_status',
-            'confirmed',
-            'created_at',
-            'updated_at',
-            'month_status',
-            'month',
-            'week',
+            [
+                'label' => Yii::t('planning', 'Category'),
+                'value' => $model->category->name,
+                'visible' => $model->isMonth()
+            ]
+            ,
+//            'action:ntext',
+            [
+                'label' => Yii::t('planning', 'Author'),
+                'value' => $model->author->username,
+            ],
+//            'week_status',
+//            'confirmed',
+//            'created_at',
+//            'updated_at',
+//            'month_status',
+//            'month',
+//            'week',
             'template',
             'repeat',
         ],
