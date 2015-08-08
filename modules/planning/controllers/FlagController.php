@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * FlagController implements the CRUD actions for Flag model.
@@ -91,6 +92,24 @@ class FlagController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionWithOption($id, $checked, $opt)
+    {
+        /* @var Flag $model */
+        $checked = ($checked === 'true');
+        $opt = explode(',', $opt);
+        if(Yii::$app->request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $model = Flag::find()->joinWith('options')->where(['{{%flag}}.id' => $id])->one();
+            foreach($model->options as $option){
+                if($checked)
+                    array_push($opt, $option->id);
+                else
+                    unset($opt[array_search($option->id, $opt)]);
+            }
+            return array_unique($opt);
         }
     }
 }

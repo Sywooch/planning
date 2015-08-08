@@ -75,7 +75,7 @@ class Flag extends ActiveRecord
 
     public function setOptions($val)
     {
-        $this->options = array_map(function($opId){return Option::find()->byId($opId);},$val);
+        $this->options = (!empty($val))?array_map(function($opId){return Option::find()->byId($opId);},$val):[];
     }
 
     public function afterSave($insert, $changedAttributes)

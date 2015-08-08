@@ -12,6 +12,23 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\modules\planning\models\Action */
 /* @var $form yii\widgets\ActiveForm */
+$url = \yii\helpers\Url::toRoute('/planning/flag/with-option');
+$script = <<<JS
+    $('input[name="Action[flags][]"]').change(function(){
+    var opt = ($('#action-options').select2('val'));
+        $.ajax({
+            url: "{$url}",
+            //type: 'post',
+            dataType: "json",
+            data:{id:$(this).val(), checked:$(this).prop("checked"), opt:(opt)?opt.join(','):opt},
+            success: function(data){
+                $('#action-options').select2('val', data);
+            }
+        });
+    });
+JS;
+
+$this->registerJs($script);
 ?>
 
 <div class="action-form">
