@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eeb8153ec4d6b5a7cb7bded6f0b1d845",
+    "hash": "893d51c4da0ffc87a61b5c34510839d8",
     "packages": [
         {
             "name": "adldap/adldap",
@@ -483,6 +483,50 @@
                 "icon"
             ],
             "time": "2015-07-28 21:55:03"
+        },
+        {
+            "name": "himiklab/yii2-sortable-grid-view-widget",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/himiklab/yii2-sortable-grid-view-widget.git",
+                "reference": "5d1880dd1536fe60a976339336f5140636d4d1fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/himiklab/yii2-sortable-grid-view-widget/zipball/5d1880dd1536fe60a976339336f5140636d4d1fb",
+                "reference": "5d1880dd1536fe60a976339336f5140636d4d1fb",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*",
+                "yiisoft/yii2-jui": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "himiklab\\sortablegrid\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "HimikLab",
+                    "homepage": "https://github.com/himiklab"
+                }
+            ],
+            "description": "Sortable modification of standard Yii2 GridView widget",
+            "keywords": [
+                "grid",
+                "gridview",
+                "sortable",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-01-27 09:34:59"
         },
         {
             "name": "kartik-v/bootstrap-fileinput",

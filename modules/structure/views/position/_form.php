@@ -11,10 +11,8 @@ use yii\widgets\Pjax;
 
 <?php
     $this->registerJs(
-        '$("document").ready(function(){
-            $("#new-position").on("pjax:end", function() {
-                $.pjax.reload({container:"#positions-grid"});
-            });
+    'jQuery("#new-position").on("pjax:end", function() {
+            jQuery.pjax.reload({container:"#positions-grid"});
         });'
     );
 ?>
@@ -24,8 +22,6 @@ use yii\widgets\Pjax;
         <?php $form = ActiveForm::begin(['options' => ['data-pjax' => true ]]); ?>
 
         <?= $form->field($model, 'position')->textInput(['maxlength' => true]) ?>
-
-        <?= $form->field($model, 'weight')->textInput() ?>
 
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Add') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

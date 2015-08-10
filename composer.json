@@ -28,7 +28,8 @@
         "kartik-v/yii2-widget-fileinput": "*",
         "kartik-v/yii2-widget-select2": "*",
         "kartik-v/yii2-icons": "dev-master",
-        "adldap/adldap": "dev-master"
+        "adldap/adldap": "dev-master",
+        "himiklab/yii2-sortable-grid-view-widget" : "*"
 
     },
     "require-dev": {

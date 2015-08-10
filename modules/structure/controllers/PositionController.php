@@ -2,6 +2,7 @@
 
 namespace app\modules\structure\controllers;
 
+use himiklab\sortablegrid\SortableGridAction;
 use Yii;
 use app\modules\structure\models\Position;
 use app\modules\structure\models\search\PositionSearch;
@@ -23,6 +24,16 @@ class PositionController extends Controller
                     'delete' => ['post'],
                 ],
             ],
+        ];
+    }
+
+    public function actions()
+    {
+        return[
+            'sort' => [
+                'class' => SortableGridAction::className(),
+                'modelName' => Position::className()
+            ]
         ];
     }
 

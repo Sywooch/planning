@@ -1,5 +1,6 @@
 <?php
 
+use himiklab\sortablegrid\SortableGridView;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -10,6 +11,12 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('structure', 'Positions');
 $this->params['breadcrumbs'][] = $this->title;
+/*$script = <<<JS
+$(document).on('sortableSuccess', function(){
+    jQuery.pjax.reload({container:"#positions-grid"});
+});
+JS;
+$this->registerJs($script);*/
 ?>
 <div class="position-index">
 
@@ -18,13 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', ['model' => $model]); ?>
 
     <?php Pjax::begin(['id' => 'positions-grid']) ?>
-        <?= GridView::widget([
+        <?= SortableGridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+//            'filterModel' => $searchModel,
             'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+//                ['class' => 'yii\grid\SerialColumn'],
                 'position',
-                'weight',
+//                'weight',
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template'=>'{update} {delete}',
