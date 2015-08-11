@@ -45,6 +45,7 @@ class Position extends ActiveRecord
             [['position', 'weight'], 'required'],
             [['position'], 'trim'],
             [['position'], 'string', 'max' => 255],
+            [['position'], 'unique'],
 //            [['weight'], 'default', 'value'=>1000]
         ];
     }

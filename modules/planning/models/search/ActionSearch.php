@@ -6,9 +6,16 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\planning\models\Action;
+use yii\helpers\ArrayHelper;
 
 class ActionSearch extends Action
 {
+    const SEARCH = 'search';
+
+    public function __construct()
+    {
+        $this->scenario = self::SEARCH;
+    }
     /**
      * @inheritdoc
      */
@@ -25,7 +32,12 @@ class ActionSearch extends Action
      */
     public function scenarios()
     {
-        return Action::scenarios();
+        return ArrayHelper::merge(
+            Action::scenarios(),
+            [
+                self::SEARCH => ['category_id', 'dateStart', 'dateStop']
+            ]
+        );
     }
 
     public function search($params)

@@ -93,3 +93,7 @@ a.desc:after {
 .blue-icon {
     color: rgb(51, 122, 183);
 }
+
+#positions-grid tbody tr:hover{
+    cursor: move;
+}

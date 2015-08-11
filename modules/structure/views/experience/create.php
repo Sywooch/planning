@@ -19,50 +19,49 @@ use yii\widgets\Pjax;
 <div class="experience-create">
 
     <h2><?= Yii::t('structure', 'Work experience') ?></h2>
-<?php $dataProvider->getModels() ?>
     <?php Pjax::begin(['id' => 'emp-works', 'timeout' => 10000, 'enablePushState'=>false]); ?>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'relDepartment.department',
-            'relPosition.position',
-            'start:date',
-            [
-                'attribute' => 'stop',
-                'format' => 'raw',
-                'value' => function(Experience $data) {
-                    return ($data->stop !== null)?Yii::$app->formatter->asDate($data->stop):Yii::t('structure', 'Until now');
-                }
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete}',
-                'buttons' => [
-                    'update' => function($url, $model) {
-                        return Html::a(
-                            HtmlKart::icon('pencil'),
-                            ['experience/update', 'id' => $model->id],
-                            [
-                                'title' => Yii::t('app', 'Edit'),
-                                'data-pjax' => '0'
-                            ]
-                        );
-                    },
-                    'delete' => function($url, $model){
-                        return Html::a(
-                            HtmlKart::icon('trash'),
-                            ['experience/delete', 'id' => $model->id],
-                            [
-                                'title' => Yii::t('app', 'Delete'),
-                            ]
-                        );
-                    },
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'relDepartment.department',
+                'relPosition.position',
+                'start:date',
+                [
+                    'attribute' => 'stop',
+                    'format' => 'raw',
+                    'value' => function(Experience $data) {
+                        return ($data->stop !== null)?Yii::$app->formatter->asDate($data->stop):Yii::t('structure', 'Until now');
+                    }
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{update} {delete}',
+                    'buttons' => [
+                        'update' => function($url, $model) {
+                            return Html::a(
+                                HtmlKart::icon('pencil'),
+                                ['experience/update', 'id' => $model->id],
+                                [
+                                    'title' => Yii::t('app', 'Edit'),
+                                    'data-pjax' => '0'
+                                ]
+                            );
+                        },
+                        'delete' => function($url, $model){
+                            return Html::a(
+                                HtmlKart::icon('trash'),
+                                ['experience/delete', 'id' => $model->id],
+                                [
+                                    'title' => Yii::t('app', 'Delete'),
+                                ]
+                            );
+                        },
+                    ],
                 ],
             ],
-        ],
-        'layout' => "{items}"
-    ]); ?>
+            'layout' => "{items}"
+        ]); ?>
     <?php Pjax::end(); ?>
 
     <?= $this->render('_addWorkForm', [

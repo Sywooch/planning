@@ -3,6 +3,7 @@
 namespace app\modules\planning\models;
 
 use app\models\User;
+use app\modules\planning\models\search\ActionSearch;
 use app\modules\structure\models\Employee;
 use app\modules\structure\models\Experience;
 use Yii;
@@ -139,8 +140,10 @@ class Action extends ActiveRecord
     {
         if(!parent::beforeValidate())
             return false;
-        $this->dateStart = Yii::$app->formatter->format($this->dateStart, ["date", "php:Y-m-d H:i:s"]);
-        $this->dateStop = Yii::$app->formatter->format($this->dateStop, ["date", "php:Y-m-d H:i:s"]);
+        if($this->scenario != ActionSearch::SEARCH){
+            $this->dateStart = Yii::$app->formatter->format($this->dateStart, ["date", "php:Y-m-d H:i:s"]);
+            $this->dateStop = Yii::$app->formatter->format($this->dateStop, ["date", "php:Y-m-d H:i:s"]);
+        }
         return true;
     }
 

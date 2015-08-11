@@ -1,12 +1,13 @@
 <?php
 
-use app\modules\structure\models\Department;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\structure\models\search\DepartmentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $model app\modules\structure\models\Department */
 
 $this->title = Yii::t('structure', 'Departments');
 $this->params['breadcrumbs'][] = $this->title;
@@ -14,23 +15,26 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="department-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?= $this->render('_form', ['model' => $model]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('structure', 'Create department'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php Pjax::begin(['id' => 'department-grid']) ?>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+                'department:ntext',
+                [
+                    'label' => Yii::t('structure', 'Head department'),
+                    'value' => function(\app\modules\structure\models\Department $dep){
+                        return ($dep->parent !== null)?$dep->parent->department:null;
+                    }
+                ],
 
-            'department:ntext',
-            'department_id',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]); ?>
+    <?php Pjax::end() ?>
 
 </div>

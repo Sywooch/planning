@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(HtmlKart::icon('pencil'), ['update', 'id' => $model->id]) //['class' => 'btn btn-primary'] ?>
         <?= Html::a(HtmlKart::icon('trash'), ['delete', 'id' => $model->id], [
             'data' => [
-                'confirm' => Yii::t('structure', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ])?>

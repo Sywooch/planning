@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\structure\models\Department;
+use yii\db\ActiveQuery;
 
 /**
  * DepartmentSeach represents the model behind the search form about `app\modules\planning\models\Department`.
@@ -55,6 +56,8 @@ class DepartmentSearch extends Department
             return $dataProvider;
         }
 
+        $query->joinWith(['parent' => function(ActiveQuery $q){$q->from('{{%department}} parent');}]);
+
         $query->andFilterWhere([
             'id' => $this->id,
             'department_id' => $this->department_id,
@@ -62,7 +65,7 @@ class DepartmentSearch extends Department
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'department', $this->department]);
+        $query->andFilterWhere(['like', '{{%department}}.department', $this->department]);
 
         return $dataProvider;
     }

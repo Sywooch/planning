@@ -36,10 +36,15 @@ class DepartmentController extends Controller
     {
         $searchModel = new DepartmentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model = new Department();
+        if($model->load(Yii::$app->request->post()) && $model->save()){
+            $model = new Department();
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model
         ]);
     }
 
@@ -53,13 +58,14 @@ class DepartmentController extends Controller
         $employees = (new Query())
             ->select(['employee_id', 'fio', 'position'])
             ->from('{{%department}}')
-            ->leftJoin('{{%staff_list}}', '{{%department}}.id = {{%staff_list}}.department_id')
-            ->leftJoin('{{%experience}}', '{{%staff_list}}.id = {{%experience}}.staff_unit_id')
-            ->leftJoin('{{%position}}', '{{%staff_list}}.position_id = {{%position}}.id')
-            ->leftJoin('{{%employee}}', '{{%experience}}.employee_id = {{%employee}}.id')
+            ->innerJoin('{{%staff_list}}', '{{%department}}.id = {{%staff_list}}.department_id')
+            ->innerJoin('{{%experience}}', '{{%staff_list}}.id = {{%experience}}.staff_unit_id')
+            ->innerJoin('{{%position}}', '{{%staff_list}}.position_id = {{%position}}.id')
+            ->innerJoin('{{%employee}}', '{{%experience}}.employee_id = {{%employee}}.id')
             ->where(['{{%department}}.id' => $id])
             ->andWhere('{{%experience}}.stop IS NULL OR {{%experience}}.stop >= now()')
             ->indexBy('employee_id')
+            ->orderBy('weight')
             ->all();
         return $this->render('view', [
             'model' => Department::find()->with(['parent','child'])->where(['{{%department}}.id' => $id])->one(),
