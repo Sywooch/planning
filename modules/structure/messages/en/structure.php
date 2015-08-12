@@ -45,4 +45,10 @@ return [
     'Update dictionaries' => '',
     'Search a employee ...' => '',
     'Select a place ...' => '',
+    'Municipal position' => '',
+    'Head position' => '',
+    '{n, plural, =0{} =1{One year} other{# years}}' => '',
+    '{n, plural, =0{} =1{One month} other{# months}}' => '',
+    '{n, plural, =0{} =1{# day} other{# days}}' => '',
+    'Municipal experience' => '',
 ];

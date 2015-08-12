@@ -1,8 +1,9 @@
 <?php
 
+use app\modules\structure\models\Position;
 use himiklab\sortablegrid\SortableGridView;
+use kartik\helpers\Html as HtmlKart;
 use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -31,6 +32,16 @@ $this->registerJs($script);*/
             'columns' => [
 //                ['class' => 'yii\grid\SerialColumn'],
                 'position',
+                [
+                    'label' => Yii::t('structure', 'Head position'),
+                    'format' => 'html',
+                    'value' => function(Position $model){return ($model->chief)?HtmlKart::icon('ok'):HtmlKart::icon('remove');}
+                ],
+                [
+                    'label' => Yii::t('structure', 'Municipal position'),
+                    'format' => 'html',
+                    'value' => function(Position $model){return ($model->municipal)?HtmlKart::icon('ok'):HtmlKart::icon('remove');}
+                ],
 //                'weight',
                 [
                     'class' => 'yii\grid\ActionColumn',

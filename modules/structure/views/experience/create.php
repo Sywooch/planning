@@ -17,8 +17,10 @@ use yii\widgets\Pjax;
 
 ?>
 <div class="experience-create">
-
-    <h2><?= Yii::t('structure', 'Work experience') ?></h2>
+    <?php $expArray = $dataProvider->getModels() ?>
+    <h2><?= Yii::t('structure', 'Work experience').' - '.Experience::getExperienceLength($expArray) ?></h2>
+    <h2><?= Yii::t('structure', 'Municipal experience').' - '.Experience::getMunicipalExp($expArray) ?></h2>
+    <?php Experience::getMunicipalExp($dataProvider->getModels()) ?>
     <?php Pjax::begin(['id' => 'emp-works', 'timeout' => 10000, 'enablePushState'=>false]); ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,

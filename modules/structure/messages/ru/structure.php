@@ -45,4 +45,10 @@ return [
     'Update dictionaries' => 'Обновить справочники',
     'Search a employee ...' => 'Выберите сотрудника ...',
     'Select a place ...' => 'Выберите место проведения ...',
+    'Municipal position' => 'Муниципальная должность',
+    'Head position' => 'Руководящая должность',
+    '{n, plural, =0{} =1{One year} other{# years}}' => '{n, plural, =0{} =1{# год} one{# год} few{# года} many{# лет} other{}}',
+    '{n, plural, =0{} =1{One month} other{# months}}' => '{n, plural, =0{} =1{# месяц} one{# месяц} few{# месяца} many{# месяцев} other{}}',
+    '{n, plural, =0{} =1{# day} other{# days}}' => '{n, plural, =0{} =1{# день} one{# день} few{# дня} many{# дней} other{}}',
+    'Municipal experience' => 'Муниципальный стаж',
 ];

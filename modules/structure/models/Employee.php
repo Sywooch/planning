@@ -49,7 +49,7 @@ class Employee extends ActiveRecord
     }
 
     public function getExtendedExperience() {
-        return $this->getExperience()->with(['relPosition', 'relDepartment']);
+        return $this->getExperience()->with(['relPosition', 'relDepartment'])->orderBy('start ASC');
     }
 
     public function getCurrentExperience() {

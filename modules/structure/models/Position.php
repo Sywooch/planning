@@ -12,12 +12,15 @@ use yii\db\ActiveRecord;
  * @property integer $id
  * @property string $position
  * @property integer $weight
+ * @property integer $chief
+ * @property boolean $municipal
  */
 class Position extends ActiveRecord
 {
     public function __toString() {
         return $this->position;
     }
+
     /**
      * @inheritdoc
      */
@@ -46,6 +49,8 @@ class Position extends ActiveRecord
             [['position'], 'trim'],
             [['position'], 'string', 'max' => 255],
             [['position'], 'unique'],
+            [['municipal', 'chief'], 'integer'],
+            [['municipal', 'chief'], 'in', 'range' => [0,1]]
 //            [['weight'], 'default', 'value'=>1000]
         ];
     }
@@ -59,6 +64,8 @@ class Position extends ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'position' => Yii::t('structure', 'Position'),
             'weight' => Yii::t('app', 'Weight'),
+            'municipal' => Yii::t('structure', 'Municipal position'),
+            'chief' => Yii::t('structure', 'Head position')
         ];
     }
 }
