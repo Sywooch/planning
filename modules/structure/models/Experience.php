@@ -148,25 +148,26 @@ class Experience extends ActiveRecord
      * @param Experience[] $expArray
      * @return string
      */
-    public static function getExperienceLength($expArray)
+    public static function getExperienceLength($expArray, $initial)
     {
+        list($days, $months, $years) = explode('|', $initial);
         $first = reset($expArray);
         $last = end($expArray);
         $interval = date_diff(date_create($first->start), date_create(($last->stop !== null)?$last->stop:date('d.m.Y', time())));
         $string = '';
         Yii::t('structure', 'There {n, plural, =0{are no employees} =1{is one employee} other{are # employees}}', ['n' => 3]);
-        if($interval->y > 0)
-            $string .= Yii::t('structure', '{n, plural, =0{} =1{One year} other{# years}}', ['n' => $interval->y]).' ';
-        if($interval->m > 0)
-            $string .= Yii::t('structure', '{n, plural, =0{} =1{One month} other{# months}}', ['n' => $interval->m]).' ';
-        if($interval->d > 0)
-            $string .= Yii::t('structure', '{n, plural, =0{} =1{# day} other{# days}}', ['n' => $interval->d]);
+        if($interval->y > 0 || !empty($years))
+            $string .= Yii::t('structure', '{n, plural, =0{} =1{One year} other{# years}}', ['n' => ($interval->y + $years)]).' ';
+        if($interval->m > 0 || !empty($months))
+            $string .= Yii::t('structure', '{n, plural, =0{} =1{One month} other{# months}}', ['n' => ($interval->m + $months)]).' ';
+        if($interval->d > 0 || !empty($days))
+            $string .= Yii::t('structure', '{n, plural, =0{} =1{# day} other{# days}}', ['n' => ($interval->d + $days)]);
         return $string;
     }
 
-    public static function getMunicipalExp($expArray)
+    public static function getMunicipalExp($expArray, $initial)
     {
-        return self::getExperienceLength(array_filter($expArray, function(Experience $el){return $el->relPosition->municipal;}));
+        return self::getExperienceLength(array_filter($expArray, function(Experience $el){return $el->relPosition->municipal;}), $initial);
     }
 }
 

@@ -10,6 +10,7 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\modules\structure\models\Experience */
 /* @var $dataProvider \yii\data\ActiveDataProvider */
+/* @var $employee \app\modules\structure\models\Employee */
 
 //$this->title = Yii::t('structure', 'Create Experience');
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('structure', 'Experiences'), 'url' => ['index']];
@@ -18,9 +19,8 @@ use yii\widgets\Pjax;
 ?>
 <div class="experience-create">
     <?php $expArray = $dataProvider->getModels() ?>
-    <h2><?= Yii::t('structure', 'Work experience').' - '.Experience::getExperienceLength($expArray) ?></h2>
-    <h2><?= Yii::t('structure', 'Municipal experience').' - '.Experience::getMunicipalExp($expArray) ?></h2>
-    <?php Experience::getMunicipalExp($dataProvider->getModels()) ?>
+    <h2><?= Yii::t('structure', 'Work experience').' - '.Experience::getExperienceLength($expArray, $employee->initial_experience) ?></h2>
+    <h2><?= Yii::t('structure', 'Municipal experience').' - '.Experience::getMunicipalExp($expArray, $employee->initial_municipal_experience) ?></h2>
     <?php Pjax::begin(['id' => 'emp-works', 'timeout' => 10000, 'enablePushState'=>false]); ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,

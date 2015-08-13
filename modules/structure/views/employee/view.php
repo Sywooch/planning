@@ -48,7 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('/experience/create', [
         'model' => new \app\modules\structure\models\Experience(['employee_id' => $model->id]),
-        'dataProvider' => new \yii\data\ActiveDataProvider(['query' => $model->getExtendedExperience()])
+        'dataProvider' => new \yii\data\ActiveDataProvider(['query' => $model->getExtendedExperience()]),
+        'employee' => $model
     ]) ?>
 
 </div>

@@ -97,3 +97,8 @@ a.desc:after {
 #positions-grid tbody tr:hover{
     cursor: move;
 }
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}

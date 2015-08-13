@@ -16,6 +16,8 @@ use yii\db\ActiveRecord;
  * @property integer $logic_delete
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $initial_experience
+ * @property string $initial_municipal_experience
  *
  * Relations properties
  * @property Phone[] $phones
@@ -29,6 +31,9 @@ class Employee extends ActiveRecord
     const INVITED = 3;
 
     public $_phones;
+    public $_d;
+    public $_m, $_y;
+    public $_md, $_mm, $_my;
     /**
      * @inheritdoc
      */
@@ -81,13 +86,10 @@ class Employee extends ActiveRecord
             [['fio', 'email'], 'trim'],
             [['fio'], 'string', 'max' => 255],
             [['email'], 'string', 'max' => 128],
+            [['initial_experience', 'initial_municipal_experience'], 'string', 'max' => 8],
             [['email'], 'email'],
-            [['phones'], 'safe'],
+            [['phones','_d', '_m', '_y', '_md', '_mm', '_my'], 'safe'],
         ];
-    }
-
-    public static function find() {
-        return new EmployeeQuery(get_called_class());
     }
 
     /**
@@ -116,6 +118,14 @@ class Employee extends ActiveRecord
         $this->_phones = $value;
     }
 
+    public function beforeValidate()
+    {
+        parent::beforeValidate();
+        $this->initial_experience = implode('|',[$this->_d, $this->_m, $this->_y]);
+        $this->initial_municipal_experience = implode('|',[$this->_md, $this->_mm, $this->_my]);
+        return true;
+    }
+
     public function afterSave($insert, $changedAttributes) {
         if(!empty($this->_phones)){
             foreach($this->_phones as $phone){
@@ -127,8 +137,12 @@ class Employee extends ActiveRecord
         }
         parent::afterSave($insert, $changedAttributes);
     }
-}
 
-class EmployeeQuery extends ActiveQuery {
-
+    public function prepareExperience()
+    {
+        if($this->initial_experience !== null)
+            list($this->_d, $this->_m, $this->_y) = explode('|', $this->initial_experience);
+        if($this->initial_municipal_experience !== null)
+            list($this->_md, $this->_mm, $this->_my) = explode('|', $this->initial_municipal_experience);
+    }
 }

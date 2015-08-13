@@ -21,6 +21,21 @@ EmployeeFormAsset::register($this);
 
     <?= $form->field($model, 'logic_delete')->checkbox() ?>
 
+    <h3>Стаж на момент приема на работу</h3>
+    <div class="row">
+        <div class="vcenter col-sm-3"><h4>Общий стаж</h4></div>
+        <div class="vcenter col-sm-2"><?= $form->field($model, '_d')->textInput(['maxlength' => 2])->label('Дней') ?></div>
+        <div class="vcenter col-sm-2"><?= $form->field($model, '_m')->textInput(['maxlength' => 2])->label('Месяцев') ?></div>
+        <div class="vcenter col-sm-2"><?= $form->field($model, '_y')->textInput(['maxlength' => 2])->label('Лет') ?></div>
+    </div>
+
+    <div class="row">
+        <div class="vcenter col-sm-3"><h4>Муниципальный стаж</h4></div>
+        <div class="vcenter col-sm-2"><?= $form->field($model, '_md')->textInput(['maxlength' => 2])->label('Дней') ?></div>
+        <div class="vcenter col-sm-2"><?= $form->field($model, '_mm')->textInput(['maxlength' => 2])->label('Месяцев') ?></div>
+        <div class="vcenter col-sm-2"><?= $form->field($model, '_my')->textInput(['maxlength' => 2])->label('Лет') ?></div>
+    </div>
+
     <?php if(!empty($model->phones))
     {
         foreach($model->phones as $phone)
