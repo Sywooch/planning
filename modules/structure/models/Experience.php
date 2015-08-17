@@ -146,11 +146,12 @@ class Experience extends ActiveRecord
 
     /**
      * @param Experience[] $expArray
+     * @param string $initial
      * @return string
      */
     public static function getExperienceLength($expArray, $initial)
     {
-        list($days, $months, $years) = explode('|', $initial);
+        list($days, $months, $years) = ($initial!==null)?explode('|', $initial):[0, 0, 0];
         $first = reset($expArray);
         $last = end($expArray);
         $interval = date_diff(date_create($first->start), date_create(($last->stop !== null)?$last->stop:date('d.m.Y', time())));

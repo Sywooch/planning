@@ -1,7 +1,7 @@
 <?php
 
+use himiklab\sortablegrid\SortableGridView;
 use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -17,13 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', ['model' => $model]); ?>
 
     <?php Pjax::begin(['id' => 'category-grid']) ?>
-        <?= GridView::widget([
+        <?= SortableGridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
             'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
                 'name',
-                'weight',
                 ['class' => 'yii\grid\ActionColumn'],
             ],
         ]); ?>

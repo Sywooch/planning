@@ -12,25 +12,16 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('structure', 'Positions');
 $this->params['breadcrumbs'][] = $this->title;
-/*$script = <<<JS
-$(document).on('sortableSuccess', function(){
-    jQuery.pjax.reload({container:"#positions-grid"});
-});
-JS;
-$this->registerJs($script);*/
 ?>
 <div class="position-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <?= $this->render('_form', ['model' => $model]); ?>
 
     <?php Pjax::begin(['id' => 'positions-grid']) ?>
         <?= SortableGridView::widget([
             'dataProvider' => $dataProvider,
-//            'filterModel' => $searchModel,
             'columns' => [
-//                ['class' => 'yii\grid\SerialColumn'],
                 'position',
                 [
                     'label' => Yii::t('structure', 'Head position'),
@@ -42,7 +33,6 @@ $this->registerJs($script);*/
                     'format' => 'html',
                     'value' => function(Position $model){return ($model->municipal)?HtmlKart::icon('ok'):HtmlKart::icon('remove');}
                 ],
-//                'weight',
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template'=>'{update} {delete}',

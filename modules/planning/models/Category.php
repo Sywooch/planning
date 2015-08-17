@@ -2,6 +2,7 @@
 
 namespace app\modules\planning\models;
 
+use himiklab\sortablegrid\SortableGridBehavior;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -24,6 +25,16 @@ class Category extends ActiveRecord
     public static function tableName()
     {
         return '{{%category}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            'sort' => [
+                'class' => SortableGridBehavior::className(),
+                'sortableAttribute' => 'weight'
+            ]
+        ];
     }
 
     /**

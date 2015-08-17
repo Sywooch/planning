@@ -94,7 +94,8 @@ a.desc:after {
     color: rgb(51, 122, 183);
 }
 
-#positions-grid tbody tr:hover{
+#positions-grid tbody tr:hover,
+#category-grid tbody tr:hover{
     cursor: move;
 }
 .vcenter {

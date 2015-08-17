@@ -2,6 +2,7 @@
 
 namespace app\modules\planning\controllers;
 
+use himiklab\sortablegrid\SortableGridAction;
 use Yii;
 use app\modules\planning\models\Category;
 use app\modules\planning\models\search\CategorySearch;
@@ -26,6 +27,16 @@ class CategoryController extends Controller
         ];
     }
 
+    public function actions()
+    {
+        return[
+            'sort' => [
+                'class' => SortableGridAction::className(),
+                'modelName' => Category::className()
+            ]
+        ];
+    }
+
     /**
      * Lists all Category models.
      * @return mixed
@@ -35,6 +46,7 @@ class CategoryController extends Controller
         $model = new Category();
         $searchModel = new CategorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['weight'=>SORT_ASC]]);
         if($model->load(Yii::$app->request->post()) && $model->save()) {
             $model = new Category();
         }
