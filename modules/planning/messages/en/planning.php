@@ -28,4 +28,7 @@ return [
     'Create option' => '',
     'Update option:' => '',
     'Select a option ...' => '',
+    'Flags' => '',
+    'Transfer' => '',
+    'Transferring action' => '',
 ];

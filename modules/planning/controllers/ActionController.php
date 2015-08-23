@@ -113,6 +113,12 @@ class ActionController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionTransfer($id)
+    {
+        $model = $this->findModel($id);
+
+    }
+
     /**
      * Finds the Action model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

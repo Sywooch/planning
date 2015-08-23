@@ -35,21 +35,7 @@ $this->registerJs($script);
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'dateStart')->widget(DateTimePicker::className(), [
-        'options' => ['placeholder' => Yii::t('planning', 'Enter start time ...')],
-        'pluginOptions' => [
-            'format' => 'dd.mm.yyyy hh:ii',
-            'autoclose'=>true,
-        ]
-    ]) ?>
-
-    <?= $form->field($model, 'dateStop')->widget(DateTimePicker::className(), [
-        'options' => ['placeholder' => Yii::t('planning', 'Enter stop time ...')],
-        'pluginOptions' => [
-            'format' => 'dd.mm.yyyy hh:ii',
-            'autoclose'=>true,
-        ]
-    ]) ?>
+    <?= $this->render('_dateFields', ['form' => $form, 'model' => $model]) ?>
 
     <?php if($model->isMonth()): ?>
         <?= $form->field($model, 'category_id')
