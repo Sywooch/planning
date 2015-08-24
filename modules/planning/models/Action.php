@@ -3,12 +3,14 @@
 namespace app\modules\planning\models;
 
 use app\models\User;
+use app\modules\planning\models\query\PlanningQuery;
 use app\modules\planning\models\search\ActionSearch;
 use app\modules\structure\models\Employee;
 use app\modules\structure\models\Experience;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
@@ -62,6 +64,14 @@ class Action extends ActiveRecord
         return '{{%action}}';
     }
 
+    /**
+     * @inheritdoc
+     */
+    public static function find()
+    {
+        return new PlanningQuery(get_called_class());
+    }
+
     public function scenarios()
     {
         return ArrayHelper::merge(
@@ -104,7 +114,7 @@ class Action extends ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'dateStart' => Yii::t('app', 'Start'),
             'dateStop' => Yii::t('app', 'Stop'),
-            'category_id' => Yii::t('planning', 'Category'),
+            'category' => Yii::t('planning', 'Category'),
             'action' => Yii::t('planning', 'Action name'),
             'user_id' => Yii::t('planning', 'Author'),
 //            'week_status' => Yii::t('planning', 'Week action approved'),
@@ -338,5 +348,37 @@ class Action extends ActiveRecord
     public function clearRelatedTable($tableName)
     {
         Yii::$app->db->createCommand()->delete($tableName, ['action_id' => $this->id])->execute();
+    }
+
+    public function newTransfer()
+    {
+        $transfer = new Transfer();
+        $transfer->old_start = Yii::$app->formatter->asDatetime($this->dateStart, 'php:Y-m-d H:i:s');
+        $transfer->old_stop = Yii::$app->formatter->asDatetime($this->dateStop, 'php:Y-m-d H:i:s');
+        $transfer->old_place = implode('|', $this->places);
+        $transfer->number = count($this->transfers) + 1;
+        if(($note = Yii::$app->request->post('note'))!== null)
+            $transfer->note = $note;
+        return $transfer;
+    }
+
+    /**
+     * @param Transfer $transfer
+     */
+    public function restoreTransfer($transfer)
+    {
+        $this->dateStart = $transfer->old_start;
+        $this->dateStop = $transfer->old_stop;
+        $this->places = $transfer->getPlacesId();
+    }
+
+    public function deleteTransfer($number)
+    {
+        Yii::$app->db->createCommand()
+            ->delete(
+                '{{%transfer}}',
+                'number >= :number AND action_id = :id',
+                [':number' => $number, ':id' => $this->id]
+            )->execute();
     }
 }

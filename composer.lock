@@ -709,12 +709,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-editable.git",
-                "reference": "879140ca5ad6b1c956d61c89f525c4a8a1c1b5e5"
+                "reference": "f9ecdf622d9477d217efef8522fbd2622de2fa20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-editable/zipball/879140ca5ad6b1c956d61c89f525c4a8a1c1b5e5",
-                "reference": "879140ca5ad6b1c956d61c89f525c4a8a1c1b5e5",
+                "url": "https://api.github.com/repos/kartik-v/yii2-editable/zipball/f9ecdf622d9477d217efef8522fbd2622de2fa20",
+                "reference": "f9ecdf622d9477d217efef8522fbd2622de2fa20",
                 "shasum": ""
             },
             "require": {
@@ -749,7 +749,7 @@
                 "popover-x",
                 "widget"
             ],
-            "time": "2015-08-05 16:15:46"
+            "time": "2015-08-14 21:18:03"
         },
         {
             "name": "kartik-v/yii2-grid",
@@ -757,12 +757,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-grid.git",
-                "reference": "f1bdf1f687c0f2774e90a368e26544017e6918b2"
+                "reference": "90203f01b4bddf8a30033a604130f6f5c2613b29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/f1bdf1f687c0f2774e90a368e26544017e6918b2",
-                "reference": "f1bdf1f687c0f2774e90a368e26544017e6918b2",
+                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/90203f01b4bddf8a30033a604130f6f5c2613b29",
+                "reference": "90203f01b4bddf8a30033a604130f6f5c2613b29",
                 "shasum": ""
             },
             "require": {
@@ -793,7 +793,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2015-07-30 10:39:45"
+            "time": "2015-08-20 05:53:45"
         },
         {
             "name": "kartik-v/yii2-helpers",

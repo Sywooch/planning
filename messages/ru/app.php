@@ -21,4 +21,5 @@ return [
     'Name' => 'Наименование',
     'Description' => 'Описание',
     'The requested page does not exist.' => 'Запрашиваемая страница не найдена.',
+    'Cancel' => 'Отмена',
 ];

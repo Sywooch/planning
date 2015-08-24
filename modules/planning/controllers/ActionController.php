@@ -3,6 +3,7 @@
 namespace app\modules\planning\controllers;
 
 use app\modules\planning\models\search\ActionSearch;
+use app\modules\planning\models\Transfer;
 use Yii;
 use app\modules\planning\models\Action;
 use yii\data\ActiveDataProvider;
@@ -51,7 +52,7 @@ class ActionController extends Controller
      */
     public function actionView($id)
     {
-        if(($model = Action::find()->with(['places', 'category', 'author'])->where(['id' => $id])->one()) === null)
+        if(($model = Action::find()->with(['places', 'category', 'author', 'transfers'])->where(['id' => $id])->one()) === null)
             throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         return $this->render('view', [
             'model' => $model,
@@ -89,8 +90,6 @@ class ActionController extends Controller
     {
         $model = $this->findModel($id);
         $model->scenario = $model->type;
-//        $model->getHeadEmployees()->all();
-//        $model->load(Yii::$app->request->post());
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -115,8 +114,29 @@ class ActionController extends Controller
 
     public function actionTransfer($id)
     {
-        $model = $this->findModel($id);
+        /* @var $model Action*/
+        $model = Action::find()->with('places', 'transfers')->byId($id);
+        $transfer = $model->newTransfer();
+        if($model->load(Yii::$app->request->post()) && $model->save()){
+            $model->link('transfers', $transfer);
+            $this->redirect(['view', 'id' => $model->id]);
+        }
 
+    }
+
+    public function actionDeleteTransfer($id, $number)
+    {
+        /* @var $model Action */
+        /* @var $transfer Transfer */
+        $model = Action::find()->with('transfers')->byId($id);
+        $transfer = array_filter($model->transfers, function(Transfer $transfer) use ($number){
+            return ($transfer->number == $number)?true:false;
+        })[0];
+        $model->restoreTransfer($transfer);
+        if($model->save()){
+            $model->deleteTransfer($number);
+        }
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     /**

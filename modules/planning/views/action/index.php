@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\planning\models\Action;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -15,7 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('planning', 'Create Action'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('planning', 'Create week action'),['/planning/action/create', 'type' => Action::WEEK], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('planning', 'Create month action'),['/planning/action/create', 'type' => Action::MONTH], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,8 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'dateStart',
             'dateStop',
-            'category_id',
-            'action:ntext',
+            [
+                'attribute' => 'category',
+                'value' => 'category.name'
+            ],
+            'action',
             // 'user_id',
             // 'week_status',
             // 'confirmed',

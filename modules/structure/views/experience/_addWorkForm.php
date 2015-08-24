@@ -28,7 +28,7 @@ $this->registerJs(
         <?php $form = ActiveForm::begin([
             'id'=>'exp-form',
             'action' => Url::toRoute('experience/create'),
-            'options' => ['data-pjax' => 'emp-works' ]
+            'options' => ['data-pjax' => true ]
         ]); ?>
         <?= $form->field($model, 'employee_id')->hiddenInput()->label(false); ?>
         <div class="row">

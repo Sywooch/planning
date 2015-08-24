@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
 class ActionSearch extends Action
 {
     const SEARCH = 'search';
+    public $category;
 
     public function __construct()
     {
@@ -22,7 +23,6 @@ class ActionSearch extends Action
     public function rules()
     {
         return [
-            [['category_id'], 'integer'],
             [['dateStart', 'dateStop', 'action'], 'safe']
         ];
     }
@@ -35,7 +35,7 @@ class ActionSearch extends Action
         return ArrayHelper::merge(
             Action::scenarios(),
             [
-                self::SEARCH => ['category_id', 'dateStart', 'dateStop']
+                self::SEARCH => ['category', 'dateStart', 'dateStop', 'action']
             ]
         );
     }
@@ -56,11 +56,18 @@ class ActionSearch extends Action
             return $dataProvider;
         }
 
-        $query->andFilterWhere(['category_id' => $this->category_id]);
+        $dataProvider->sort->attributes['category'] = [
+            'asc' => ['{{%category}}.name' => SORT_ASC],
+            'desc' => ['{{%category}}.name' => SORT_DESC],
+        ];
+
+        $query->joinWith('category');
+
 
         $query->andFilterWhere(['like', 'action', $this->action])
             ->andFilterWhere(['like', "DATE_FORMAT(dateStart,'%d.%m.%Y')", $this->dateStart])
-            ->andFilterWhere(['like', "DATE_FORMAT(dateStop,'%d.%m.%Y')", $this->dateStop]);
+            ->andFilterWhere(['like', "DATE_FORMAT(dateStop,'%d.%m.%Y')", $this->dateStop])
+            ->andFilterWhere(['like', '{{%category}}.name', $this->category]);
 
         return $dataProvider;
     }

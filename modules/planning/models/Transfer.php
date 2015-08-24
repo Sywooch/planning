@@ -3,6 +3,7 @@
 namespace app\modules\planning\models;
 
 use Yii;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "{{%transfer}}".
@@ -49,9 +50,9 @@ class Transfer extends \yii\db\ActiveRecord
         return [
             'number' => Yii::t('planning', 'Number'),
             'action_id' => Yii::t('planning', 'Action ID'),
-            'old_start' => Yii::t('planning', 'Old Start'),
-            'old_stop' => Yii::t('planning', 'Old Stop'),
-            'old_place' => Yii::t('planning', 'Old Place'),
+            'old_start' => Yii::t('planning', 'Previous start date'),
+            'old_stop' => Yii::t('planning', 'Previous stop date'),
+            'old_place' => Yii::t('planning', 'Previous places'),
             'note' => Yii::t('planning', 'Note'),
         ];
     }
@@ -62,5 +63,23 @@ class Transfer extends \yii\db\ActiveRecord
     public function getAction()
     {
         return $this->hasOne(Action::className(), ['id' => 'action_id']);
+    }
+
+    public function preparePlacesLinks()
+    {
+        foreach(explode('|', $this->old_place) as $placeInfo){
+            list($id, $placeName) = explode('::', $placeInfo);
+            $links[] = Html::a($placeName, ['/planning/place/view', 'id' => $id]);
+        }
+        return (isset($links))?implode(', ', $links):'';
+    }
+
+    public function getPlacesId()
+    {
+        foreach(explode('|', $this->old_place) as $placeInfo){
+            list($id, $placeName) = explode('::', $placeInfo);
+            $ids[] = $id;
+        }
+        return (isset($ids))?$ids:[];
     }
 }

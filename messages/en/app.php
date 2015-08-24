@@ -21,4 +21,5 @@ return [
     'Name' => '',
     'Description' => '',
     'The requested page does not exist.' => '',
+    'Cancel' => '',
 ];

@@ -22,6 +22,11 @@ class Place extends ActiveRecord
         return '{{%place}}';
     }
 
+    public function __toString()
+    {
+        return (string)($this->id.'::'.$this->place);
+    }
+
 
     /**
      * @inher
