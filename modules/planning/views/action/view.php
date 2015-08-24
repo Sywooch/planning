@@ -93,8 +93,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => Yii::t('planning', 'Author'),
                 'value' => $model->author->username,
             ],
-            'template',
-            'repeat',
+            [
+                'attribute' => 'repeat',
+                'visible' => $model->template
+            ],
         ],
     ]) ?>
 

@@ -40,7 +40,7 @@ return [
     'Transfer action' => 'Перенести мероприятие',
     'Previous start date' => 'Педыдущая дата начала',
     'Previous stop date' => 'Педыдущая дата окончания',
-    'Number' => 'Порядковый номер',
+    'Number' => 'Номер переноса',
     'Previous places' => 'Предыдущее место проведения',
     'Action transfers' => 'Информация о переносах мероприятия',
 ];

@@ -76,8 +76,8 @@ class Action extends ActiveRecord
     {
         return ArrayHelper::merge(
             [
-                self::WEEK => ['dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options'],
-                self::MONTH => ['dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options', 'category_id'],
+                self::WEEK => ['action', 'dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options'],
+                self::MONTH => ['action', 'dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options', 'category_id'],
             ],
             parent::scenarios()
         );

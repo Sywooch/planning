@@ -119,9 +119,8 @@ class ActionController extends Controller
         $transfer = $model->newTransfer();
         if($model->load(Yii::$app->request->post()) && $model->save()){
             $model->link('transfers', $transfer);
-            $this->redirect(['view', 'id' => $model->id]);
         }
-
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     public function actionDeleteTransfer($id, $number)
