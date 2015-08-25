@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'dateStart',
             'dateStop',
             [
@@ -34,17 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'category.name'
             ],
             'action',
-            // 'user_id',
-            // 'week_status',
-            // 'confirmed',
-            // 'created_at',
-            // 'updated_at',
-            // 'month_status',
-            // 'month',
-            // 'week',
-            // 'template',
-            // 'repeat',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

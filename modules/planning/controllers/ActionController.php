@@ -6,11 +6,11 @@ use app\modules\planning\models\search\ActionSearch;
 use app\modules\planning\models\Transfer;
 use Yii;
 use app\modules\planning\models\Action;
-use yii\data\ActiveDataProvider;
-use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * ActionController implements the CRUD actions for Action model.
@@ -68,6 +68,7 @@ class ActionController extends Controller
     public function actionCreate($type)
     {
         $model = new Action(['scenario' => $type, $type => true]);
+        $model->status = $model->getStatusConstant('create');
         $model->initDates();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -128,13 +129,29 @@ class ActionController extends Controller
         /* @var $model Action */
         /* @var $transfer Transfer */
         $model = Action::find()->with('transfers')->byId($id);
-        $transfer = array_filter($model->transfers, function(Transfer $transfer) use ($number){
+        $transfer = array_values(array_filter($model->transfers, function(Transfer $transfer) use ($number){
             return ($transfer->number == $number)?true:false;
-        })[0];
+        }))[0];
         $model->restoreTransfer($transfer);
         if($model->save()){
             $model->deleteTransfer($number);
         }
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
+    /**
+     * Отмена мероприятия. Сначала происходит поиск мероприятие по его *id*.
+     * Затем в зависимости от типа мероприятия устанавливается
+     * статус *отменено* в поле *week_status* или *month_status*
+     *
+     * @param integer $id
+     * @return Response
+     * @throws NotFoundHttpException
+     */
+    public function actionDisable($id)
+    {
+        $model = $this->findModel($id);
+        $model->updateAttributes(['status' => Action::DISABLED]);
         return $this->redirect(['view', 'id' => $id]);
     }
 

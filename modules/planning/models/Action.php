@@ -10,7 +10,6 @@ use app\modules\structure\models\Experience;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\db\Exception;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
@@ -23,11 +22,10 @@ use yii\helpers\ArrayHelper;
  * @property integer $category_id
  * @property string $action
  * @property integer $user_id
- * @property integer $week_status
+ * @property integer $status
  * @property integer $confirmed
  * @property integer $created_at
  * @property integer $updated_at
- * @property integer $month_status
  * @property integer $month
  * @property integer $week
  * @property integer $template
@@ -52,6 +50,13 @@ class Action extends ActiveRecord
 {
     const MONTH = 'month';
     const WEEK = 'week';
+    const DISABLED = -1;
+    const MONTH_CREATE = 1;
+    const MONTH_AGREEMENT = 2;
+    const MONTH_PUBLISHED = 3;
+    const WEEK_CREATE = 4;
+    const WEEK_AGREEMENT = 5;
+    const WEEK_PUBLISHED = 6;
     public $headEmployees;
     public $responsibleEmployees;
     public $invitedEmployees;
@@ -74,10 +79,11 @@ class Action extends ActiveRecord
 
     public function scenarios()
     {
+        $safeFields = ['action', 'status', 'dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options'];
         return ArrayHelper::merge(
             [
-                self::WEEK => ['action', 'dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options'],
-                self::MONTH => ['action', 'dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options', 'category_id'],
+                self::WEEK => $safeFields,
+                self::MONTH => ArrayHelper::merge($safeFields, ['category_id']),
             ],
             parent::scenarios()
         );
@@ -90,10 +96,12 @@ class Action extends ActiveRecord
     {
         return [
             [['dateStart', 'dateStop', 'action', 'headEmployees', 'responsibleEmployees', 'places'], 'required'],
-            [['category_id'], 'integer'],
+            [['category_id', 'status'], 'integer'],
             [['category_id'], 'required', 'on' => self::MONTH],
             [['category_id'], 'in', 'range' => Category::getCategoriesId()],
+            [['places'], 'validatePlaces'],
             [['action'], 'string'],
+
 //            [['repeat'], 'string', 'max' => 255]
         ];
     }
@@ -380,5 +388,59 @@ class Action extends ActiveRecord
                 'number >= :number AND action_id = :id',
                 [':number' => $number, ':id' => $this->id]
             )->execute();
+    }
+
+    public function getStatusConstant($name)
+    {
+        return constant('app\modules\planning\models\Action::'.strtoupper($this->getType().'_'.$name));
+    }
+
+    public function validatePlaces($attribute, $params)
+    {
+        if($this->getType() === self::WEEK){
+            $query = (new Query())
+                ->select('*')
+                ->from('{{%action}}')
+                ->leftJoin('{{action_place}}', '{{%action}}.id = action_place.action_id')
+                ->leftJoin('{{%place}}', 'action_place.place_id = {{%place}}.id')
+                ->where(['action_place.place_id' => $this->places])
+                ->all();
+        }
+        /*if($this->type == self::WEEK_ACTION)
+        {
+            if(!$this->isLongAction() && !empty($this->places))
+            {
+                $actionList = array();
+                foreach($this->places as $placeId) {
+                    $criteria = new CDbCriteria();
+                    $criteria->with = array('places');
+                    $criteria->condition = self::getCollisionCondition(':start',':stop');
+                    $criteria->addCondition('places.id=:pid');
+                    $criteria->addCondition('status<>:status AND type=2 AND transfer=0');
+                    $criteria->params = array(
+                        ':start'=>date('Y-m-d H:i:s',strtotime($this->dateStart)),
+                        ':stop'=>date('Y-m-d H:i:s',strtotime($this->dateStop)),
+                        ':pid'=>$placeId,
+                        ':status'=>self::DELETED,
+                    );
+                    if(!$this->isNewRecord){
+                        $criteria->addCondition('t.id<>:id');
+                        $criteria->params = CMap::mergeArray($criteria->params,array(':id'=>$this->id));
+                    }
+                    $actionList = CMap::mergeArray($actionList,Action::model()->findAll($criteria));
+                    foreach($actionList as $action)
+                    {
+                        if(!$action->isLongAction())
+                            $this->addCollisionError($action, $attribute, 'Место проведения "'.Place::model()->findByPk($placeId)->place.'" занято:');
+                    }
+                }
+            }
+        }*/
+
+        /*$conditions[] = '((dateStart<='.$startParam.') AND (dateStop>'.$startParam.'))';
+        $conditions[] = '((dateStart<'.$stopParam.') AND (dateStop>='.$stopParam.'))';
+        $conditions[] = '((dateStart>'.$startParam.') AND (dateStop<'.$stopParam.'))';
+        $conditions[] = '((dateStart='.$startParam.') AND (dateStop='.$stopParam.'))';
+        return implode(' OR ', $conditions);*/
     }
 }

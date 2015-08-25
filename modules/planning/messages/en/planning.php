@@ -43,4 +43,5 @@ return [
     'Number' => '',
     'Previous places' => '',
     'Action transfers' => '',
+    'Disable action' => '',
 ];

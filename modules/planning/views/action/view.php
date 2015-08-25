@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\planning\models\Action;
 use kartik\helpers\Html as HtmlKart;
 use kartik\select2\Select2;
 use yii\bootstrap\Modal;
@@ -21,54 +22,65 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>
         <?= Html::encode($this->title) ?>
-        <?= Html::a(HtmlKart::icon('pencil'), ['update', 'id' => $model->id]) ?>
-        <?= Html::a(HtmlKart::icon('trash'), ['delete', 'id' => $model->id], [
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ])?>
+        <?php if(!Yii::$app->user->isGuest): ?>
+            <?php if(Yii::$app->user->can('admin') || (Yii::$app->user->id === $model->user_id && ($model->status !== Action::DISABLED || $model->status !== $model->getStatusConstant('published')))): ?>
+                <?= Html::a(HtmlKart::icon('pencil'), ['update', 'id' => $model->id]) ?>
+            <?php endif; ?>
+            <?= Html::a(HtmlKart::icon('trash'), ['delete', 'id' => $model->id], [
+                'data' => [
+                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                    'method' => 'post',
+                ],
+            ])?>
+        <?php endif; ?>
     </h1>
 
-    <p>
-        <?= Html::tag('button', Yii::t('planning', 'Transfer action'), ['class' => 'btn btn-default', 'data-toggle' => 'modal', 'data-target' => '#transfer-modal']) ?>
-    </p>
+    <?php if(!Yii::$app->user->isGuest): ?>
+        <?php if($model->status !== Action::DISABLED): ?>
+        <p>
+            <?= Html::tag('button', Yii::t('planning', 'Transfer action'), ['class' => 'btn btn-default', 'data-toggle' => 'modal', 'data-target' => '#transfer-modal']) ?>
+            <?php if($model->status === $model->getStatusConstant('published')): ?>
+                <?= Html::a(Yii::t('planning', 'Disable action'), ['disable', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
+            <?php endif; ?>
+        </p>
+        <?php endif; ?>
 
-    <?php
-    Modal::begin([
-        'id' => 'transfer-modal',
-        'header' => '<h3>'.Yii::t('planning', 'Transferring action').'</h3>',
-    ]);
-    ?>
-        <div class="transfer-form">
-            <?php $form = ActiveForm::begin([
-                'action' => Url::toRoute(['/planning/action/transfer', 'id' => $model->id]),
-                'method' => 'post'
-            ]) ?>
+        <?php
+        Modal::begin([
+            'id' => 'transfer-modal',
+            'header' => '<h3>'.Yii::t('planning', 'Transferring action').'</h3>',
+        ]);
+        ?>
+            <div class="transfer-form">
+                <?php $form = ActiveForm::begin([
+                    'action' => Url::toRoute(['/planning/action/transfer', 'id' => $model->id]),
+                    'method' => 'post'
+                ]) ?>
 
-            <?= $this->render('_dateFields', ['form' => $form, 'model' => $model]) ?>
+                <?= $this->render('_dateFields', ['form' => $form, 'model' => $model]) ?>
 
-            <?= $form->field($model, 'places')->widget(Select2::className(), [
-                'data' => ArrayHelper::map(\app\modules\planning\models\Place::find()->all(), 'id', 'place'),
-                'options' => ['multiple' => true],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]) ?>
+                <?= $form->field($model, 'places')->widget(Select2::className(), [
+                    'data' => ArrayHelper::map(\app\modules\planning\models\Place::find()->all(), 'id', 'place'),
+                    'options' => ['multiple' => true],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]) ?>
 
-            <div class="form-group">
-                <label class="control-label" for="note"><?= Yii::t('planning', 'Note') ?></label>
-                <?= Html::textarea('note','',['id' => 'note', 'class' => 'form-control', 'rows' => 3]) ?>
+                <div class="form-group">
+                    <label class="control-label" for="note"><?= Yii::t('planning', 'Note') ?></label>
+                    <?= Html::textarea('note','',['id' => 'note', 'class' => 'form-control', 'rows' => 3]) ?>
+                </div>
+
+                <div class="modal-footer">
+                    <?= Html::submitButton(Yii::t('planning', 'Transfer action'),['class' => 'btn btn-success']) ?>
+                    <?= Html::button(Yii::t('app', 'Cancel'),['class' => 'btn btn-danger', 'data-dismiss' => 'modal']) ?>
+                </div>
+
+                <?php ActiveForm::end() ?>
             </div>
-
-            <div class="modal-footer">
-                <?= Html::submitButton(Yii::t('planning', 'Transfer action'),['class' => 'btn btn-success']) ?>
-                <?= Html::button(Yii::t('app', 'Cancel'),['class' => 'btn btn-danger', 'data-dismiss' => 'modal']) ?>
-            </div>
-
-            <?php ActiveForm::end() ?>
-        </div>
-    <?php Modal::end();?>
+        <?php Modal::end();?>
+    <?php endif; ?>
 
     <?= DetailView::widget([
         'model' => $model,
