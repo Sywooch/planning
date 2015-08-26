@@ -63,8 +63,8 @@ $config = [
                 'domain_controllers' => array('vlgd61.ru'),
                 'account_suffix' => '@vlgd61.ru',
                 'base_dn' => 'OU=adm,DC=vlgd61,DC=ru',
-                'admin_username' => 'podlasenko',
-                'admin_password' => 'GjFyLt-844',
+                'admin_username' => '********',
+                'admin_password' => '*******',
             ]
         ],
         'cache' => [
