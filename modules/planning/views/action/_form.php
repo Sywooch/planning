@@ -27,13 +27,12 @@ $script = <<<JS
         });
     });
 JS;
-
 $this->registerJs($script);
 ?>
 
 <div class="action-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['fieldConfig' => ['errorOptions' => ['class'=>'help-block', 'encode' => false]]]); ?>
 
     <?= $this->render('_dateFields', ['form' => $form, 'model' => $model]) ?>
 

@@ -103,3 +103,8 @@ a.desc:after {
     vertical-align: middle;
     float: none;
 }
+
+li.select2-error {
+    background-color: #ffdcdc !important;
+    border-color: #A94442!important;
+}

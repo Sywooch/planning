@@ -7,11 +7,13 @@ use app\modules\planning\models\query\PlanningQuery;
 use app\modules\planning\models\search\ActionSearch;
 use app\modules\structure\models\Employee;
 use app\modules\structure\models\Experience;
+use DateTime;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "{{%action}}".
@@ -31,6 +33,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $template
  * @property string $repeat
  * @property string $type
+ * @property boolean $allow_collision
  *
  * @property ActionEmployee[] $actionEmployees
  * @property Experience[] $employeesExp
@@ -82,7 +85,7 @@ class Action extends ActiveRecord
         $safeFields = ['action', 'status', 'dateStart', 'dateStop', 'flags', 'headEmployees', 'responsibleEmployees', 'invitedEmployees',  'places', 'user_id', 'options'];
         return ArrayHelper::merge(
             [
-                self::WEEK => $safeFields,
+                self::WEEK => ArrayHelper::merge($safeFields, ['allow_collision']),
                 self::MONTH => ArrayHelper::merge($safeFields, ['category_id']),
             ],
             parent::scenarios()
@@ -100,6 +103,7 @@ class Action extends ActiveRecord
             [['category_id'], 'required', 'on' => self::MONTH],
             [['category_id'], 'in', 'range' => Category::getCategoriesId()],
             [['places'], 'validatePlaces'],
+            [['headEmployees', 'invitedEmployees'], 'validateEmployees'],
             [['action'], 'string'],
 
 //            [['repeat'], 'string', 'max' => 255]
@@ -301,9 +305,6 @@ class Action extends ActiveRecord
         $this->options = (!empty($options))?array_map(function($opId){return Option::find()->byId($opId);}, $options):[];
     }
 
-    /**
-     * @return string
-     */
     public function getType()
     {
         if($this->isMonth()) return self::MONTH;
@@ -395,52 +396,94 @@ class Action extends ActiveRecord
         return constant('app\modules\planning\models\Action::'.strtoupper($this->getType().'_'.$name));
     }
 
+    public function calculateStartWithOptions()
+    {
+        return date('Y-m-d H:i:s', (strtotime($this->dateStart) - $this->calculateOptionsDuration()));
+    }
+
+    public function calculateOptionsDuration($asTimeStamp = true, $format = 'H:i:s')
+    {
+        $duration = 0;
+        foreach($this->options as $option){
+            list($h, $m, $s) = explode(':', $option->duration);
+            $duration += $s + $m*60 + $h*3600;
+        }
+        return ($asTimeStamp)?$duration:gmdate($format, $duration);
+    }
+
     public function validatePlaces($attribute, $params)
     {
         if($this->getType() === self::WEEK){
-            $query = (new Query())
-                ->select('*')
+            $rows = (new Query())
+                ->select(['{{%action}}.id', '{{%action}}.dateStart, {{%action}}.dateStop, {{%action}}.action', '{{%place}}.place'])
+                ->addSelect(['dateStart' => 'IF(NOT ISNULL(duration), FROM_UNIXTIME(UNIX_TIMESTAMP({{%action}}.dateStart) - SUM( TIME_TO_SEC( {{%option}}.duration ))), {{%action}}.dateStart)'])
+                ->addSelect(['longAction' => 'IF((UNIX_TIMESTAMP({{%action}}.dateStop) - UNIX_TIMESTAMP({{%action}}.dateStart))>=86400, 1, 0)'])
                 ->from('{{%action}}')
                 ->leftJoin('{{action_place}}', '{{%action}}.id = action_place.action_id')
                 ->leftJoin('{{%place}}', 'action_place.place_id = {{%place}}.id')
-                ->where(['action_place.place_id' => $this->places])
+                ->leftJoin('{{action_option}}', '{{%action}}.id = action_option.action_id')
+                ->leftJoin('{{%option}}', 'action_option.option_id = {{%option}}.id')
+                ->where(['action_place.place_id' => $this->places, 'week' => 1, 'allow_collision' => false])
+                ->andWhere('{{%action}}.status <> :status', [':status' => Action::DISABLED])
+                ->andWhere(self::getCollisionCondition($this->calculateStartWithOptions(), $this->dateStop))
+                ->having(['longAction' => 0])
+                ->groupBy(['{{%action}}.id'])
                 ->all();
-        }
-        /*if($this->type == self::WEEK_ACTION)
-        {
-            if(!$this->isLongAction() && !empty($this->places))
-            {
-                $actionList = array();
-                foreach($this->places as $placeId) {
-                    $criteria = new CDbCriteria();
-                    $criteria->with = array('places');
-                    $criteria->condition = self::getCollisionCondition(':start',':stop');
-                    $criteria->addCondition('places.id=:pid');
-                    $criteria->addCondition('status<>:status AND type=2 AND transfer=0');
-                    $criteria->params = array(
-                        ':start'=>date('Y-m-d H:i:s',strtotime($this->dateStart)),
-                        ':stop'=>date('Y-m-d H:i:s',strtotime($this->dateStop)),
-                        ':pid'=>$placeId,
-                        ':status'=>self::DELETED,
-                    );
-                    if(!$this->isNewRecord){
-                        $criteria->addCondition('t.id<>:id');
-                        $criteria->params = CMap::mergeArray($criteria->params,array(':id'=>$this->id));
-                    }
-                    $actionList = CMap::mergeArray($actionList,Action::model()->findAll($criteria));
-                    foreach($actionList as $action)
-                    {
-                        if(!$action->isLongAction())
-                            $this->addCollisionError($action, $attribute, 'Место проведения "'.Place::model()->findByPk($placeId)->place.'" занято:');
-                    }
+            if(!empty($rows)){
+                foreach($rows as $row){
+                    $errors[] = $this->getLocalizedDateRange($row['dateStart'], $row['dateStop'])
+                        .' в месте проведения &laquo'.$row['place'].'&raquo проходит мероприятие '
+                        .Html::a('&laquo'.$row['action'].'&raquo', ['view', 'id' => $row['id']], ['target' => '_blank']);
                 }
+                $this->addError($attribute, implode("<br/>", $errors));
             }
-        }*/
+        }
+    }
 
-        /*$conditions[] = '((dateStart<='.$startParam.') AND (dateStop>'.$startParam.'))';
-        $conditions[] = '((dateStart<'.$stopParam.') AND (dateStop>='.$stopParam.'))';
-        $conditions[] = '((dateStart>'.$startParam.') AND (dateStop<'.$stopParam.'))';
-        $conditions[] = '((dateStart='.$startParam.') AND (dateStop='.$stopParam.'))';
-        return implode(' OR ', $conditions);*/
+    public function validateEmployees($attribute, $params)
+    {
+        if($this->getType() === self::WEEK){
+            $rows =(new Query())
+                ->select(['{{%action}}.id', '{{%action}}.action', '{{%action}}.dateStart', '{{%action}}.dateStop', '{{%employee}}.fio'])
+                ->from('{{%action}}')
+                ->leftJoin('action_employee', '{{%action}}.id = action_employee.action_id')
+                ->leftJoin('{{%experience}}', 'action_employee.exp_id = {{%experience}}.id')
+                ->leftJoin('{{%employee}}', '{{%experience}}.employee_id = {{%employee}}.id')
+                ->where(['{{%experience}}.id' => $this->{$attribute}, 'week' => 1, 'allow_collision' => false])
+                ->andWhere('{{%action}}.status <> :status', [':status' => Action::DISABLED])
+                ->andWhere(self::getCollisionCondition($this->dateStart, $this->dateStop))
+                ->all();
+            if(!empty($rows)){
+                foreach($rows as $row){
+                    $errors[] = 'Сотрудник &laquo'.$row['fio'].'&raquo участвует в мероприятии - '
+                        .Html::a('&laquo'.$row['action'].'&raquo', ['view', 'id' => $row['id']], ['target' => '_blank'])
+                        .' '.$this->getLocalizedDateRange($row['dateStart'], $row['dateStop']);
+                }
+                $this->addError($attribute, implode("<br/>", $errors));
+            }
+        }
+    }
+
+    public static function getCollisionCondition($startParam, $stopParam) {
+        $conditions[] = "((`dateStart`<='".$startParam."') AND (`dateStop`>'".$startParam."'))";
+        $conditions[] = "((`dateStart`<'".$stopParam."') AND (`dateStop`>='".$stopParam."'))";
+        $conditions[] = "((`dateStart`>'".$startParam."') AND (`dateStop`<'".$stopParam."'))";
+        $conditions[] = "((`dateStart`='".$startParam."') AND (`dateStop`='".$stopParam."'))";
+        return implode(' OR ', $conditions);
+    }
+
+    public function getLocalizedDateRange($start, $stop)
+    {
+        return ((strtotime($stop) - strtotime($start)) >= 3600*24)
+            ?'с '.Yii::$app->formatter->asDatetime($start)
+            .' до '.Yii::$app->formatter->asDatetime($stop)
+            :Yii::$app->formatter->asDate($start).
+            ' с '.Yii::$app->formatter->format($start, ['date', 'php:H:i']).
+            ' до '.Yii::$app->formatter->format($stop, ['date', 'php:H:i']);
+    }
+
+    public function isLongAction()
+    {
+        return (strtotime($this->dateStop) - strtotime($this->dateStart)) >= 3600*24;
     }
 }
